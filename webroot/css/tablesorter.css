@@ -1,0 +1,30 @@
+/* tables */
+table.tablesorter thead tr .header {
+	text-align: center;
+	cursor: pointer;
+}
+table.tablesorter thead tr .headerSortUp {
+	background-image: url(../img/asc.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	text-align: left;
+}
+table.tablesorter thead tr .headerSortDown {
+	background-image: url(../img/desc.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	text-align: left;
+}
+
+
+#win_loss th {
+	width: 35px;
+}
+#win_loss th[colspan],
+#win_loss th[rowspan] {
+	width: auto;
+}
+#win_loss .num {
+	text-align: center;
+}
+

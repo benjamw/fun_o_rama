@@ -1,0 +1,19 @@
+make a tournament generator (auto-use when creating a cornhole game with more than 4 players)
+
+allow more then one sat out player
+
+allow more than one award per badge
+
+clean up admin area, make sure everything has all the data it needs
+maybe also fix up the templates and re-bake to make sure
+-- possibly add in the links for related-related models in the views?
+
+re-bake other admin areas (groups, users, pages, etc)
+
+Add levels for players based on number of games played (ranking, or
+experience?)
+https://docs.google.com/a/daz3d.com/document/d/1vzd3e8AFPnikg5EJYJz26-fFyojLKpAwbOOIgO5PU74/edit
+
+more stats on stats page, maybe split out each game type into it's own
+table
+

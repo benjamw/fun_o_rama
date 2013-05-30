@@ -1,0 +1,63 @@
+/*
+	These styles get loaded between bootstrap
+	and bootstrap-responsive
+*/
+
+.navbar .brand {
+	margin-left: 0;
+}
+
+.actions {
+	border-top: 1px solid #ccc;
+	padding-top: 10px;
+}
+
+table .actions {
+	width: 1px;
+	white-space: nowrap;
+}
+
+.required label:after {
+	content: " *";
+	color: #da4f49;
+}
+
+.nav > li > a.delete:hover,
+.nav > li > a.delete:focus {
+	background-color: #c00;
+	color: #fff;
+}
+
+.well .badges li {
+	list-style: none inside none;
+	float: left;
+	padding: 5px;
+}
+
+.badges img {
+	border: 5px solid whitesmoke;
+	border-radius: 5px;
+}
+
+
+/*
+	margin is only required when the
+	navbar is fixed
+*/
+@media (min-width: 980px) {
+	body > .container {
+		margin-top: 50px;
+	}
+}
+
+.date select,
+.time select,
+.datetime select {
+	width: auto;
+}
+
+/* this allows the sortable names to be dropped on empty lists */
+ul.swappable {
+	padding: 5px;
+}
+
