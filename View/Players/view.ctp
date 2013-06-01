@@ -31,6 +31,8 @@
 			?></li>
 		<?php } ?>
 		</ul>
+
+		<div style="clear:both;">&nbsp;</div>
 	</div>
 
 	<div class="well">
