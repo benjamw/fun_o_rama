@@ -6,7 +6,7 @@
 
 	<?php
 
-		echo $this->Html->charset( );
+		echo $this->Html->charset('UTF-8');
 		echo $this->Html->meta('icon');
 		echo $this->Html->meta(array('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0'));
 		echo $this->fetch('meta');
@@ -69,6 +69,7 @@
 		<?php echo $this->Html->image('g3103.gif'); ?>
 		Built with: <?php echo $this->Html->image('logo-powerpoint.gif'); ?>
 		<a href="/guestbook.asp">Sign our GuestBook!</a>
+		¡Hasta Mañana!
 	<?php } ?>
 	</footer>
 
