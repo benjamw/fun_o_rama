@@ -272,13 +272,16 @@ CakeLog::config('error', array(
 
 	function array_flatten_keys($array, $return = array( ), $prefix = array( )) {
 		$this_array = array_keys($array);
+		sort($this_array);
 		$orig_prefix = $prefix;
 
 		foreach ($this_array as $value) {
 			$prefix = $orig_prefix;
 			$prefix[] = $value;
 
-			$return[$value] = implode('.', $prefix);
+			$str_prefix = implode('.', $prefix);
+
+			$return[$str_prefix] = $str_prefix;
 
 			$pass = $array[$value];
 			if (is_array($pass) && ! empty($pass)) {

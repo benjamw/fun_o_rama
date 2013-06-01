@@ -681,6 +681,7 @@ CakeLog::write('debug', env('REMOTE_ADDR'));
 		$used = array(
 			$this->modelClass,
 			'Group',
+			'PlayerRanking',
 			'User',
 		);
 
