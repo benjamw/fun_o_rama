@@ -4,16 +4,39 @@ App::uses('AppController', 'Controller');
 
 class PlayerRankingsController extends AppController {
 
+	const KILL_SWITCH = false;
+
 	public $components = array('TrueSkill.TrueSkill');
+
+	public function refresh_values( ) {
+		$this->autoRender = false;
+
+		if (self::KILL_SWITCH) {
+			exit;
+		}
+
+g('EMPTYING TABLE...');
+		$this->PlayerRanking->query(
+			'TRUNCATE TABLE `player_rankings`'
+		);
+
+		$rows = $this->PlayerRanking->find('count');
+g('ROW COUNT = '.$rows);
+
+g('STARTING');
+		$this->fill_values( );
+		$this->play_games( );
+g('DONE');
+	}
 
 	public function fill_values( ) {
 		$this->autoRender = false;
 
-		// kill switch
-		if (true) {
+		if (self::KILL_SWITCH) {
 			exit;
 		}
 
+g('FILLING VALUES');
 		$players = array_keys($this->PlayerRanking->Player->find('list'));
 		$game_types = array_keys($this->PlayerRanking->GameType->find('list'));
 
@@ -33,18 +56,16 @@ class PlayerRankingsController extends AppController {
 g($result);
 			}
 		}
-
-		exit;
 	}
 
 	public function play_games( ) {
 		$this->autoRender = false;
 
-		// kill switch
-		if (true) {
+		if (self::KILL_SWITCH) {
 			exit;
 		}
 
+g('PLAYING GAMES');
 		$players = $this->PlayerRanking->Player->find('all', array(
 			'contain' => array(
 				'PlayerRanking',
@@ -134,8 +155,6 @@ g($data);
 				$this->PlayerRanking->save($data);
 			}
 		}
-
-		exit;
 	}
 
 }
