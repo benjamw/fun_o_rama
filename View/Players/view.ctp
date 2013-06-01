@@ -4,13 +4,10 @@
 	<h2><?php echo $player['Player']['name']; ?>'s Amazing Stuff!!</h2>
 
 	<div class="well">
-		<h3>Ranking</h3>
-		Coming Soon
-	</div>
-
-	<?php if ( ! empty($player['Badge'])) { ?>
-	<div class="well">
-		<h3 class="badges" data-href="<?php echo $this->Html->url(array('admin' => true, 'prefix' => 'admin', 'controller' => 'players', 'action' => 'badges', $player['Player']['id'])); ?>">Badges</h3>
+		<h3 class="badges" data-href="<?php echo $this->Html->url(array('admin' => true, 'prefix' => 'admin', 'controller' => 'players', 'action' => 'badges', $player['Player']['id'])); ?>">
+			Badges
+			<small><?php echo count($player['Badge']).' out of '.count($badges); ?></small>
+		</h3>
 
 		<ul class="badges">
 		<?php foreach ($player['Badge'] as $badge) { ?>
@@ -34,10 +31,17 @@
 			?></li>
 		<?php } ?>
 		</ul>
-
-		<div style="clear:both;height:50px;">&nbsp;</div><!-- padding for the popovers -->
 	</div>
-	<?php } ?>
+
+	<div class="well">
+		<h3>Ranking</h3>
+
+		<?php foreach ($player['PlayerRanking'] as $ranking) { ?>
+		<div class="well">
+			<?php echo $ranking['GameType']['name'].' &mdash; Mean (Rank): <strong>'.number_format($ranking['mean'], 4).'</strong> &mdash; Std.Dev. (Accuracy): '.number_format($ranking['std_deviation'], 6); ?>
+		</div>
+		<?php } ?>
+	</div>
 
 </div>
 

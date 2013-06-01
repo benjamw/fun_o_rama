@@ -14,12 +14,16 @@ class PlayersController extends AppController {
 		$this->set('player', $this->Player->find('first', array(
 			'contain' => array(
 				'Badge',
-				'PlayerRanking',
+				'PlayerRanking' => array(
+					'GameType',
+				),
 			),
 			'conditions' => array(
 				'Player.id' => $id,
 			),
 		)));
+
+		$this->set('badges', $this->Player->Badge->find('all'));
 	}
 
 	public function admin_badges($id) {
