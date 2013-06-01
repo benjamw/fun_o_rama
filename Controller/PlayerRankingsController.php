@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class PlayerRankingsController extends AppController {
 
-	const KILL_SWITCH = false;
+	const KILL_SWITCH = true;
 
 	public $components = array('TrueSkill.TrueSkill');
 
