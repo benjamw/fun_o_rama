@@ -25,7 +25,7 @@
 			<td><?php echo h($match['Match']['id']); ?>&nbsp;</td>
 			<td><?php echo $this->Html->link($match['Game']['name'], array('controller' => 'games', 'action' => 'view', $match['Game']['id'])); ?>&nbsp;</td>
 			<td>
-				<strong><?php echo $this->Html->link($match['Team'][0]['name'], array('controller' => 'teams', 'action' => 'view', $match['Team'][0]['id'])); ?></strong><br>
+				<strong><?php echo $this->Html->link($match['Team'][0]['name'] ?: 'Team 1', array('controller' => 'teams', 'action' => 'view', $match['Team'][0]['id'])); ?></strong><br>
 				<?php
 					$players = array( );
 					foreach ($match['Team'][0]['Player'] as $player) {
@@ -35,7 +35,7 @@
 				?>&nbsp;
 			</td>
 			<td>
-				<strong><?php echo $this->Html->link($match['Team'][1]['name'], array('controller' => 'teams', 'action' => 'view', $match['Team'][1]['id'])); ?></strong><br>
+				<strong><?php echo $this->Html->link(($match['Team'][1]['name'] ?: 'Team 2'), array('controller' => 'teams', 'action' => 'view', $match['Team'][1]['id'])); ?></strong><br>
 				<?php
 					$players = array( );
 					foreach ($match['Team'][1]['Player'] as $player) {
@@ -46,14 +46,23 @@
 			</td>
 			<td><?php echo h($match['Match']['created']); ?>&nbsp;</td>
 			<td><?php
-				if (0 === $match['Match']['winning_team_id']) {
+				if (0 === (int) $match['Match']['winning_team_id']) {
 					echo 'Tie';
 				}
 				elseif ( ! $match['Match']['winning_team_id']) {
 					echo 'Unfinished';
 				}
 				else {
-					echo $this->Html->link($match['WinningTeam']['name'], array('controller' => 'teams', 'action' => 'view', $match['WinningTeam']['id']));
+					if ( ! empty($match['WinningTeam']['name'])) {
+						echo $match['WinningTeam']['name'].' &mdash;&nbsp;';
+					}
+
+					foreach ($match['Team'] as $n => $team) {
+						if ((int) $team['id'] === (int) $match['Match']['winning_team_id']) {
+							echo 'Team&nbsp;'.($n + 1);
+							break;
+						}
+					}
 				}
 			?>&nbsp;</td>
 			<td><?php echo $this->Html->link($match['SatOutPlayer']['name'], array('controller' => 'players', 'action' => 'view', $match['SatOutPlayer']['id'])); ?>&nbsp;</td>
