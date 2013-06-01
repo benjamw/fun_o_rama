@@ -1,5 +1,6 @@
 
 <div class="teams view">
+
 	<h2><?php echo __('Team'); ?></h2>
 	<dl>
 
@@ -37,8 +38,8 @@
 
 	<?php foreach ($team['Player'] as $player) { ?>
 		<tr class="table-hover">
-			<td><?php echo $player['id']; ?></td>
-			<td><?php echo $player['name']; ?></td>
+			<td><?php echo $player['id']; ?>&nbsp;</td>
+			<td><?php echo $player['name']; ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'players', 'action' => 'view', $player['id']), array('class' => 'btn btn-small')); ?>
@@ -54,7 +55,7 @@
 
 	<div class="actions">
 		<ul class="nav nav-pills">
-			<li><?php echo $this->Html->link(__('List Player'), array('controller' => 'players', 'action' => 'index')); ?> </li>
+			<li><?php echo $this->Html->link(__('List Players'), array('controller' => 'players', 'action' => 'index')); ?> </li>
 			<li><?php echo $this->Html->link(__('New Player'), array('controller' => 'players', 'action' => 'add')); ?> </li>
 		</ul>
 	</div>

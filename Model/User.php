@@ -1,7 +1,6 @@
 <?php
 
 App::uses('AppModel', 'Model');
-App::uses('AuthComponent', 'Controller');
 
 class User extends AppModel {
 
@@ -12,62 +11,98 @@ class User extends AppModel {
 	public $auth_password = 'password';
 
 	public $validate = array(
-//		'group_id' => array('numeric'),
-		'first_name' => array('notempty'),
-		'last_name' => array('notempty'),
+		'first_name' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'last_name' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
 		'username' => array(
-			'exists' => array(
-				'rule' => 'notempty',
+			'notempty' => array(
+				'rule' => array('notempty'),
 				'message' => 'Please enter a username',
+				//'allowEmpty' => false,
 				'required' => true,
-				'allowEmpty' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 			'unique' => array(
-				'rule' => 'isUnique',
+				'rule' => array('isUnique'),
 				'message' => 'That username is already in use',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
 		'email' => array(
 			'email' => array(
-				'rule' => 'email',
+				'rule' => array('email'),
 				'message' => 'Please enter a valid email address',
+				//'allowEmpty' => false,
 				'required' => true,
-				'allowEmpty' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 			'unique' => array(
-				'rule' => 'isUnique',
+				'rule' => array('isUnique'),
 				'message' => 'That email address is already in use',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
 		'current' => array(
 			'current' => array(
-				'rule' => 'validateCurrentPassword',
+				'rule' => array('validateCurrentPassword'),
 				'message' => 'You must enter your current password',
-				'required' => false,
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
 				'on' => 'update',
 			),
 		),
 		'password' => array(
-			'pass' => array(
-				'rule' => 'notempty',
+			'notempty' => array(
+				'rule' => array('notempty'),
 				'message' => 'You must enter a password',
+				//'allowEmpty' => false,
 				'required' => true,
-				'allowEmpty' => false,
+				//'last' => false, // Stop validation after this rule
 				'on' => 'create',
 			),
 		),
 		'confirm' => array(
 			'required' => array(
-				'rule' => 'notEmpty',
+				'rule' => array('notempty'),
 				'message' => 'You must verify your password',
+				//'allowEmpty' => false,
 				'required' => true,
-				'allowEmpty' => false,
+				//'last' => false, // Stop validation after this rule
 				'on' => 'create',
 			),
 			'confirm' => array(
-				'rule' => 'passConfirm',
+				'rule' => array('passConfirm'),
 				'message' => 'The passwords entered do not match',
-				'required' => false,
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
 	);
@@ -77,12 +112,28 @@ class User extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'Group',
+		'Group' => array(
+			'className' => 'Group',
+			'foreignKey' => 'group_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+		),
 	);
 
 	public $hasOne = array(
 		'Forgot' => array(
+			'className' => 'Forgot',
+			'foreignKey' => 'user_id',
 			'dependent' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => '',
 		),
 	);
 
@@ -125,7 +176,7 @@ class User extends AppModel {
 			return ($pass_missing || $pass_empty);
 		}
 
-		$current_pass_match = (0 === strcmp(AuthComponent::password($current), $this->field($this->auth_password)));
+		$current_pass_match = (0 === strcmp(Security::hash($current, 'blowfish'), $this->field($this->auth_password)));
 
 		return $current_pass_match;
 	}
@@ -160,7 +211,7 @@ class User extends AppModel {
 
 		// hash the password if we have one, remove it if we don't
 		if ( ! empty($this->data['User'][$this->auth_password])) {
-			$this->data['User'][$this->auth_password] = AuthComponent::password($this->data['User'][$this->auth_password]);
+			$this->data['User'][$this->auth_password] = Security::hash($this->data[$this->alias][$this->auth_password], 'blowfish');
 		}
 		else {
 			unset($this->data['User'][$this->auth_password]);

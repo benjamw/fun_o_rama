@@ -33,7 +33,7 @@
 		<?php if ($allow_add_delete && (false !== strpos($this->action, 'edit'))) { ?>
 		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Page.id')), array('class' => 'delete'), __('Are you sure you want to delete Page #%s?', $this->Form->value('Page.id'))); ?></li>
 		<?php } ?>
-		<li><?php echo $this->Html->link(__('List Pages'), array('action' => 'index'));?></li>
+		<li><?php echo $this->Html->link(__('List Pages'), array('action' => 'index')); ?></li>
 	</ul>
 </div>
 

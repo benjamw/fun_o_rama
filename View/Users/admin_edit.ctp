@@ -1,6 +1,6 @@
 
 <div class="users form">
-	<?php echo $this->Form->create('User', array('action' => $this->action)); ?>
+	<?php echo $this->Form->create('User'); ?>
 		<fieldset>
 			<legend><?php echo __(Inflector::humanize(substr($this->action, 6)).' User'); ?></legend>
 
@@ -22,14 +22,16 @@
 			?>
 
 		</fieldset>
-	<?php echo $this->Form->end(__('Submit'));?>
+
+		<?php echo $this->Form->submit(__('Submit'), array('class' => 'btn btn-primary')); ?>
+	<?php echo $this->Form->end( ); ?>
 </div>
 <div class="actions">
-	<ul>
+	<ul class="nav nav-pills">
 		<?php if (false !== strpos($this->action, 'edit')) { ?>
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('User.id')), array('class' => 'delete'), __('Are you sure you want to delete # %s?', $this->Form->value('User.id'))); ?></li>
+		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('User.id')), array('class' => 'delete'), __('Are you sure you want to delete User #%s?', $this->Form->value('User.id'))); ?></li>
 		<?php } ?>
-		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index'));?></li>
+		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?></li>
 	</ul>
 </div>
 

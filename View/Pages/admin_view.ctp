@@ -1,28 +1,28 @@
 
 <div class="pages view">
 
-	<h2><?php echo __('Page');?></h2>
+	<h2><?php echo __('Page'); ?></h2>
 	<dl>
 
-		<dt><?php __('Id'); ?></dt>
+		<dt><?php echo __('ID'); ?></dt>
 		<dd><?php echo h($page['Page']['id']); ?>&nbsp;</dd>
 
-		<dt><?php __('Title'); ?></dt>
+		<dt><?php echo __('Title'); ?></dt>
 		<dd><?php echo h($page['Page']['title']); ?>&nbsp;</dd>
 
-		<dt><?php __('Slug'); ?></dt>
+		<dt><?php echo __('Slug'); ?></dt>
 		<dd><?php echo $this->Html->link($page['Page']['slug'], array('admin' => false, 'prefix' => false, 'controller' => 'pages', 'action' => 'display', $page['Page']['slug'])); ?>&nbsp;</dd>
 
-		<dt><?php __('Copy'); ?></dt>
+		<dt><?php echo __('Copy'); ?></dt>
 		<dd><?php echo $page['Page']['copy']; ?>&nbsp;</dd>
 
-		<dt><?php __('Created'); ?></dt>
+		<dt><?php echo __('Created'); ?></dt>
 		<dd><?php echo h($page['Page']['created']); ?>&nbsp;</dd>
 
-		<dt><?php __('Modified'); ?></dt>
+		<dt><?php echo __('Modified'); ?></dt>
 		<dd><?php echo h($page['Page']['modified']); ?>&nbsp;</dd>
 
-		<dt><?php __('Active'); ?></dt>
+		<dt><?php echo __('Active'); ?></dt>
 		<dd><?php echo ucfirst(Set::enum((int) $page['Page']['active'])); ?>&nbsp;</dd>
 
 	</dl>

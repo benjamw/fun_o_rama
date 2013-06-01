@@ -32,7 +32,6 @@
 	</table>
 
 	<?php echo $this->element('bootstrap_pagination'); ?>
-
 </div>
 <div class="actions">
 	<ul class="nav nav-pills">

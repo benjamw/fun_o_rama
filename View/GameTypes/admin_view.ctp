@@ -35,8 +35,8 @@
 
 	<?php foreach ($gameType['Game'] as $game) { ?>
 		<tr class="table-hover">
-			<td><?php echo $game['id']; ?></td>
-			<td><?php echo $game['name']; ?></td>
+			<td><?php echo $game['id']; ?>&nbsp;</td>
+			<td><?php echo $game['name']; ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'games', 'action' => 'view', $game['id']), array('class' => 'btn btn-small')); ?>
@@ -74,11 +74,11 @@
 
 	<?php foreach ($gameType['PlayerRanking'] as $playerRanking) { ?>
 		<tr class="table-hover">
-			<td><?php echo $playerRanking['id']; ?></td>
-			<td><?php echo $this->Html->link($playerRanking['Player']['name'], array('controller' => 'players', 'action' => 'view', $playerRanking['Player']['id'])); ?></td>
-			<td><?php echo $playerRanking['mean']; ?></td>
-			<td><?php echo $playerRanking['std_deviation']; ?></td>
-			<td><?php echo $playerRanking['games_played']; ?></td>
+			<td><?php echo $playerRanking['id']; ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($playerRanking['Player']['name'], array('controller' => 'players', 'action' => 'view', $playerRanking['Player']['id'])); ?>&nbsp;</td>
+			<td><?php echo $playerRanking['mean']; ?>&nbsp;</td>
+			<td><?php echo $playerRanking['std_deviation']; ?>&nbsp;</td>
+			<td><?php echo $playerRanking['games_played']; ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'player_rankings', 'action' => 'view', $playerRanking['id']), array('class' => 'btn btn-small')); ?>

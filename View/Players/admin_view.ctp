@@ -39,11 +39,11 @@
 
 	<?php foreach ($player['PlayerRanking'] as $playerRanking) { ?>
 		<tr class="table-hover">
-			<td><?php echo $playerRanking['id']; ?></td>
-			<td><?php echo $this->Html->link($playerRanking['GameType']['name'], array('controller' => 'game_types', 'action' => 'view', $playerRanking['GameType']['id'])); ?></td>
-			<td><?php echo $playerRanking['mean']; ?></td>
-			<td><?php echo $playerRanking['std_deviation']; ?></td>
-			<td><?php echo $playerRanking['games_played']; ?></td>
+			<td><?php echo $playerRanking['id']; ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($playerRanking['GameType']['name'], array('controller' => 'game_types', 'action' => 'view', $playerRanking['GameType']['id'])); ?>&nbsp;</td>
+			<td><?php echo $playerRanking['mean']; ?>&nbsp;</td>
+			<td><?php echo $playerRanking['std_deviation']; ?>&nbsp;</td>
+			<td><?php echo $playerRanking['games_played']; ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'player_rankings', 'action' => 'view', $playerRanking['id']), array('class' => 'btn btn-small')); ?>
@@ -80,7 +80,7 @@
 
 	<?php foreach ($player['Badge'] as $badge) { ?>
 		<tr class="table-hover">
-			<td><?php echo h($badge['id']); ?>&nbsp;</td>
+			<td><?php echo $badge['id']; ?>&nbsp;</td>
 			<td><?php echo h($badge['name']); ?>&nbsp;</td>
 			<td><?php echo h($badge['description']); ?>&nbsp;</td>
 			<td><?php if ( ! empty($badge['icon']['main'])) echo $this->Html->image($badge['icon']['main']); ?>&nbsp;</td>
@@ -119,9 +119,9 @@
 
 	<?php foreach ($player['Team'] as $team) { ?>
 		<tr class="table-hover">
-			<td><?php echo $team['id']; ?></td>
-			<td><?php echo $this->Html->link($team['Match']['Game']['name'], array('controller' => 'games', 'action' => 'view', $team['Match']['Game']['id'])).' @ '.$this->Html->link($team['Match']['created'], array('controller' => 'matches', 'action' => 'view', $team['Match']['id'])); ?></td>
-			<td><?php echo $team['name']; ?></td>
+			<td><?php echo $team['id']; ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($team['Match']['Game']['name'], array('controller' => 'games', 'action' => 'view', $team['Match']['Game']['id'])).' @ '.$this->Html->link($team['Match']['created'], array('controller' => 'matches', 'action' => 'view', $team['Match']['id'])); ?>&nbsp;</td>
+			<td><?php echo $team['name']; ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'teams', 'action' => 'view', $team['id']), array('class' => 'btn btn-small')); ?>

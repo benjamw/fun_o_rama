@@ -16,6 +16,7 @@
 			<th>Team 2</th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('winning_team_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('sat_out'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
@@ -55,6 +56,7 @@
 					echo $this->Html->link($match['WinningTeam']['name'], array('controller' => 'teams', 'action' => 'view', $match['WinningTeam']['id']));
 				}
 			?>&nbsp;</td>
+			<td><?php echo $this->Html->link($match['SatOutPlayer']['name'], array('controller' => 'players', 'action' => 'view', $match['SatOutPlayer']['id'])); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('action' => 'view', $match['Match']['id']), array('class' => 'btn btn-small')); ?>
@@ -68,7 +70,6 @@
 	</table>
 
 	<?php echo $this->element('bootstrap_pagination'); ?>
-
 </div>
 <div class="actions">
 	<ul class="nav nav-pills">

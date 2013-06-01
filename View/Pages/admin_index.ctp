@@ -1,6 +1,10 @@
 
 <div class="pages index">
-	<h2><?php echo __('Pages');?></h2>
+	<h2><?php echo __('Pages'); ?> <?php echo $this->Html->link(__('New Page'), array('action' => 'add'), array('class' => 'btn btn-mini btn-info')); ?></h2>
+
+	<div class="clearfix">
+		<?php echo $this->element('admin_filter'); ?>
+	</div>
 
 	<?php echo $this->element('bootstrap_pagination'); ?>
 
@@ -25,10 +29,10 @@
 			<td><?php echo ucfirst(Set::enum((int) $page['Page']['active'])); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
-					<?php echo $this->Html->link(__('View'), array('action' => 'view', $page['Page']['id'])); ?>
-					<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $page['Page']['id'])); ?>
+					<?php echo $this->Html->link(__('View'), array('action' => 'view', $page['Page']['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $page['Page']['id']), array('class' => 'btn btn-small')); ?>
 					<?php if ($allow_add_delete) { ?>
-					<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $page['Page']['id']), array('class' => 'delete'), __('Are you sure you want to delete # %s?', $page['Page']['id'])); ?>
+					<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $page['Page']['id']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete Page #%s?', $page['Page']['id'])); ?>
 					<?php } ?>
 				</div>
 			</td>
@@ -38,7 +42,6 @@
 	</table>
 
 	<?php echo $this->element('bootstrap_pagination'); ?>
-
 </div>
 <?php if ($allow_add_delete) { ?>
 <div class="actions">

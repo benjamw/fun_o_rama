@@ -4,14 +4,24 @@ App::uses('AppModel', 'Model');
 
 class Group extends AppModel {
 
-	public $displayField = 'name';
-
 	public $actsAs = array(
 		'Acl' => array('requester'),
 	);
 
 	public $hasMany = array(
-		'User',
+		'User' => array(
+			'className' => 'User',
+			'foreignKey' => 'group_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => '',
+		),
 	);
 
 	public function parentNode( ) {

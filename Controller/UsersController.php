@@ -12,7 +12,7 @@ class UsersController extends AppController {
 				}
 			}
 			else {
-				$this->Session->setFlash($this->Auth->loginError);
+				$this->Session->setFlash($this->Auth->loginError, 'flash_error');
 				$this->request->data[$this->Auth->userModel][$this->Auth->authenticate['all']['fields']['password']] = null;
 			}
 		}
@@ -53,8 +53,9 @@ class UsersController extends AppController {
 		if ($this->use_remember_me) {
 			$this->RememberMe->delete( );
 		}
+		session_destroy( );
 
-		$this->Session->setFlash(__('You\'ve successfully logged out.'));
+		$this->Session->setFlash(__('You\'ve successfully logged out.'), 'flash_success');
 		$this->redirect($this->Auth->logout( ));
 	}
 

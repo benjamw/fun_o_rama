@@ -14,7 +14,10 @@
 		<dd><?php echo h($match['Match']['created']); ?>&nbsp;</dd>
 
 		<dt><?php echo __('Winning Team'); ?></dt>
-		<dd><?php echo $this->Html->link($match['WinningTeam']['id'], array('controller' => 'teams', 'action' => 'view', $match['WinningTeam']['id'])); ?>&nbsp;</dd>
+		<dd><?php echo $this->Html->link($match['WinningTeam']['name'], array('controller' => 'teams', 'action' => 'view', $match['WinningTeam']['id'])); ?>&nbsp;</dd>
+
+		<dt><?php echo __('Sat Out Player'); ?></dt>
+		<dd><?php echo $this->Html->link($match['SatOutPlayer']['name'], array('controller' => 'players', 'action' => 'view', $match['SatOutPlayer']['id'])); ?>&nbsp;</dd>
 
 	</dl>
 
@@ -35,12 +38,14 @@
 	<table class="table table-striped table-bordered table-condensed">
 		<tr>
 			<th><?php echo __('ID'); ?></th>
+			<th><?php echo __('Name'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
 	<?php foreach ($match['Team'] as $team) { ?>
 		<tr class="table-hover">
-			<td><?php echo $team['id']; ?></td>
+			<td><?php echo $team['id']; ?>&nbsp;</td>
+			<td><?php echo $team['name']; ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'teams', 'action' => 'view', $team['id']), array('class' => 'btn btn-small')); ?>
@@ -56,7 +61,7 @@
 
 	<div class="actions">
 		<ul class="nav nav-pills">
-			<li><?php echo $this->Html->link(__('List Team'), array('controller' => 'teams', 'action' => 'index')); ?> </li>
+			<li><?php echo $this->Html->link(__('List Teams'), array('controller' => 'teams', 'action' => 'index')); ?> </li>
 			<li><?php echo $this->Html->link(__('New Team'), array('controller' => 'teams', 'action' => 'add')); ?> </li>
 		</ul>
 	</div>

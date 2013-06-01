@@ -71,8 +71,8 @@ class Badge extends AppModel {
 			$this->data['Badge']['name'] = strip_tags($this->data['Badge']['name']);
 		}
 
-		if ( ! empty($this->data['Badge']['name'])) {
-			$this->data['Badge']['name'] = strip_tags($this->data['Badge']['name']);
+		if ( ! empty($this->data['Badge']['description'])) {
+			$this->data['Badge']['description'] = strip_tags($this->data['Badge']['description']);
 		}
 
 		return parent::beforeSave($options);

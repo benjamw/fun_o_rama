@@ -24,7 +24,7 @@ if ($wysiwyg) {
 ?>
 
 <div class="settings form">
-	<?php echo $this->Form->create('Setting', $file);?>
+	<?php echo $this->Form->create('Setting', $file); ?>
 		<fieldset>
 			<legend><?php echo __('Edit Settings'); ?></legend>
 
@@ -50,6 +50,8 @@ if ($wysiwyg) {
 		?>
 
 		</fieldset>
-	<?php echo $this->Form->end(__('Submit'));?>
+
+		<?php echo $this->Form->submit(__('Submit'), array('class' => 'btn btn-primary')); ?>
+	<?php echo $this->Form->end( ); ?>
 </div>
 

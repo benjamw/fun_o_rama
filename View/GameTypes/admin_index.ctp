@@ -3,7 +3,8 @@
 	<h2><?php echo __('Game Types'); ?> <?php echo $this->Html->link(__('New Game Type'), array('action' => 'add'), array('class' => 'btn btn-mini btn-info')); ?></h2>
 
 	<div class="clearfix">
-		<?php echo $this->element('admin_filter'); ?>	</div>
+		<?php echo $this->element('admin_filter'); ?>
+	</div>
 
 	<?php echo $this->element('bootstrap_pagination'); ?>
 

@@ -590,3 +590,4 @@ CakeLog::config('error', array(
 			exit;
 		}
 	}
+

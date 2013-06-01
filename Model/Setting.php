@@ -4,7 +4,6 @@ App::uses('AppModel', 'Model');
 
 class Setting extends AppModel {
 
-	public $displayField = 'name';
 	public $validateFile = array( );
 
 	public $_settings = array( );
@@ -33,6 +32,7 @@ class Setting extends AppModel {
 		}
 	}
 
+// TODO: redo the file handling for the settings
 	public function generateUniqueFilename($fileName, $path = 'files/setting') {
 		$path = empty($path) ? WWW_ROOT.'files'.DS : WWW_ROOT.$path.DS;
 
