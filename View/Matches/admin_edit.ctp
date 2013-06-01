@@ -10,7 +10,7 @@
 				}
 				echo $this->Form->input('game_id');
 				echo $this->Form->input('winning_team_id');
-				echo $this->Form->input('sat_out');
+				echo $this->Form->input('sat_out', array('type' => 'select', 'options' => $satOutPlayers, 'empty' => true));
 			?>
 
 		</fieldset>
