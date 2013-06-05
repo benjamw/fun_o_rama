@@ -2,7 +2,7 @@
 <html>
 <head>
 
-	<title>DAZ Fun-☺-rama 5000&trade; :: <?php echo $title_for_layout; ?></title>
+	<title>DAZ Fun-☺-rama ME&reg; :: <?php echo $title_for_layout; ?></title>
 
 	<?php
 
