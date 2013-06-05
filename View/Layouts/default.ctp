@@ -26,7 +26,7 @@
 
 	<header class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<span class="brand"><?php echo ($geobootstrap) ? $this->Html->image('Daz3D_23016.gif') : 'DAZ'; ?> Fun-☺-rama 5000&trade;</span>
+			<span class="brand"><?php echo ($geobootstrap) ? $this->Html->image('Daz3D_23016.gif') : 'DAZ'; ?> Fun-☺-rama <?php echo ($geobootstrap) ? $this->Html->image('me.jpg') : 'ME'; ?>&reg;</span>
 			<?php
 				$menu = array(
 					array('Home', array('controller' => 'home', 'action' => 'index')),
