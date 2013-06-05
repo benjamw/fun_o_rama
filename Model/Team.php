@@ -57,7 +57,7 @@ class Team extends AppModel {
 
 	public function beforeSave($options = array( )) {
 		if ( ! isset($this->data['Team']['name']) && ! isset($this->data['Team']['id'])) {
-			$this->data['Team']['name'] = $this->generate_name( );
+			$this->data['Team']['name'] = $this->generate_name(true);
 		}
 
 		return true;

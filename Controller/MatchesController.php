@@ -353,7 +353,7 @@ class MatchesController extends AppController {
 				$data = array(
 					'Team' => array(
 						'id' => $this->request->data['rename'],
-						'name' => $this->Match->Team->generate_name( ),
+						'name' => $this->Match->Team->generate_name(true),
 					),
 				);
 
