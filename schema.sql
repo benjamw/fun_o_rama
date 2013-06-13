@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `badges_players` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `badge_id` int(10) unsigned NOT NULL,
   `player_id` int(10) unsigned NOT NULL,
+  `count` smallint(5) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `badge_id` (`badge_id`,`player_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=376 ;

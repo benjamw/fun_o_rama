@@ -48,6 +48,7 @@ class Player extends AppModel {
 			'finderQuery' => '',
 			'deleteQuery' => '',
 			'insertQuery' => '',
+			'with' => 'BadgesPlayer',
 		),
 		'Team' => array(
 			'className' => 'Team',
