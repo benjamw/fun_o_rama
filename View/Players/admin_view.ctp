@@ -10,6 +10,9 @@
 		<dt><?php echo __('Name'); ?></dt>
 		<dd><?php echo h($player['Player']['name']); ?>&nbsp;</dd>
 
+		<dt><?php echo __('Avatar'); ?></dt>
+		<dd><?php if ( ! empty($player['Player']['avatar']['main'])) echo $this->Html->image($player['Player']['avatar']['main']); ?>&nbsp;</dd>
+
 	</dl>
 
 </div>

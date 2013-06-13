@@ -12,6 +12,7 @@
 		<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo __('Avatar'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
@@ -19,6 +20,7 @@
 		<tr class="table-hover">
 			<td><?php echo h($player['Player']['id']); ?>&nbsp;</td>
 			<td><?php echo h($player['Player']['name']); ?>&nbsp;</td>
+			<td><?php if ( ! empty($player['Player']['avatar']['main'])) echo $this->Html->image($player['Player']['avatar']['main']); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('action' => 'view', $player['Player']['id']), array('class' => 'btn btn-small')); ?>

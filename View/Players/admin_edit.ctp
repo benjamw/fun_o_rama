@@ -1,6 +1,6 @@
 
 <div class="players form">
-	<?php echo $this->Form->create('Player'); ?>
+	<?php echo $this->Form->create('Player', array('type' => 'file')); ?>
 		<fieldset>
 			<legend><?php echo __(Inflector::humanize(substr($this->action, 6)).' Player'); ?></legend>
 
@@ -9,6 +9,7 @@
 					echo $this->Form->input('id');
 				}
 				echo $this->Form->input('name');
+				echo $this->Form->input('avatar', array('type' => 'file'));
 			?>
 
 		</fieldset>

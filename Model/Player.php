@@ -17,6 +17,27 @@ class Player extends AppModel {
 		),
 	);
 
+	public $actsAs = array(
+		'Image' => array(
+			'fields' => array(
+				'avatar' => array(
+					'resize' => null,
+					'thumbnail' => null,
+					'versions' => array(
+						array(
+							'prefix' => 'main',
+							'width' => 50,
+							'height' => 50,
+							'aspect' => true,
+							'crop' => true,
+							'allow_enlarge' => true,
+						),
+					),
+				),
+			),
+		),
+	);
+
 	public $hasMany = array(
 		'PlayerRanking' => array(
 			'className' => 'PlayerRanking',
