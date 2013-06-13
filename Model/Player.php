@@ -64,6 +64,21 @@ class Player extends AppModel {
 			'deleteQuery' => '',
 			'insertQuery' => '',
 		),
+		'Tournament' => array(
+			'className' => 'Tournament',
+			'joinTable' => 'players_tournaments',
+			'foreignKey' => 'player_id',
+			'associationForeignKey' => 'tournament_id',
+			'unique' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => '',
+		),
 	);
 
 	public function afterSave($created) {

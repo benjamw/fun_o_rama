@@ -7,7 +7,7 @@ class Match extends AppModel {
 	public $displayField = 'created';
 
 	public $validate = array(
-		'game_id' => array(
+		'tournament_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
@@ -20,9 +20,9 @@ class Match extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'Game' => array(
-			'className' => 'Game',
-			'foreignKey' => 'game_id',
+		'Tournament' => array(
+			'className' => 'Tournament',
+			'foreignKey' => 'tournament_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',

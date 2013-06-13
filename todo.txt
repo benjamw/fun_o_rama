@@ -12,8 +12,44 @@ re-bake other admin areas (groups, users, pages, etc)
 
 Add levels for players based on number of games played (ranking, or
 experience?)
+
 https://docs.google.com/a/daz3d.com/document/d/1vzd3e8AFPnikg5EJYJz26-fFyojLKpAwbOOIgO5PU74/edit
 
 more stats on stats page, maybe split out each game type into it's own
 table
+
+
+
+
+Tournament Generator
+===============================
+Two Options:
+	- Round Robin (every team plays every other team once)
+		team with most wins is the winning team
+		- for this method, generate all possible matches up front
+			disregarding match quality
+
+	- Ladder [Bracket] (every team plays at least once, winner continues)
+		last team standing is the winner
+		- for this method, generate all possible matches and pull
+			the top ones:
+				3 teams: top 1 match w/1 rem,
+				4 teams: top 2 matches,
+				5 teams: top 2 matches w/1 rem,
+				6 teams: top 3 matches,
+				n teams: top floor(n / 2) matches w/(n % 2) rem
+			then play those teams together, and if odd teams, bring in
+			odd team on second round and calculate top matches for winners
+
+			- future: double/triple elimination
+
+To generate teams:
+	Create all possible team options with given players and team size
+	Take those teams, and with remaining players create all possible
+	team options, and continue until all teams are created.
+	For each of those team combinations, calculate the match quality,
+	and keep the best one.
+
+	So just like how it works now, except extend team creation recursively
+	until all teams are created.
 

@@ -38,9 +38,9 @@ class Game extends AppModel {
 	);
 
 	public $hasMany = array(
-		'Match' => array(
-			'className' => 'Match',
-			'foreignKey' => 'game_id',
+		'Tournament' => array(
+			'className' => 'Tournament',
+			'foreignKey' => 'tournament_id',
 			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
