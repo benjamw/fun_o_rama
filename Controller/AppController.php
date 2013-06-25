@@ -13,7 +13,7 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 
-	public $helpers = array('Session', 'Html', 'Form', 'Plural', 'Menu');
+	public $helpers = array('Session', 'Html', 'Form', 'Plural', 'Menu', 'Identicon.Identicon');
 	public $components = array('Session', 'Auth', 'DebugKit.Toolbar');
 
 	public $user = array( );
@@ -58,8 +58,9 @@ class AppController extends Controller {
 // log the IP addresses accessing the site
 // so I can filter out anything not DAZ later
 CakeLog::write('debug', env('REMOTE_ADDR'));
+CakeLog::write('debug', env('HTTP_USER_AGENT'));
 
-		if ( ! in_array(env('REMOTE_ADDR'), $this->allowed_ips)) {
+		if (env('REMOTE_ADDR') && ! in_array(env('REMOTE_ADDR'), $this->allowed_ips)) {
 			echo 'Access denied.';
 			exit;
 		}

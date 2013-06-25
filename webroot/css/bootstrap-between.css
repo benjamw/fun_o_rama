@@ -61,3 +61,10 @@ ul.swappable {
 	padding: 5px;
 }
 
+
+.player_popover figure {
+	width: 75px;
+	text-align: center;
+	float: left;
+	margin: 10px;
+}

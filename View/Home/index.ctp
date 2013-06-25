@@ -10,8 +10,34 @@
 		<strong><?php echo $match['Game']['name']; ?></strong> started on <?php echo date('F j, Y @ h:ia', strtotime($match['Match']['created'])); ?>
 		<div class="outcomes pull-right">
 			<?php echo $this->Html->link('Adjust', array('controller' => 'matches', 'action' => 'adjust', $match['Match']['id']), array('class' => 'btn btn-mini btn-info')); ?>
-			<button class="btn btn-mini btn-success" title="<?php echo implode(', ', Set::extract('/Player/name', $match['Team'][0])); ?>" id="res_<?php echo $match['Match']['id'].'_'.$match['Team'][0]['id']; ?>"><?php echo $match['Team'][0]['name']; ?> (Team 1)</button>
-			<button class="btn btn-mini btn-success" title="<?php echo implode(', ', Set::extract('/Player/name', $match['Team'][1])); ?>" id="res_<?php echo $match['Match']['id'].'_'.$match['Team'][1]['id']; ?>"><?php echo $match['Team'][1]['name']; ?> (Team 2)</button>
+			<?php
+				foreach ($match['Team'] as $team_num => $team) {
+					$team_players = '<div class="player_popover">';
+					foreach ($team['Player'] as $player) {
+						if ( ! empty($player['avatar']['main'])) {
+							$image = $this->Html->image($player['avatar']['main'], array('alt' => $player['name']));
+						}
+						else {
+							$image = $this->Identicon->create($player['id']);
+						}
+
+						$team_players .= '<figure>'.$image.'<figcaption>'.$player['name'].'</figcaption></figure>';
+					}
+					$team_players .= '</div>';
+
+					echo $this->Form->button($team['name'].'  (Team '.($team_num + 1).')', array(
+						'type' => 'button',
+						'class' => 'btn btn-mini btn-success teams',
+						'id' => 'res_'.$match['Match']['id'].'_'.$team['id'],
+//						'title' => implode(', ', Set::extract('/Player/name', $team)),
+						'data-html' => 'true',
+						'data-placement' => 'top',
+						'data-trigger' => 'hover',
+						'data-title' => $team['name'].'  (Team '.($team_num + 1).')',
+						'data-content' => str_replace('"', "'", $team_players),
+					));
+				}
+			?>
 			<button class="btn btn-mini btn-warning" id="res_<?php echo $match['Match']['id'].'_0'; ?>">Tie</button>
 			<button class="btn btn-mini btn-danger" id="res_<?php echo $match['Match']['id'].'_null'; ?>">Didn't Play</button>
 		</div>

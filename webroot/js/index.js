@@ -23,3 +23,6 @@ jQuery('.in_progress').on('click', 'button', function(evt) {
 
 	return false; // stop everything
 });
+
+jQuery('.teams').popover( );
+
