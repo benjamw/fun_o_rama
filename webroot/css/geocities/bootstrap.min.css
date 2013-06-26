@@ -855,6 +855,7 @@ select,input[type="file"] {
 select {
 	width:220px;
 	background-color:#000;
+	color: #999;
 	border:1px solid #0f0
 }
 select[multiple],select[size] {
@@ -2349,8 +2350,8 @@ input[type="submit"].btn-block,input[type="reset"].btn-block,input[type="button"
 	color:rgba(255,255,255,0.75)
 }
 .btn-primary {
-	color:#fff;
-	text-shadow:0 -1px 0 rgba(0,0,0,0.25);
+	color:#000;
+	text-shadow:0 -1px 0 rgba(255,255,255,0.25);
 	background-color:#0ee;
 	*background-color:#0ee;
 	background-image:-moz-linear-gradient(top,#0ee,#0ee);
@@ -2365,7 +2366,7 @@ input[type="submit"].btn-block,input[type="reset"].btn-block,input[type="button"
 	filter:progid:DXImageTransform.Microsoft.gradient(enabled=false)
 }
 .btn-primary:hover,.btn-primary:focus,.btn-primary:active,.btn-primary.active,.btn-primary.disabled,.btn-primary[disabled] {
-	color:#fff;
+	color:#000;
 	background-color:#0ee;
 	*background-color:#00d4d5
 }
@@ -2373,8 +2374,8 @@ input[type="submit"].btn-block,input[type="reset"].btn-block,input[type="button"
 	background-color:#0bb \9
 }
 .btn-warning {
-	color:#fff;
-	text-shadow:0 -1px 0 rgba(0,0,0,0.25);
+	color:#000;
+	text-shadow:0 -1px 0 rgba(255,255,255,0.25);
 	background-color:#fa0;
 	*background-color:#fa0;
 	background-image:-moz-linear-gradient(top,#fa0,#fa0);
@@ -2389,7 +2390,7 @@ input[type="submit"].btn-block,input[type="reset"].btn-block,input[type="button"
 	filter:progid:DXImageTransform.Microsoft.gradient(enabled=false)
 }
 .btn-warning:hover,.btn-warning:focus,.btn-warning:active,.btn-warning.active,.btn-warning.disabled,.btn-warning[disabled] {
-	color:#fff;
+	color:#000;
 	background-color:#fa0;
 	*background-color:#e69900
 }
@@ -2421,8 +2422,8 @@ input[type="submit"].btn-block,input[type="reset"].btn-block,input[type="button"
 	background-color:#c00 \9
 }
 .btn-success {
-	color:#fff;
-	text-shadow:0 -1px 0 rgba(0,0,0,0.25);
+	color:#000;
+	text-shadow:0 -1px 0 rgba(255,255,255,0.25);
 	background-color:#0f0;
 	*background-color:#0f0;
 	background-image:-moz-linear-gradient(top,#0f0,#0f0);
@@ -2437,7 +2438,7 @@ input[type="submit"].btn-block,input[type="reset"].btn-block,input[type="button"
 	filter:progid:DXImageTransform.Microsoft.gradient(enabled=false)
 }
 .btn-success:hover,.btn-success:focus,.btn-success:active,.btn-success.active,.btn-success.disabled,.btn-success[disabled] {
-	color:#fff;
+	color:#000;
 	background-color:#0f0;
 	*background-color:#00e600
 }
@@ -2445,8 +2446,8 @@ input[type="submit"].btn-block,input[type="reset"].btn-block,input[type="button"
 	background-color:#0c0 \9
 }
 .btn-info {
-	color:#fff;
-	text-shadow:0 -1px 0 rgba(0,0,0,0.25);
+	color:#000;
+	text-shadow:0 -1px 0 rgba(255,255,255,0.25);
 	background-color:#0ff;
 	*background-color:#0ff;
 	background-image:-moz-linear-gradient(top,#0ff,#0ff);
@@ -2461,7 +2462,7 @@ input[type="submit"].btn-block,input[type="reset"].btn-block,input[type="button"
 	filter:progid:DXImageTransform.Microsoft.gradient(enabled=false)
 }
 .btn-info:hover,.btn-info:focus,.btn-info:active,.btn-info.active,.btn-info.disabled,.btn-info[disabled] {
-	color:#fff;
+	color:#000;
 	background-color:#0ff;
 	*background-color:#00e5e6
 }
