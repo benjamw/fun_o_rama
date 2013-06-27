@@ -107,6 +107,7 @@ if (class_exists('Inflector')) {
 
 	Inflector::rules('plural', array(
 		'irregular' => array(
+			'human' => 'humans',
 			'musk-ox' => 'musk-oxen',
 		),
 		'uninflected' => array(
@@ -117,9 +118,9 @@ if (class_exists('Inflector')) {
 
 	Inflector::rules('singular', array(
 		'irregular' => array(
-			'musk-oxen' => 'musk-ox',
 			'cookies' => 'cookie',
 			'genies' => 'genie',
+			'musk-oxen' => 'musk-ox',
 			'niches' => 'niche',
 			'testes' => 'testis',
 		),
