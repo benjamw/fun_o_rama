@@ -5,7 +5,7 @@ App::uses('AppModel', 'Model');
 class Team extends AppModel {
 
 	public $validate = array(
-		'match_id' => array(
+		'tournament_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
@@ -28,9 +28,9 @@ class Team extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'Match' => array(
-			'className' => 'Match',
-			'foreignKey' => 'match_id',
+		'Tournament' => array(
+			'className' => 'Tournament',
+			'foreignKey' => 'tournament_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -38,6 +38,21 @@ class Team extends AppModel {
 	);
 
 	public $hasAndBelongsToMany = array(
+		'Match' => array(
+			'className' => 'Match',
+			'joinTable' => 'matches_teams',
+			'foreignKey' => 'team_id',
+			'associationForeignKey' => 'match_id',
+			'unique' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => '',
+		),
 		'Player' => array(
 			'className' => 'Player',
 			'joinTable' => 'players_teams',
@@ -82,6 +97,16 @@ class Team extends AppModel {
 		$adjectives = m('Adjective')->find('list', $conds);
 		$colors = m('Color')->find('list', $conds);
 		$animals = m('Animal')->find('list', $conds);
+
+		// if alliteration was attempted, but a match was not found
+		// kill the alliteration, and just pull all values
+		if ( ! $adjectives || ! $colors || ! $animals) {
+			$conds = array( );
+
+			$adjectives = m('Adjective')->find('list', $conds);
+			$colors = m('Color')->find('list', $conds);
+			$animals = m('Animal')->find('list', $conds);
+		}
 
 		shuffle($adjectives);
 		shuffle($adjectives);

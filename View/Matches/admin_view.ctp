@@ -7,17 +7,14 @@
 		<dt><?php echo __('ID'); ?></dt>
 		<dd><?php echo h($match['Match']['id']); ?>&nbsp;</dd>
 
-		<dt><?php echo __('Game'); ?></dt>
-		<dd><?php echo $this->Html->link($match['Game']['name'], array('controller' => 'games', 'action' => 'view', $match['Game']['id'])); ?>&nbsp;</dd>
+		<dt><?php echo __('Tournament'); ?></dt>
+		<dd><?php echo $this->Html->link($match['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $match['Tournament']['id'])); ?>&nbsp;</dd>
 
 		<dt><?php echo __('Created'); ?></dt>
 		<dd><?php echo h($match['Match']['created']); ?>&nbsp;</dd>
 
 		<dt><?php echo __('Winning Team'); ?></dt>
 		<dd><?php echo $this->Html->link($match['WinningTeam']['id'].' '.$match['WinningTeam']['name'], array('controller' => 'teams', 'action' => 'view', $match['WinningTeam']['id'])); ?>&nbsp;</dd>
-
-		<dt><?php echo __('Sat Out Player'); ?></dt>
-		<dd><?php echo $this->Html->link($match['SatOutPlayer']['name'], array('controller' => 'players', 'action' => 'view', $match['SatOutPlayer']['id'])); ?>&nbsp;</dd>
 
 	</dl>
 
@@ -38,6 +35,7 @@
 	<table class="table table-striped table-bordered table-condensed">
 		<tr>
 			<th><?php echo __('ID'); ?></th>
+			<th><?php echo __('Tournament'); ?></th>
 			<th><?php echo __('Name'); ?></th>
 			<th><?php echo __('Players'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -46,6 +44,7 @@
 	<?php foreach ($match['Team'] as $team) { ?>
 		<tr class="table-hover">
 			<td><?php echo $team['id']; ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($team['Tournament']['Game']['name'], array('controller' => 'games', 'action' => 'view', $team['Tournament']['Game']['id'])).' @ '.$this->Html->link($team['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $team['Tournament']['id'])); ?>&nbsp;</td>
 			<td><?php echo $team['name']; ?>&nbsp;</td>
 			<td>
 				<?php

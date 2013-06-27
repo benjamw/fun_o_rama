@@ -31,6 +31,19 @@ class Player extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => '',
 		),
+		'PlayerStat' => array(
+			'className' => 'PlayerStat',
+			'foreignKey' => 'player_id',
+			'dependent' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => '',
+		),
 	);
 
 	public $hasAndBelongsToMany = array(
@@ -64,21 +77,6 @@ class Player extends AppModel {
 			'deleteQuery' => '',
 			'insertQuery' => '',
 		),
-		'Tournament' => array(
-			'className' => 'Tournament',
-			'joinTable' => 'players_tournaments',
-			'foreignKey' => 'player_id',
-			'associationForeignKey' => 'tournament_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => '',
-		),
 	);
 
 	public function afterSave($created) {
@@ -94,6 +92,18 @@ class Player extends AppModel {
 				$this->PlayerRanking->save(array('PlayerRanking' => array(
 					'player_id' => $this->id,
 					'game_type_id' => $game_type,
+				)), false);
+			}
+
+			// create an entry in the PlayerStat table for this player
+			// for every game.  the values are defaulted in the table
+			$games = array_keys($this->PlayerStat->Game->find('list'));
+
+			foreach ($games as $game) {
+				$this->PlayerStat->create( );
+				$this->PlayerStat->save(array('PlayerStat' => array(
+					'player_id' => $this->id,
+					'game_id' => $game,
 				)), false);
 			}
 		}

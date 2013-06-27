@@ -9,6 +9,7 @@
 					echo $this->Form->input('id');
 				}
 				echo $this->Form->input('name');
+				echo $this->Form->input('max_team_size');
 			?>
 
 		</fieldset>

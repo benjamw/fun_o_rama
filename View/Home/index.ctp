@@ -27,12 +27,19 @@
 <?php } ?>
 
 <div class="home form">
-	<?php echo $this->Form->create('Match', array('action' => 'start')); ?>
+	<?php echo $this->Form->create('Tournament', array('action' => 'start')); ?>
 		<fieldset>
-			<legend>Start a match</legend>
+			<legend>Start a match / tournament</legend>
 
-			<?php echo $this->Form->input('game_id', array('label' => false)); ?>
-			<?php echo $this->Form->input('player_id', array('label' => 'Players', 'type' => 'select', 'multiple' => 'checkbox')); ?>
+			<div class="row">
+				<div class="span3">
+					<?php echo $this->Form->input('game_id'); ?>
+					<?php echo $this->Form->input('tournament_type'); ?>
+					<?php echo $this->Form->input('team_size', array('type' => 'select', 'empty' => 'Even Split', 'options' => array_combine(range(1, 4), range(1, 4)))); ?>
+				</div>
+
+				<?php echo $this->Form->input('player_id', array('label' => 'Players', 'type' => 'select', 'multiple' => 'checkbox', 'div' => array('class' => 'checkboxes'))); ?>
+			</div>
 		</fieldset>
 		<?php if ($geobootstrap) { echo $this->Html->image('hot.gif'); } ?>
 		<?php echo $this->Form->submit(__('Create Teams'), array('class' => 'btn btn-primary', 'div' => ! $geobootstrap)); ?>

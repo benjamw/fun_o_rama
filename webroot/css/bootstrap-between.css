@@ -36,6 +36,10 @@ table .actions {
 
 .badges img {
 	border: 5px solid whitesmoke;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
 	border-radius: 5px;
 }
 
@@ -55,6 +59,32 @@ table .actions {
 .datetime select {
 	width: auto;
 }
+
+#TournamentStartForm div.checkboxes {
+	float: left;
+	min-height: 1px;
+	margin-left: 30px;
+	-webkit-column-count: 3;
+	-moz-column-count: 3;
+	-ms-column-count: 3;
+	-o-column-count: 3;
+	column-count: 3;
+	height: 160px;
+	width: 600px;
+	margin-top: 25px;
+	overflow: visible;
+	position: relative;
+}
+
+#TournamentStartForm div.checkboxes .checkbox {
+	width: 180px;
+}
+
+#TournamentStartForm div.checkboxes > label {
+	position: absolute;
+	top: -25px;
+}
+
 
 /* this allows the sortable names to be dropped on empty lists */
 ul.swappable {

@@ -17,6 +17,9 @@ class PlayersController extends AppController {
 				'PlayerRanking' => array(
 					'GameType',
 				),
+				'PlayerStat' => array(
+					'Game',
+				),
 			),
 			'conditions' => array(
 				'Player.id' => $id,

@@ -27,13 +27,6 @@ class Match extends AppModel {
 			'fields' => '',
 			'order' => '',
 		),
-		'SatOutPlayer' => array(
-			'className' => 'Player',
-			'foreignKey' => 'sat_out',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
 		'WinningTeam' => array(
 			'className' => 'Team',
 			'foreignKey' => 'winning_team_id',
@@ -43,19 +36,21 @@ class Match extends AppModel {
 		),
 	);
 
-	public $hasMany = array(
+	public $hasAndBelongsToMany = array(
 		'Team' => array(
 			'className' => 'Team',
+			'joinTable' => 'matches_teams',
 			'foreignKey' => 'match_id',
-			'dependent' => true,
+			'associationForeignKey' => 'team_id',
+			'unique' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
 			'limit' => '',
 			'offset' => '',
-			'exclusive' => '',
 			'finderQuery' => '',
-			'counterQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => '',
 		),
 	);
 

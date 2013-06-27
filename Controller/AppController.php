@@ -615,19 +615,19 @@ CakeLog::write('debug', env('REMOTE_ADDR'));
 
 		// grab the games list in order of most played
 		if (isset($this->viewVars['games'])) {
-			$this->set('games', m('Match')->Game->find('list', array(
+			$this->set('games', m('Tournament')->Game->find('list', array(
 				'joins' => array(
 					array(
-						'table' => 'matches',
-						'alias' => 'Match',
+						'table' => 'tournaments',
+						'alias' => 'Tournament',
 						'type' => 'LEFT',
 						'conditions' => array(
-							'Match.game_id = Game.id',
+							'Tournament.game_id = Game.id',
 						),
 					),
 				),
 				'order' => array(
-					'COUNT(Match.id)' => 'DESC',
+					'COUNT(Tournament.id)' => 'DESC',
 					'Game.name' => 'ASC',
 				),
 				'group' => array(

@@ -32,9 +32,9 @@ class EnumBehavior extends ModelBehavior {
 		$this->settings[$model->name] = $config;
 		foreach($config as $field => $values){
 			$model->validate[$field]['allowedValues'] = array(
-		  		'rule' => array('inList', $values),
-		  		'message' => __('Please choose ont of the following values : %s', join(', ', $this->__translate($values))),
-		  	);
+				'rule' => array('inList', $values),
+				'message' => __('Please choose one of the following values : %s', join(', ', $this->__translate($values))),
+			);
 		}
 	}
 

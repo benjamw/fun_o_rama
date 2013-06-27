@@ -11,7 +11,6 @@
 				echo $this->Form->input('game_id');
 				echo $this->Form->input('tournament_type');
 				echo $this->Form->input('team_size');
-				echo $this->Form->input('Player');
 			?>
 
 		</fieldset>

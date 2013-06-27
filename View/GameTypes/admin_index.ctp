@@ -12,6 +12,7 @@
 		<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo $this->Paginator->sort('max_team_size'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
@@ -19,6 +20,7 @@
 		<tr class="table-hover">
 			<td><?php echo h($gameType['GameType']['id']); ?>&nbsp;</td>
 			<td><?php echo h($gameType['GameType']['name']); ?>&nbsp;</td>
+			<td><?php echo h($gameType['GameType']['max_team_size']); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('action' => 'view', $gameType['GameType']['id']), array('class' => 'btn btn-small')); ?>

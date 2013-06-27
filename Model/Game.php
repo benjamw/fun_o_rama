@@ -53,5 +53,23 @@ class Game extends AppModel {
 		),
 	);
 
+	public function afterSave($created) {
+		parent::afterSave($created);
+
+		if ($created) {
+			// create an entry in the PlayerStat table for this game
+			// for every player.  the values are defaulted in the table
+			$players = array_keys($this->PlayerStat->Player->find('list'));
+
+			foreach ($players as $player) {
+				$this->PlayerStat->create( );
+				$this->PlayerStat->save(array('PlayerStat' => array(
+					'player_id' => $player,
+					'game_id' => $this->id,
+				)), false);
+			}
+		}
+	}
+
 }
 
