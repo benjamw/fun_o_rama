@@ -1,3 +1,6 @@
+add player avatars to match edit page (Match/start.ctp), and to
+match create page in checkbox list (Home/index.ctp)
+
 make a tournament generator (auto-use when creating a cornhole game with more than 4 players)
 
 allow more then one sat out player
