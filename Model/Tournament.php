@@ -133,6 +133,8 @@ if ($data['num_byes']) {
 
 		list($data['teams'], $data['quality']) = $this->create_teams($data);
 
+		$tourny['Tournament']['quality'] = $data['quality'] * 100;
+
 		shuffle($data['teams']);
 
 		foreach ($data['teams'] as $t => $team) {
@@ -235,6 +237,10 @@ if ($data['num_byes']) {
 			$this_match = $match;
 			$this_match['Team']['Team'] = $teams;
 
+			// TODO: calculate match quality here and store in DB
+$quality = 0;
+			$this_match['Match']['quality'] = $quality * 100;
+
 			$this->Match->create( );
 			$this->Match->saveAssociated($this_match, array('deep' => true));
 		}
@@ -242,6 +248,12 @@ if ($data['num_byes']) {
 
 
 	protected function single_elimination( ) {
+		// TODO: build this
+	}
+
+
+	// calculate the team seeds (sum the player rankings for each team and sort)
+	protected function team_seeds( ) {
 		// TODO: build this
 	}
 
