@@ -21,6 +21,8 @@ https://docs.google.com/a/daz3d.com/document/d/1vzd3e8AFPnikg5EJYJz26-fFyojLKpAw
 more stats on stats page, maybe split out each game type into it's own
 table
 
+add hex code to colors, and update with this list: http://xona.com/colorlist/
+
 
 
 

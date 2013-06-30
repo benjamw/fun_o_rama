@@ -7,22 +7,59 @@ class HomeController extends AppController {
 	public $uses = array('Tournament');
 
 	public function index( ) {
-		// grab any in progress tournaments / matches
-		// if the tournament only has two teams, it's not a
-		// "tournament", it's just a match, so only show the match
-		$this->set('in_progress', $this->Tournament->Match->find('all', array(
+		// grab any in progress tournaments
+		$in_progress = $this->Tournament->find('all', array(
+			'fields' => array(
+				'Tournament.*',
+				'COUNT(CMatch.id ) AS `match_count`',
+			),
 			'contain' => array(
-				'Tournament' => array(
-					'Team',
+				'Match' => array(
+					'conditions' => array(
+						'Match.winning_team_id IS NULL',
+					),
+					'Team' => array(
+						'Player',
+					),
 				),
-				'Team' => array(
-					'Player',
+			),
+			'joins' => array(
+				array(
+					'table' => 'matches',
+					'alias' => 'JMatch',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'JMatch.tournament_id = Tournament.id',
+						'JMatch.winning_team_id IS NULL',
+					),
+				),
+				array(
+					'table' => 'matches',
+					'alias' => 'CMatch',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'CMatch.tournament_id = Tournament.id',
+					),
 				),
 			),
 			'conditions' => array(
-				'winning_team_id IS NULL',
+				'JMatch.id IS NOT NULL',
 			),
-		)));
+			'group' => array(
+				'Tournament.id',
+			),
+			'order' => array(
+				'Tournament.created' => 'ASC',
+			),
+		));
+
+		foreach ($in_progress as & $tourny) { // mind the reference
+			$tourny['Tournament']['match_count'] = $tourny[0]['match_count'];
+			unset($tourny[0]);
+		}
+		unset($tourny); // kill the reference
+
+		$this->set('in_progress', $in_progress);
 
 		$this->_setSelects(true);
 	}

@@ -5,7 +5,8 @@
 		There are unfinished matches.  Please enter the outcome of those matches.
 	</div>
 
-	<?php foreach ($in_progress as $match) { ?>
+	<?php foreach ($in_progress as $tourny) { ?>
+	<?php ?>
 	<div class="match well">
 		<strong><?php echo $match['Game']['name']; ?></strong> started on <?php echo date('F j, Y @ h:ia', strtotime($match['Match']['created'])); ?>
 		<div class="outcomes pull-right">
@@ -19,6 +20,8 @@
 	<?php } ?>
 </div>
 <?php } ?>
+
+<hr />
 
 <?php if ($geobootstrap) { ?>
 <marquee behavior="alternate">Please select the game and players below, then click on "Create Teams" to get your auto-generated teams!</marquee>
