@@ -6,6 +6,7 @@ require_once $path[0].'TrueSkill/TrueSkill/FactorGraphTrueSkillCalculator.php';
 require_once $path[0].'TrueSkill/TrueSkill/TwoTeamTrueSkillCalculator.php';
 require_once $path[0].'TrueSkill/Teams.php';
 require_once $path[0].'Combinations.php';
+require_once $path[0].'TeamCombinations.php';
 
 use Moserware\Skills\TrueSkill\FactorGraphTrueSkillCalculator;
 use Moserware\Skills\TrueSkill\TwoTeamTrueSkillCalculator;
@@ -16,6 +17,7 @@ use Moserware\Skills\Team;
 use Moserware\Skills\Teams;
 use Moserware\Skills\SkillCalculator;
 use Moserware\Skills\Combinations;
+use Moserware\Skills\TeamCombinations;
 
 class TrueSkillBehavior extends ModelBehavior {
 
@@ -23,6 +25,14 @@ class TrueSkillBehavior extends ModelBehavior {
 	private $TwoTeamCalculator;
 	private $MultiTeamCalculator;
 
+
+	/**
+	 * Setup the behavior
+	 *
+	 * @param Model linked model (not used)
+	 * @param array optional configuration data
+	 * @return void
+	 */
 	public function setup(Model $model, $config = array( )) {
 		parent::setup($model, $config);
 
@@ -54,6 +64,7 @@ class TrueSkillBehavior extends ModelBehavior {
 	 *		),
 	 *	);
 	 *
+	 * @param Model linked model (not used)
 	 * @param array teams of Player data including PlayerRanking data
 	 * @param int winning team (1 = first team, 2 = second team, 0 = draw)
 	 * @return array player data including new ranking data or false on failure
@@ -123,6 +134,7 @@ class TrueSkillBehavior extends ModelBehavior {
 	 *
 	 *	Odd count players will be handled, but are not recommended
 	 *
+	 * @param Model linked model (not used)
 	 * @param array player data including rank
 	 * @param int optional number of players per team
 	 * @return array team arrays of player ids
@@ -140,14 +152,13 @@ class TrueSkillBehavior extends ModelBehavior {
 
 		$calculator = ((2 === $num_teams) ? $this->TwoTeamCalculator : $this->MultiTeamCalculator);
 
-		$matches = $this->getMatches(count($players), $team_size);
-
-		if ( ! $matches) {
-			return false;
-		}
+// TODO: this whole thing is running out of memory
+// need to find a way to iterate through all possible matches
+// while keeping the memory footprint small and also running as fast as possible
 
 		$team_quality = array( );
-		foreach ($matches as $teams) {
+		$highest_quality = 0;
+		foreach (new TeamCombinations(range(0, count($players) - 1), $team_size) as $teams) {
 			$calc_teams = array( );
 			foreach ($teams as $player_spots) {
 				$team = new Team( );
@@ -159,7 +170,18 @@ class TrueSkillBehavior extends ModelBehavior {
 				$calc_teams[] = $team;
 			}
 
-			$quality = (string) $calculator->calculateMatchQuality($this->GameInfo, $calc_teams);
+			$quality = $calculator->calculateMatchQuality($this->GameInfo, $calc_teams);
+
+			if ($quality < $highest_quality) {
+				continue;
+			}
+			elseif ($quality > $highest_quality) {
+				unset($team_quality);
+				$team_quality = array( );
+			}
+
+			$highest_quality = $quality;
+
 			$quality = number_format($quality, 10);
 
 			if ( ! isset($team_quality[$quality])) {
@@ -178,78 +200,86 @@ class TrueSkillBehavior extends ModelBehavior {
 		$top_teams = $first['value'];
 
 		shuffle($top_teams);
-		shuffle($top_teams);
-		shuffle($top_teams);
 
 		return array(reset($top_teams), $top_quality);
 	}
 
-	protected function getMatches($num_players, $team_size) {
-		$num_teams = $num_players / $team_size;
-		if ((int) $num_teams != $num_teams) {
-			// the number of players given do not fit into the given team size evenly
-			return false;
-		}
 
-		// run the recursive function to get all possible teams
-		list($matches, ) = $this->getTeams(array( ), range(0, $num_players - 1), (int) $num_teams);
+	/**
+	 * Calculate the match quality with the given teams
+	 *
+	 *	$teams = array(
+	 *		array(
+	 *			array(
+	 *				'id' => [player_id],
+	 *				'mean' => [player_ranking_mean],
+	 *				'std_dev' => [player_ranking_standard_deviation],
+	 *			),
+	 *			...
+	 *		),
+	 *		array(
+	 *			array(
+	 *				'id' => [player_id],
+	 *				'mean' => [player_ranking_mean],
+	 *				'std_dev' => [player_ranking_standard_deviation],
+	 *			),
+	 *			...
+	 *		),
+	 *	);
+	 *
+	 * @param Model linked model (not used)
+	 * @param array teams of Player data including PlayerRanking data
+	 * @return float match quality
+	 */
+	public function getQuality(Model $model, $teams) {
+		$num_teams = count($teams);
 
-		// flatten the output, but not too much
-		while ( ! is_int($matches[0][0][0])) {
-			$all_matches = array( );
+		$calculator = ((2 === $num_teams) ? $this->TwoTeamCalculator : $this->MultiTeamCalculator);
 
-			foreach ($matches as $match) {
-				$all_matches = array_merge($all_matches, $match);
+		foreach ($teams as $players) {
+			$team = new Team( );
+
+			foreach ($players as $player) {
+				$team->addPlayer(new Player($player['id']), new Rating($player['mean'], $player['std_dev']));
 			}
 
-			$matches = $all_matches;
+			$calc_teams[] = $team;
 		}
 
-		return $matches;
+		return $calculator->calculateMatchQuality($this->GameInfo, $calc_teams);
 	}
 
-	// recursive function to get all possible team combinations
-	protected function getTeams($teams, $player_spots, $num_teams) {
-		sort($player_spots);
 
-		if (1 === $num_teams) {
-			$teams[] = $player_spots;
-			return array($teams, $player_spots);
-		}
-
-		$return_teams = $first_team = $last_team = array( );
-		foreach (new Combinations($player_spots, (int) ceil(count($player_spots) / $num_teams)) as $cur_team) {
-			// store the first team that was created
-			// so we can pass it up the tree
-			if ( ! $first_team) {
-				$first_team = $cur_team;
-			}
-
-			// if the current team has already been seen
-			// then stop creating teams, it only repeats from here
-			if ($cur_team == $last_team) {
-				break;
-			}
-
-			$new_teams = $teams;
-			$new_teams[] = $cur_team;
-
-			list($return, $last_team) = $this->getTeams($new_teams, array_diff($player_spots, $cur_team), $num_teams - 1);
-
-			$return_teams[] = $return;
-		}
-
-		return array($return_teams, $first_team);
-	}
-
-	public function getDefaultMean( ) {
+	/**
+	 * Getter for the default mean value
+	 *
+	 * @param Model linked model (not used)
+	 * @return float default mean
+	 */
+	public function getDefaultMean(Model $model) {
 		return $this->GameInfo->getDefaultRating( )->getMean( );
 	}
 
-	public function getDefaultStandardDeviation( ) {
+
+	/**
+	 * Getter for the default standard deviation value
+	 *
+	 * @param Model linked model (not used)
+	 * @return float default standard deviation
+	 */
+	public function getDefaultStandardDeviation(Model $model) {
 		return $this->GameInfo->getDefaultRating( )->getStandardDeviation( );
 	}
 
+
+	/**
+	 * Getter for the Combinations Iterator
+	 *
+	 * @param Model linked model (not used)
+	 * @param array|string set S of elements
+	 * @param int k number of elements to choose
+	 * @return Combinations Iterator
+	 */
 	public function combinations(Model $model, $s, $k) {
 		return new Combinations($s, $k);
 	}
