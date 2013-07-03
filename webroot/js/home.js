@@ -4,7 +4,7 @@ jQuery('.in_progress').on('click', 'button', function(evt) {
 	var id = $this.attr('id').split('_');
 
 	jQuery.ajax({
-		url: MATCH_URL,
+		url: TOURNAMENT_URL,
 		type: 'POST',
 		data: 'match='+ id[1] +'&winner='+ id[2],
 		success: function(msg) {

@@ -9,11 +9,8 @@ class HomeController extends AppController {
 	public function index( ) {
 		// grab any in progress tournaments
 		$in_progress = $this->Tournament->find('all', array(
-			'fields' => array(
-				'Tournament.*',
-				'COUNT(CMatch.id ) AS `match_count`',
-			),
 			'contain' => array(
+				'Game',
 				'Match' => array(
 					'conditions' => array(
 						'Match.winning_team_id IS NULL',
@@ -33,14 +30,6 @@ class HomeController extends AppController {
 						'JMatch.winning_team_id IS NULL',
 					),
 				),
-				array(
-					'table' => 'matches',
-					'alias' => 'CMatch',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'CMatch.tournament_id = Tournament.id',
-					),
-				),
 			),
 			'conditions' => array(
 				'JMatch.id IS NOT NULL',
@@ -54,8 +43,17 @@ class HomeController extends AppController {
 		));
 
 		foreach ($in_progress as & $tourny) { // mind the reference
-			$tourny['Tournament']['match_count'] = $tourny[0]['match_count'];
-			unset($tourny[0]);
+			$tourny['Tournament']['match_count'] = $this->Tournament->Match->find('count', array(
+				'conditions' => array(
+					'Match.tournament_id' => $tourny['Tournament']['id'],
+				),
+			));
+
+			$tourny['Tournament']['team_count'] = $this->Tournament->Team->find('count', array(
+				'conditions' => array(
+					'Team.tournament_id' => $tourny['Tournament']['id'],
+				),
+			));
 		}
 		unset($tourny); // kill the reference
 
