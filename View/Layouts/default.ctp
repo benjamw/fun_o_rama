@@ -30,6 +30,7 @@
 			<?php
 				$menu = array(
 					array('Home', array('controller' => 'home', 'action' => 'index')),
+					array('Tournaments', array('controller' => 'tournaments', 'action' => 'index')),
 //					array('Players', array('controller' => 'players', 'action' => 'index')),
 //					array('Games', array('controller' => 'games', 'action' => 'index')),
 					array('Stats', array('controller' => 'stats', 'action' => 'index')),

@@ -61,47 +61,15 @@ g($result);
 		}
 
 g('PLAYING GAMES');
-		$players = $this->PlayerStat->Player->find('all', array(
-			'contain' => array(
-				'PlayerStat',
+		$matches = $this->PlayerStat->Player->Team->Match->find('all', array(
+			'conditions' => array(
+				'winning_team_id IS NOT NULL',
 			),
 		));
-		$players = Set::combine($players, '/Player/id', '/');
-g($players);
-
-		foreach ($players as & $player) { // mind the reference
-			$player['PlayerStat'] = Set::combine($player['PlayerStat'], '/game_id', '/');
-		}
-		unset($player); // kill the reference
-g($players);
-
-		$matches = $this->PlayerStat->Game->Match->find('all', array(
-			'contain' => array(
-				'Game',
-				'Team' => array(
-					'Player.id',
-				),
-			),
-			'order' => array(
-				'created' => 'ASC',
-			),
-		));
-g($matches);
 
 		foreach ($matches as $match) {
-			if (empty($match['Team'])) {
-				continue;
-			}
-// TODO: build this
-		}
-
-g($players);
-		foreach ($players as $player) {
-			foreach ($player['PlayerStat'] as $stats) {
-				$data = array('PlayerStat' => $stats);
-g($data);
-				$this->PlayerStat->save($data);
-			}
+g($match);
+			$this->PlayerStat->Player->Team->Match->update_stats($match['Match']['id']);
 		}
 	}
 

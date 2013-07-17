@@ -5,7 +5,8 @@ UPDATE  `game_types` SET  `max_team_size` =  '4' WHERE  `game_types`.`id` =1;
 ALTER TABLE `matches`
 	DROP `sat_out` ,
 	CHANGE  `game_id`  `tournament_id` INT( 10 ) UNSIGNED NOT NULL ,
-	ADD  `quality` DECIMAL( 6, 4 ) NOT NULL DEFAULT '0' AFTER  `tournament_id` ,
+	ADD  `name` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER  `tournament_id` ,
+	ADD  `quality` DECIMAL( 6, 4 ) NOT NULL DEFAULT '0' AFTER  `name` ,
 	DROP INDEX  `game_id` ,
 	ADD INDEX  `tournament_id` (  `tournament_id` );
 
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `teams` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `tournament_id` int(10) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
+  `start_seed` smallint(2) NULL DEFAULT NULL,
   `seed` smallint(2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `tournament_id` (`tournament_id`),

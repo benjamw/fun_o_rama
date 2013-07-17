@@ -1,4 +1,5 @@
 <?php
+
 	$single = ((1 === count($tournament['Match'])) && (2 === count($tournament['Team'])));
 
 	if (empty($adjusting)) {
@@ -12,6 +13,9 @@
 			'text' => $game_name,
 		);
 	}
+
+	$game_type_id = $tournament['Game']['game_type_id'];
+
 ?>
 
 <h3><strong><?php echo $tournament['Game']['name']; ?></strong> started on <span class="date"><?php echo date('F j, Y @ h:ia', strtotime($tournament['Tournament']['created'])); ?></span></h3>
@@ -28,24 +32,37 @@
 <h6>Tournament Quality: <?php echo number_format($tournament['Tournament']['quality'], 2); ?>%</h6>
 <?php } ?>
 <div class="teams well">
-	<?php foreach ($tournament['Team'] as $team) { ?>
-		<?php echo $this->element('team', array('team' => $team, 'swap' => true, 'link' => true)); ?>
-	<?php } ?>
+	<?php
+		$swap = $link = true;
+		foreach ($tournament['Team'] as $team) {
+			echo $this->element('team', compact('team', 'game_type_id', 'swap', 'link'));
+		}
+	?>
 </div>
 <?php } ?>
 
-<?php if ($adjusting && ! empty($the_rest)) { ?>
+<?php if (false && ($adjusting || ! empty($sitting_out))) { ?>
+<div class="well" id="team_out">
+	<h5>Sitting Out:</h5>
+	<ul class="swappable">
+	<?php
+		foreach ($sitting_out as $player) {
+			echo $this->element('player_li', compact('player', 'game_type_id', 'link'));
+		}
+	?>
+	</ul>
+</div>
+<?php } ?>
+
+<?php if ($adjusting) { ?>
 <div class="well" id="the_rest">
 	<h5>Other Players:</h5>
 	<ul class="swappable">
-	<?php foreach ($the_rest as $player) { $pl = $player['Player']; ?>
-		<li id="pl_<?php echo $pl['id']; ?>"><?php
-			echo $this->Html->link($pl['name'], array('controller' => 'players', 'action' => 'view', $pl['id']));
-			if ( ! empty($pl['PlayerRanking'][0]['mean'])) {
-				echo ' ('.number_format($pl['PlayerRanking'][0]['mean'], 2).')';
-			}
-		?></li>
-	<?php } ?>
+	<?php
+		foreach ($the_rest as $player) {
+			echo $this->element('player_li', compact('player', 'game_type_id', 'link'));
+		}
+	?>
 	</ul>
 </div>
 <?php } ?>
@@ -61,29 +78,17 @@
 		<?php } ?>
 
 		<div class="row">
-		<?php foreach ($match['Team'] as $team_num => $team) { ?>
-			<?php echo $this->element('team', array('team' => $team, 'swap' => $single, 'link' => $single, 'span' => 'span5')); ?>
-		<?php } ?>
+		<?php
+			$span = 'span5';
+			$swap = $link = $single;
+			foreach ($match['Team'] as $team_num => $team) {
+				echo $this->element('team', compact('team', 'game_type_id', 'swap', 'link', 'span'));
+			}
+		?>
 		</div>
 	</div>
 	<?php } ?>
 <?php if ( ! $single) { ?>
-</div>
-<?php } ?>
-
-<?php if (false && ($adjusting || ! empty($sitting_out))) { ?>
-<div class="well" id="team_out">
-	<h5>Sitting Out:</h5>
-	<ul class="swappable">
-	<?php if ( ! empty($sitting_out)) { $pl = $sitting_out['Player']; ?>
-		<li id="pl_<?php echo $pl['id']; ?>"><?php
-			echo $this->Html->link($pl['name'], array('controller' => 'players', 'action' => 'view', $pl['id']));
-			if ( ! empty($pl['PlayerRanking'][0]['mean'])) {
-				echo ' ('.number_format($pl['PlayerRanking'][0]['mean'], 2).')';
-			}
-		?></li>
-	<?php } ?>
-	</ul>
 </div>
 <?php } ?>
 

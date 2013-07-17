@@ -4,34 +4,105 @@ App::uses('AppController', 'Controller');
 
 class TournamentsController extends AppController {
 
+	public function index( ) {
+		// grab any curently running tournaments
+		$active = $this->Tournament->find('all', array(
+			'contain' => array(
+				'Game' => array(
+					'GameType',
+				),
+				'Match' => array(
+					'Team',
+				),
+				'Team' => array(
+					'Player' => array(
+						'PlayerRanking',
+					),
+				),
+			),
+			'joins' => array(
+				array(
+					'table' => 'matches',
+					'alias' => 'ActiveMatch',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ActiveMatch.tournament_id = Tournament.id',
+						'ActiveMatch.winning_team_id IS NULL',
+					),
+				),
+			),
+			'conditions' => array(
+				'ActiveMatch.id IS NOT NULL',
+			),
+			'group' => array(
+				'Tournament.id',
+			),
+			'order' => array(
+				'Tournament.created' => 'DESC',
+			),
+		));
+		$this->set('active', $active);
+
+		// grab the 5 most recently completed tournaments and their results
+		$completed = $this->Tournament->find('all', array(
+			'contain' => array(
+				'Game' => array(
+					'GameType',
+				),
+				'Match' => array(
+					'Team',
+				),
+				'Team' => array(
+					'Player',
+				),
+			),
+			'joins' => array(
+				array(
+					'table' => 'matches',
+					'alias' => 'ActiveMatch',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ActiveMatch.tournament_id = Tournament.id',
+						'ActiveMatch.winning_team_id IS NULL',
+					),
+				),
+				array(
+					'table' => 'matches',
+					'alias' => 'LastMatch',
+					'type' => 'INNER',
+					'conditions' => array(
+						'LastMatch.tournament_id = Tournament.id',
+						'LastMatch.winning_team_id IS NOT NULL',
+						'LastMatch.created = (
+							SELECT matches.created
+							FROM matches
+							WHERE tournament_id = Tournament.id
+							ORDER BY matches.created
+							LIMIT 1
+						)',
+					),
+				),
+			),
+			'conditions' => array(
+				'ActiveMatch.id IS NULL',
+			),
+			'group' => array(
+				'Tournament.id',
+			),
+			'order' => array(
+				'LastMatch.created' => 'DESC',
+			),
+			'limit' => 5,
+		));
+		$this->set('completed', $completed);
+	}
+
+
 	public function start( ) {
 		try {
 			$id = $this->Tournament->start($this->request->data['Tournament']);
-
-			$this->set('tournament', $this->Tournament->find('first', array(
-				'contain' => array(
-					'Game' => array(
-						'GameType',
-					),
-					'Match' => array(
-						'Team' => array(
-							'Player' => array(
-								'PlayerRanking',
-							),
-						),
-					),
-					'Team' => array(
-						'Player' => array(
-							'PlayerRanking',
-						),
-					),
-				),
-				'conditions' => array(
-					'Tournament.id' => $id,
-				),
-			)));
-
-			$this->set('games', $this->Tournament->Game->find('list'));
+			$this->Session->setFlash('Tournament Created Successfully!', 'flash_success');
+			$this->redirect(array('controller' => 'tournaments', 'action' => 'adjust', $id));
 		}
 		catch (CakeException $e) {
 			$this->Session->setFlash($e->getMessage( ).'. Please try again', 'flash_error');
@@ -47,11 +118,7 @@ class TournamentsController extends AppController {
 					'GameType',
 				),
 				'Match' => array(
-					'Team' => array(
-						'Player' => array(
-							'PlayerRanking',
-						),
-					),
+					'Team',
 				),
 				'Team' => array(
 					'Player' => array(
@@ -64,15 +131,15 @@ class TournamentsController extends AppController {
 			),
 		));
 
-//		$player_ids = array( );
-//		foreach ($match['Team'] as & $team) { // mind the reference
-//			foreach ($team['Player'] as & $player) { // mind the reference
-//				$player_ids[] = $player['id'];
-//			}
-//			unset($player); // kill the reference
-//		}
-//		unset($team); // kill the reference
-//
+		$player_ids = array( );
+		foreach ($tournament['Team'] as & $team) { // mind the reference
+			foreach ($team['Player'] as & $player) { // mind the reference
+				$player_ids[] = $player['id'];
+			}
+			unset($player); // kill the reference
+		}
+		unset($team); // kill the reference
+
 //		if ( ! empty($match['Match']['sat_out'])) {
 //			$player_ids[] = $match['Match']['sat_out'];
 //
@@ -83,27 +150,26 @@ class TournamentsController extends AppController {
 //			));
 //			$this->set('sitting_out', $sitting_out);
 //		}
-//
-//		if ( ! empty($player_ids)) {
-//			$the_rest = $this->Match->Team->Player->find('all', array(
-//				'conditions' => array(
-//					'id <>' => $player_ids,
-//				),
-//			));
-//			$this->set('the_rest', $the_rest);
-//		}
+
+		if ( ! empty($player_ids)) {
+			$the_rest = $this->Tournament->Team->Player->find('all', array(
+				'contain' => array(
+					'PlayerRanking',
+				),
+				'conditions' => array(
+					'id <>' => $player_ids,
+				),
+			));
+			$this->set('the_rest', $the_rest);
+		}
 
 		$this->set('tournament', $tournament);
 		$this->set('adjusting', true);
 		$this->_setSelects( );
-
-		$this->render('start');
 	}
 
 
 	public function update( ) {
-		$update_rank = false;
-
 		if ($this->request->isAjax( ) && $this->request->is('post')) {
 			if ( ! empty($this->request->data['pk'])) {
 				// updating the tournament game
@@ -111,6 +177,8 @@ class TournamentsController extends AppController {
 					'id' => (int) $this->request->data['pk'],
 					$this->request->data['name'] => (int) $this->request->data['value'],
 				));
+
+				$response = $this->Tournament->save($data, false);
 			}
 			elseif (isset($this->request->data['winner'])) {
 				// updating the match winner
@@ -121,12 +189,7 @@ class TournamentsController extends AppController {
 					exit;
 				}
 
-				$data = array('Match' => array(
-					'id' => (int) $this->request->data['match'],
-					'winning_team_id' => (int) $this->request->data['winner'],
-				));
-
-				$update_rank = true;
+				$response = $this->Tournament->finish_match((int) $this->request->data['match'], (int) $this->request->data['winner']);
 			}
 			elseif (isset($this->request->data['rename'])) {
 				$data = array(
@@ -170,22 +233,19 @@ class TournamentsController extends AppController {
 						),
 					);
 				}
+
+				$response = $this->Tournament->saveAll($data, array('validate' => false));
 			}
 			else {
 				throw new ForbiddenException( );
 			}
 
-			if ($this->Tournament->saveAll($data, array('validate' => false))) {
+			if ($response) {
 				echo 'OK';
 			}
 			else {
 				throw new InternalErrorException( );
 			}
-		}
-
-		// only update the rank after everything is up to date
-		if ($update_rank) {
-			$this->update_rank((int) $this->request->data['match']);
 		}
 
 		exit;

@@ -109,15 +109,9 @@ class Team extends AppModel {
 		}
 
 		shuffle($adjectives);
-		shuffle($adjectives);
-		shuffle($adjectives);
 
 		shuffle($colors);
-		shuffle($colors);
-		shuffle($colors);
 
-		shuffle($animals);
-		shuffle($animals);
 		shuffle($animals);
 
 		$name = trim(reset($adjectives)).' '.trim(reset($colors)).' '.Inflector::pluralize(trim(reset($animals)));

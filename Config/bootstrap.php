@@ -551,15 +551,16 @@ CakeLog::config('error', array(
 		return preg_replace('/^(?:\+?1)?\D*([2-9][0-8][0-9])\D*([2-9][0-9]{2})\D*([0-9]{4})$/', '($1) $2-$3', $number);
 	}
 
+
 	/**
-	* strposall
-	*
-	* Find all occurrences of a needle in a haystack
-	*
-	* @param string $haystack
-	* @param string $needle
-	* @return array or false
-	*/
+	 * strposall
+	 *
+	 * Find all occurrences of a needle in a haystack
+	 *
+	 * @param string $haystack
+	 * @param string $needle
+	 * @return array or false
+	 */
 	function strposall($haystack, $needle) {
 		$s = 0;
 		$i = 0;
@@ -579,6 +580,37 @@ CakeLog::config('error', array(
 		else {
 			return false;
 		}
+	}
+
+
+	/**
+	 * Computes the number of combinations
+	 * of k elements chosen from a set S of size n
+	 *
+	 * @param int n
+	 * @param int k
+	 * @return int n! / (k! (n - k)!)
+	 */
+	function nCk($n, $k) {
+		return (fact($n) / (fact($k) * fact($n - $k)));
+	}
+	function num_combos($n, $k) { return nCk($n, $k); }
+
+
+	/**
+	 *	Computes the factorial (n!) of given n
+	 *
+	 * @param int n
+	 * @return int n!
+	 */
+	function fact($n) {
+		$out = 1;
+
+		for ($i = 2; $i <= $n; ++$i) {
+			$out *= $i;
+		}
+
+		return $out;
 	}
 
 

@@ -1,6 +1,7 @@
 <?php
 
-	$unique = substr(md5(uniqid(microtime(true), true)), 0, 5);
+	$unique = my_ife($unique, substr(md5(uniqid(microtime(true), true)), 0, 5));
+	$game_type_id = my_ife($game_type_id, 0);
 	$swap = my_ife($swap, false);
 	$link = my_ife($link, false);
 	$span = my_ife($span, '');
@@ -12,20 +13,11 @@
 			if ( ! empty($team['seed'])) { echo ' (#'.$team['seed'].')'; }
 		?></h5>
 		<ul class="<?php if ($swap) { echo 'swappable'; } ?>">
-		<?php foreach ($team['Player'] as $player) { $pl = $player; ?>
-			<li id="pl_<?php echo $pl['id'].'_'.$unique;; ?>"><?php
-				if ($link) {
-					echo $this->Html->link($pl['name'], array('controller' => 'players', 'action' => 'view', $pl['id']));
-				}
-				else {
-					echo $pl['name'];
-				}
-
-				if ( ! empty($pl['PlayerRanking'][0]['mean'])) {
-					echo ' ('.number_format($pl['PlayerRanking'][0]['mean'], 2).')';
-				}
-			?></li>
-		<?php } ?>
+		<?php
+			foreach ($team['Player'] as $player) {
+				echo $this->element('player_li', compact('player', 'game_type_id', 'unique', 'link'));
+			}
+		?>
 		</ul>
 	</div>
 

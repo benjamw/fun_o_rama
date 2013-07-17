@@ -9,7 +9,7 @@
 		<?php if ((1 === $tourny['Tournament']['match_count']) && (2 === $tourny['Tournament']['team_count'])) { ?>
 			<?php $match = $tourny['Match'][0]; ?>
 
-	<div class="match well">
+	<div class="tourny match well">
 		<strong><?php echo $tourny['Game']['name']; ?></strong> started on <?php echo date('F j, Y @ h:ia', strtotime($match['created'])); ?>
 		<div class="outcomes pull-right">
 			<?php echo $this->Html->link('Adjust', array('controller' => 'tournaments', 'action' => 'adjust', $tourny['Tournament']['id']), array('class' => 'btn btn-mini btn-info')); ?>

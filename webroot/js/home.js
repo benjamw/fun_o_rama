@@ -9,9 +9,18 @@ jQuery('.in_progress').on('click', 'button', function(evt) {
 		data: 'match='+ id[1] +'&winner='+ id[2],
 		success: function(msg) {
 			if ('OK' === msg) {
-				$this.closest('.match').remove( );
+				if ('null' === id[2]) {
+					$this.closest('.tourny').remove( );
+				}
+				else {
+					$this.closest('.match').remove( );
 
-				if ( ! $('.in_progress').find('.match').length) {
+					if ( ! $this.closest('.tourny').find('.match').length) {
+						$this.closest('.tourny').remove( );
+					}
+				}
+
+				if ( ! $('.in_progress').find('.tourny').length) {
 					$('.in_progress').remove( );
 				}
 			}

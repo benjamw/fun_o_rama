@@ -65,7 +65,7 @@ class Tournament extends AppModel {
 		'Match' => array(
 			'className' => 'Match',
 			'foreignKey' => 'tournament_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -78,7 +78,7 @@ class Tournament extends AppModel {
 		'Team' => array(
 			'className' => 'Team',
 			'foreignKey' => 'tournament_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -171,6 +171,7 @@ if ($data['num_byes']) {
 			shuffle($team);
 
 			$tourny['Team'][$t] = array(
+				'start_seed' => $data['seed'][$t] + 1,
 				'seed' => $data['seed'][$t] + 1,
 				'Player' => array(
 					'Player' => array( ),
@@ -178,7 +179,7 @@ if ($data['num_byes']) {
 			);
 
 			foreach ($team as $p) {
-				$tourny['Team'][$t]['Player']['Player'][] = $data['player_id'][$p];
+				$tourny['Team'][$t]['Player']['Player'][] = $p;
 			}
 		}
 
@@ -233,16 +234,80 @@ if ($data['num_byes']) {
 		foreach ($players as $player) {
 			$calc_players[] = array(
 				'id' => $player['Player']['id'],
-				'mean' => ife($player['PlayerRanking']['mean'], 25),
-				'std_dev' => ife($player['PlayerRanking']['std_deviation'], 8.333333333333),
+				'mean' => ife($player['PlayerRanking']['mean'], $this->getDefaultMean( )),
+				'std_dev' => ife($player['PlayerRanking']['std_deviation'], $this->getDefaultStandardDeviation( )),
 			);
 		}
 
-		// allow a little more time for team generation
-		ini_set('max_execution_time', 30); // like the server
-		ini_set('memory_limit', '64M'); // like the server
+		// calculate the number of combinations before this function is run
+		// as it may run a loooong time
+		$num_combos = 1;
+		$num_players = count($calc_players);
+		while ($num_players) {
+			$num_combos *= nCk($num_players, $data['team_size']);
+			$num_players -= $data['team_size'];
+		}
 
-		list($teams, $quality) = $this->calculateBestMatch($calc_players, $data['team_size']);
+		// if this function is going to be running for a while
+		// just skip it and manually create the teams
+		if (150000 >= $num_combos) {
+			list($teams, $quality) = $this->calculateBestMatch($calc_players, $data['team_size']);
+		}
+		else {
+			// sort the players by ranking and pull them out in
+			// a way that makes the teams as fair as possible
+			$player_mean = Set::extract('/mean', $calc_players);
+			arsort($player_mean);
+
+			$player_mean = array_keys($player_mean);
+
+			$odd = (1 === ($data['team_size'] % 2));
+
+			$i = 0;
+			$teams = array( );
+			while (count($player_mean)) {
+				$team_size = $data['team_size'];
+				$j = 0;
+
+				// if the team size is odd, pull a player from the middle now
+				if ($odd) {
+					$mid_idx = (int) floor(count($player_mean) / 2);
+					$middle = array_splice($player_mean, $mid_idx, 1);
+
+					$teams[$i][$j] = $middle[0];
+
+					--$team_size;
+					++$j;
+				}
+
+				while (0 < $team_size) {
+					// take a player from the top of the array
+					$top = array_shift($player_mean);
+					$teams[$i][$j] = $top;
+
+					--$team_size;
+					++$j;
+
+					// take a player from the bottom of the array
+					$bottom = array_pop($player_mean);
+					$teams[$i][$j] = $bottom;
+
+					--$team_size;
+					++$j;
+				}
+
+				++$i;
+			}
+
+			$calc_teams = array( );
+			foreach ($teams as $t => $team) {
+				foreach ($team as $p => $player) {
+					$calc_teams[$t][$p] = $calc_players[$player];
+				}
+			}
+
+			$quality = $this->getQuality($calc_teams);
+		}
 
 		// shuffle the teams here because the
 		// seed keys need to match the team keys
@@ -264,6 +329,15 @@ if ($data['num_byes']) {
 		arsort($seed);
 		$seed = array_flip(array_keys($seed));
 
+		// convert team indexes to team ids
+		foreach ($teams as & $team) {
+			foreach ($team as & $player) {
+				$player = (int) $calc_players[$player]['id'];
+			}
+			unset($player);
+		}
+		unset($team);
+
 		return array($teams, $quality, $seed);
 	}
 
@@ -278,6 +352,17 @@ if ($data['num_byes']) {
 
 
 	protected function round_robin( ) {
+		// if matches have already been created, just skip this whole thing
+		$matches = $this->Match->find('count', array(
+			'conditions' => array(
+				'Match.tournament_id' => $this->id,
+			),
+		));
+
+		if ($matches) {
+			return true;
+		}
+
 		// create all possible matches up front
 		// every team plays one game against every other team
 		$team_ids = Set::extract('/Team/id', $this->data);
@@ -321,19 +406,157 @@ if ($data['num_byes']) {
 
 				$calc_teams[] = $calc_team;
 			}
+$first_seed = 1;
+$second_seed = 2;
 
 			$this_match['Match']['quality'] = $this->getQuality($calc_teams) * 100;
+			$this_match['Match']['name'] = 'Round 1: #'.$first_seed.' vs #'.$second_seed.'';
 
 			$this->Match->create( );
-			$this->Match->saveAssociated($this_match, array('deep' => true));
+			if ( ! $this->Match->saveAssociated($this_match, array('deep' => true))) {
+				return false;
+			}
 		}
+
+		return true;
 	}
 
 
-	protected function single_elimination( ) {
-		// generate the first round matches based on number of teams and seed value
-		// additional matches will be generated as the rounds are finished
-		$team_ids = Set::combine($this->data, '/Team/seed', '/Team/id');
+	function single_elimination( ) {
+		// find any unfinished matches
+		$unfinished = $this->Match->find('count', array(
+			'conditions' => array(
+				'Match.tournament_id' => $this->id,
+				'Match.winning_team_id IS NULL',
+			),
+		));
+
+		if ($unfinished) {
+			return true;
+		}
+
+		// pull teams that have not played yet, as well as teams that have not lost a match
+		// this query does both
+		// note that the Model::find has been overridden to allow for HAVING clauses
+		$matches_played = $this->Team->find('all', array(
+			'fields' => array(
+				'Team.id',
+				'IFNULL(COUNT(MatchesPlayed.id), 0) AS matches_played',
+			),
+			'joins' => array(
+				array(
+					'table' => 'matches_teams',
+					'alias' => 'MatchesPlayed',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'MatchesPlayed.team_id = Team.id'
+					),
+				),
+			),
+			'conditions' => array(
+				'Team.tournament_id' => $this->id,
+			),
+			'group' => array(
+				'Team.id',
+			),
+		));
+		$matches_played = Set::combine($matches_played, '/Team/id', '/0/matches_played');
+
+		$matches_won = $this->Team->find('all', array(
+			'fields' => array(
+				'Team.id',
+				'IFNULL(COUNT(MatchesWon.id), 0) AS matches_won',
+			),
+			'joins' => array(
+				array(
+					'table' => 'matches',
+					'alias' => 'MatchesWon',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'MatchesWon.winning_team_id = Team.id',
+					),
+				),
+			),
+			'conditions' => array(
+				'Team.tournament_id' => $this->id,
+			),
+			'group' => array(
+				'Team.id',
+			),
+		));
+		$matches_won = Set::combine($matches_won, '/Team/id', '/0/matches_won');
+
+		// find all the teams who have either not played, or not lost
+		$teams = array( );
+		foreach ($matches_played as $team_id => $played) {
+			if ($matches_won[$team_id] === $played) {
+				$teams[] = $team_id;
+			}
+		}
+
+		// if there's only one team left, that's our winner
+		if (1 >= count($teams)) {
+			return true;
+		}
+
+		$team_ids = array( );
+		foreach ($this->data['Team'] as $team) {
+			if (in_array($team['id'], $teams)) {
+				$team_ids[$team['seed']] = $team['id'];
+			}
+		}
+
+		// seed here does not mean starting seed, but rather the highest seeded team in the match
+		// that was previously played
+		// e.g. in the match 4 v 5 the seed would be 4 regardless of who won
+		//		in the match 13 v 20 the seed would be 13, even if 20 won
+
+		// the seed will get updated as the matches are played to reflect the outcome
+		// e.g.- if in 13 v 20, 20 wins, then the team that was seed 20 is now 13
+		//		and the team that was seed 13 is now 20
+		// this will also help with finding out who won
+
+		// if a team hasn't played yet, then seed really is seed, but the end results are the same
+
+		ksort($team_ids);
+
+		$total_team_count = count($this->data['Team']);
+		$total_round_count = (int) ceil(log($total_team_count, 2));
+
+		$current_team_count = count($team_ids);
+		$current_round_count = (int) ceil(log($current_team_count, 2));
+
+		$round_num = $total_round_count - ($current_round_count - 1);
+
+		$root = pow(2, $current_round_count);
+
+		// if the team count is not divisible by 2^n, remove the highest seeded teams for later
+		for ($i = $root - $current_team_count; $i > 0; $i -= 1) {
+			array_shift($team_ids);
+		}
+
+		$slice = 1;
+		$bracket_list = array_values($team_ids);
+		while ($slice < (count($bracket_list) / 2)) {
+			$temp = $bracket_list;
+			$bracket_list = array( );
+
+			while (0 < count($temp)) {
+				$bracket_list = array_merge($bracket_list, array_splice($temp, 0, $slice));
+				$bracket_list = array_merge($bracket_list, array_splice($temp, -$slice, $slice));
+			}
+
+			$slice *= 2;
+		}
+
+		$round = array( );
+		for ($i = 0, $len = count($bracket_list); $i < $len; $i += 2) {
+			$round[] = array(
+				$bracket_list[$i],
+				$bracket_list[$i + 1],
+			);
+		}
+
 
 		$match = array(
 			'Match' => array(
@@ -344,33 +567,24 @@ if ($data['num_byes']) {
 			),
 		);
 
-		ksort($team_ids);
-
-		for ($i = 0, $count = count($team_ids); pow(2, $i) < $count; ++$i) {
-			// do nothing
-			// pow(2, $i) is the result
-		}
-		$root = pow(2, $i);
-
-		// if the team count is not divisible by 2^n, remove the highest seeded teams for later
-		for ($i = $root - $count; $i > 0; $i -= 1) {
-			array_shift($team_ids);
-		}
-
-		while ($team_ids) {
-			// pull the higest and lowest seed and put them together
-			$teams = array( );
-			$teams[] = array_shift($team_ids);
-			$teams[] = array_pop($team_ids);
-
+		foreach ($round as $round_match) {
 			$this_match = $match;
-			$this_match['Team']['Team'] = $teams;
+			$this_match['Team']['Team'] = $round_match;
+
+			$first_seed = $second_seed = 0;
 
 			$calc_teams = array( );
-			foreach ($teams as $team_id) {
+			foreach ($round_match as $team_id) {
 				foreach ($this->data['Team'] as $team) {
 					if ((int) $team['id'] !== (int) $team_id) {
 						continue;
+					}
+
+					if (empty($first_seed)) {
+						$first_seed = $team['seed'];
+					}
+					else {
+						$second_seed = $team['seed'];
 					}
 
 					$calc_team = array( );
@@ -388,123 +602,15 @@ if ($data['num_byes']) {
 			}
 
 			$this_match['Match']['quality'] = $this->getQuality($calc_teams) * 100;
+			$this_match['Match']['name'] = 'Round '.$round_num.': #'.$first_seed.' vs #'.$second_seed.'';
 
 			$this->Match->create( );
-			$this->Match->saveAssociated($this_match, array('deep' => true));
-		}
-	}
-
-
-	/*
-	 *	$team_ids = array(
-	 *		[seed] = [team_id],
-	 *		[seed] = [team_id],
-	 *		[seed] = [team_id],
-	 *	);
-	 */
-	function single_elimination_round($team_ids) {
-		// find any unfinished matches
-		$uninished = $this->Match->find('count', array(
-			'conditions' => array(
-				'Match.tournament_id' => $this->id,
-				'Match.winning_team_id IS NULL',
-			),
-		));
-
-		if ($unfinished) {
-			return false;
+			if ( ! $this->Match->saveAssociated($this_match, array('deep' => true))) {
+				return false;
+			}
 		}
 
-		// pull teams that have not played yet, as well as teams that have not lost a match
-		$never_played = $this->Team->find('all', array(
-			'joins' => array(
-				array(
-					'table' => 'matches_teams',
-					'alias' => 'MatchesTeam',
-					'type' => 'left',
-					'conditions' => array(
-						'MatchesTeam.team_id = Team.id'
-					),
-				),
-			),
-			'conditions' => array(
-				'Team.tournament_id' => $this->id,
-				'MatchesTeam.match_id IS NULL',
-			),
-			'group' => array(
-				'Team.id',
-			),
-			'order' => array(
-				'Team.seed' => 'ASC',
-			),
-		));
-
-		$never_lost = $this->Team->find('all', array(
-			'joins' => array(
-				array(
-					'table' => 'matches_teams',
-					'alias' => 'MatchesTeam',
-					'type' => 'left',
-					'conditions' => array(
-						'MatchesTeam.team_id = Team.id'
-					),
-				),
-				array(
-					'table' => 'matches',
-					'alias' => 'Matches',
-					'type' => 'left',
-					'conditions' => array(
-						'Matches.id = MatchesTeam.match_id',
-						'Matches.winning_team_id',
-					),
-				),
-			),
-			'conditions' => array(
-				'Team.tournament_id' => $this->id,
-			),
-			'group' => array(
-				'Team.id',
-			),
-			'order' => array(
-				'Team.seed' => 'ASC',
-			),
-		));
-
-		// seed here does not mean actual seed, but rather the highest seeded team in the match
-		// that was previously played
-		// e.g. in the match 4 v 5 the seed would be 4 regardless of who won
-		//		in the match 13 v 20 the seed would be 13, even if 20 won
-
-		// the seed will get updated as the matches are played to reflect the outcome
-		// e.g.- if in 13 v 20, 20 wins, then the team that was seed 20 is now 13
-		//		and the team that was seed 13 is now 20
-		// this will also help with finding out who won
-
-		// if a team hasn't played yet, then seed really is seed, but the end results are the same
-
-		ksort($team_ids);
-
-		for ($rounds = 0, $count = count($team_ids); ($root = pow(2, $rounds)) < $count; ++$rounds) {
-			// do nothing
-			// $root = pow(2, $rounds) is the result
-		}
-
-		// if the team count is not divisible by 2^n, remove the highest seeded teams for later
-		for ($i = $root - $count; $i > 0; $i -= 1) {
-			array_shift($team_ids);
-		}
-
-		$round = array( );
-		while ($team_ids) {
-			// pull the higest and lowest seed and put them together
-			$teams = array( );
-			$teams[] = array_shift($team_ids);
-			$teams[] = array_pop($team_ids);
-
-			$round[] = $teams;
-		}
-
-		return $round;
+		return true;
 	}
 
 
@@ -513,6 +619,87 @@ if ($data['num_byes']) {
 		// the difference comes after matches have been played
 		$this->single_elimination( );
 	}
+
+
+	public function finish_match($match_id, $winning_team_id) {
+		$match = $this->Match->find('first', array(
+			'contain' => array(
+				'Team',
+			),
+			'conditions' => array(
+				'Match.id' => $match_id,
+			),
+		));
+
+		$data = array(
+			'Match' => array(
+				'id' => $match_id,
+				'winning_team_id' => $winning_team_id,
+			),
+		);
+
+		if ( ! $this->Match->save($data)) {
+			return false;
+		}
+
+		$this->Match->update_rank($match_id);
+		$this->Match->update_stats($match_id);
+
+		// swap the team seed if the lower ranked team won
+		$team_seed = array( );
+		foreach ($match['Team'] as $team) {
+			$team_seed[$team['id']] = $team['seed'];
+		}
+
+		asort($team_seed);
+		$team_ids = array_keys($team_seed);
+
+		if ($team_ids[0] !== $winning_team_id) {
+			$team_seed = array_combine(array_keys($team_seed), array_reverse(array_values($team_seed)));
+
+			foreach ($team_seed as $team => $seed) {
+				$this->Team->save(array(
+					'Team' => array(
+						'id' => $team,
+						'seed' => $seed,
+					),
+				), false);
+			}
+		}
+
+		// grab the tournament now that everything is updated
+		$this->contain(array(
+			'Game' => array(
+				'GameType',
+			),
+			'Match' => array(
+				'Team',
+			),
+			'Team' => array(
+				'Player' => array(
+					'PlayerRanking',
+				),
+			),
+		));
+		$tournament = $this->read(null, $match['Match']['tournament_id']);
+
+		return $this->{$this->data['Tournament']['tournament_type']}( );
+	}
+
+
+	public function check_rounds($tournament_id) {
+		$this->contain(array(
+			'Team' => array(
+				'Player',
+			),
+			'Match' => array(
+				'Team',
+			),
+		));
+		$this->read(null, $tournament_id);
+
+	}
+
 
 }
 
