@@ -77,7 +77,7 @@
 	<?php
 
 		echo $this->Html->scriptblock('var ROOT_URL = "'.$this->Html->url('/').'";');
-		echo $this->Html->script('//code.jquery.com/jquery-2.0.1.js');
+		echo $this->Html->script('//code.jquery.com/jquery-2.0.3.min.js');
 		echo $this->Html->script('//code.jquery.com/ui/1.10.3/jquery-ui.js');
 		echo $this->Html->script('bootstrap.min.js');
 		echo $this->fetch('script');

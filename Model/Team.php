@@ -28,46 +28,12 @@ class Team extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'Tournament' => array(
-			'className' => 'Tournament',
-			'foreignKey' => 'tournament_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
+		'Tournament',
 	);
 
 	public $hasAndBelongsToMany = array(
-		'Match' => array(
-			'className' => 'Match',
-			'joinTable' => 'matches_teams',
-			'foreignKey' => 'team_id',
-			'associationForeignKey' => 'match_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => '',
-		),
-		'Player' => array(
-			'className' => 'Player',
-			'joinTable' => 'players_teams',
-			'foreignKey' => 'team_id',
-			'associationForeignKey' => 'player_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => '',
-		),
+		'Match',
+		'Player',
 	);
 
 	public function beforeSave($options = array( )) {

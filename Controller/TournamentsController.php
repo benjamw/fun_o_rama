@@ -41,6 +41,14 @@ class TournamentsController extends AppController {
 				'Tournament.created' => 'DESC',
 			),
 		));
+
+		foreach ($active as & $tourny) { // mind the reference
+			if ('round_robin' === $tourny['Tournament']['tournament_type']) {
+				$tourny['Results'] = $this->Tournament->get_round_robin_results($tourny['Tournament']['id']);
+			}
+		}
+		unset($tourny); // kill the reference
+
 		$this->set('active', $active);
 
 		// grab the 5 most recently completed tournaments and their results
@@ -94,6 +102,14 @@ class TournamentsController extends AppController {
 			),
 			'limit' => 5,
 		));
+
+		foreach ($completed as & $tourny) { // mind the reference
+			if ('round_robin' === $tourny['Tournament']['tournament_type']) {
+				$tourny['Results'] = $this->Tournament->get_round_robin_results($tourny['Tournament']['id']);
+			}
+		}
+		unset($tourny); // kill the reference
+
 		$this->set('completed', $completed);
 	}
 
@@ -190,6 +206,33 @@ class TournamentsController extends AppController {
 				}
 
 				$response = $this->Tournament->finish_match((int) $this->request->data['match'], (int) $this->request->data['winner']);
+
+				// grab the next batch of matches if there are any
+				$current_matches = $this->Tournament->Match->find('all', array(
+					'contain' => array(
+						'Team' => array(
+							'Player',
+						),
+					),
+					'joins' => array(
+						array(
+							'table' => 'matches',
+							'alias' => 'Finished',
+							'type' => 'INNER',
+							'conditions' => array(
+								'Finished.id' => (int) $this->request->data['match'],
+								'Match.tournament_id = Finished.tournament_id',
+							),
+						),
+					),
+					'conditions' => array(
+						'Match.winning_team_id IS NULL',
+					),
+					'order' => array(
+						'Match.id',
+					),
+				));
+				$this->set('current_matches', $current_matches);
 			}
 			elseif (isset($this->request->data['rename'])) {
 				$data = array(
@@ -242,6 +285,11 @@ class TournamentsController extends AppController {
 
 			if ($response) {
 				echo 'OK';
+
+				if ( ! empty($current_matches)) {
+					$this->render('current_matches');
+					return;
+				}
 			}
 			else {
 				throw new InternalErrorException( );
@@ -254,6 +302,8 @@ class TournamentsController extends AppController {
 
 	protected function _setSelects($active_only = false) {
 		parent::_setSelects($active_only);
+
+		$this->set($this->Tournament->enumValues( ));
 
 		if (empty($this->viewVars['sitting_out'])) {
 			$this->set('sitting_out', false);

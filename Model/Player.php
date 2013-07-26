@@ -19,64 +19,16 @@ class Player extends AppModel {
 
 	public $hasMany = array(
 		'PlayerRanking' => array(
-			'className' => 'PlayerRanking',
-			'foreignKey' => 'player_id',
 			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => '',
 		),
 		'PlayerStat' => array(
-			'className' => 'PlayerStat',
-			'foreignKey' => 'player_id',
 			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => '',
 		),
 	);
 
 	public $hasAndBelongsToMany = array(
-		'Badge' => array(
-			'className' => 'Badge',
-			'joinTable' => 'badges_players',
-			'foreignKey' => 'player_id',
-			'associationForeignKey' => 'badge_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => '',
-		),
-		'Team' => array(
-			'className' => 'Team',
-			'joinTable' => 'players_teams',
-			'foreignKey' => 'player_id',
-			'associationForeignKey' => 'team_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => '',
-		),
+		'Badge',
+		'Team',
 	);
 
 	public function afterSave($created) {

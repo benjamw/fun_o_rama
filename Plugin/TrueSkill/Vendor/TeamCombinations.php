@@ -19,6 +19,10 @@ class TeamCombinations implements \Iterator
 		$this->s = array_values($s);
 		$this->n = (int) count($this->s);
 
+		if (1 >= $this->n) {
+			trigger_error(__METHOD__.' requires at least two elements, '.count($s).' given', E_USER_WARNING);
+		}
+
 		$this->k = (int) $k;
 		$this->teams = (int) floor($this->n / $this->k);
 

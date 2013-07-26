@@ -216,8 +216,11 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 			foreach ($controllerList as $controllerItem) {
 				$controller = Inflector::underscore(str_replace('Controller', '', $controllerItem));
 				$hide = array( // add the controller to this array to hide it from the menu
+					'adjectives',
 					'admin',
+					'animals',
 					'app',
+					'colors',
 					'contact',
 					'home',
 					'forgots',

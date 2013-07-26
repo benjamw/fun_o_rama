@@ -10,7 +10,8 @@
 				}
 				echo $this->Form->input('game_id');
 				echo $this->Form->input('tournament_type');
-				echo $this->Form->input('team_size');
+				echo $this->Form->input('team_size', array('min' => 1, 'max' => 4, 'value' => ife($this->request->data['Tournament']['team_size'], 2)));
+				echo $this->Form->input('quality', array('min' => 0, 'max' => 100, 'value' => ife($this->request->data['Tournament']['quality'], 0)));
 			?>
 
 		</fieldset>

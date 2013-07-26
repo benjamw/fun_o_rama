@@ -20,6 +20,10 @@ class Combinations implements \Iterator
 			$this->n = strlen($this->s);
 		}
 
+		if (1 >= $this->n) {
+			trigger_error(__METHOD__.' requires at least two elements, '.count($s).' given', E_USER_WARNING);
+		}
+
 		$this->k = $k;
 		$this->rewind( );
 	}

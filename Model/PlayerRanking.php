@@ -60,20 +60,8 @@ class PlayerRanking extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'Player' => array(
-			'className' => 'Player',
-			'foreignKey' => 'player_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
-		'GameType' => array(
-			'className' => 'GameType',
-			'foreignKey' => 'game_type_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
+		'Player',
+		'GameType',
 	);
 
 }

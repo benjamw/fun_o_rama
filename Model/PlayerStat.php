@@ -60,20 +60,8 @@ class PlayerStat extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'Player' => array(
-			'className' => 'Player',
-			'foreignKey' => 'player_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
-		'Game' => array(
-			'className' => 'Game',
-			'foreignKey' => 'game_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
+		'Player',
+		'Game',
 	);
 
 }

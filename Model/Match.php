@@ -15,6 +15,16 @@ class Match extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+		'name' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
 	);
 
 	public $actsAs = array(
@@ -22,38 +32,15 @@ class Match extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'Tournament' => array(
-			'className' => 'Tournament',
-			'foreignKey' => 'tournament_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
+		'Tournament',
 		'WinningTeam' => array(
 			'className' => 'Team',
 			'foreignKey' => 'winning_team_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
 		),
 	);
 
 	public $hasAndBelongsToMany = array(
-		'Team' => array(
-			'className' => 'Team',
-			'joinTable' => 'matches_teams',
-			'foreignKey' => 'match_id',
-			'associationForeignKey' => 'team_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => '',
-		),
+		'Team',
 	);
 
 	public function update_rank($match_id) {
@@ -138,6 +125,8 @@ class Match extends AppModel {
 	}
 
 	public function update_stats($match_id) {
+		$schema = $this->schema( );
+
 		$match = $this->find('first', array(
 			'contain' => array(
 				'Tournament' => array(

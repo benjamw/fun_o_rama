@@ -8,7 +8,13 @@
 		<dd><?php echo h($match['Match']['id']); ?>&nbsp;</dd>
 
 		<dt><?php echo __('Tournament'); ?></dt>
-		<dd><?php echo $this->Html->link($match['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $match['Tournament']['id'])); ?>&nbsp;</dd>
+		<dd><?php echo $this->Html->link($match['Tournament']['Game']['name'], array('controller' => 'games', 'action' => 'view', $match['Tournament']['Game']['id'])).' @ '.$this->Html->link($match['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $match['Tournament']['id'])); ?>&nbsp;</dd>
+
+		<dt><?php echo __('Name'); ?></dt>
+		<dd><?php echo h($match['Match']['name']); ?>&nbsp;</dd>
+
+		<dt><?php echo __('Quality'); ?></dt>
+		<dd><?php echo h($match['Match']['quality']); ?>&nbsp;</dd>
 
 		<dt><?php echo __('Created'); ?></dt>
 		<dd><?php echo h($match['Match']['created']); ?>&nbsp;</dd>
@@ -35,8 +41,9 @@
 	<table class="table table-striped table-bordered table-condensed">
 		<tr>
 			<th><?php echo __('ID'); ?></th>
-			<th><?php echo __('Tournament'); ?></th>
 			<th><?php echo __('Name'); ?></th>
+			<th><?php echo __('Start Seed'); ?></th>
+			<th><?php echo __('Seed'); ?></th>
 			<th><?php echo __('Players'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
@@ -44,8 +51,9 @@
 	<?php foreach ($match['Team'] as $team) { ?>
 		<tr class="table-hover">
 			<td><?php echo $team['id']; ?>&nbsp;</td>
-			<td><?php echo $this->Html->link($team['Tournament']['Game']['name'], array('controller' => 'games', 'action' => 'view', $team['Tournament']['Game']['id'])).' @ '.$this->Html->link($team['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $team['Tournament']['id'])); ?>&nbsp;</td>
 			<td><?php echo $team['name']; ?>&nbsp;</td>
+			<td><?php echo $team['start_seed']; ?>&nbsp;</td>
+			<td><?php echo $team['seed']; ?>&nbsp;</td>
 			<td>
 				<?php
 					$players = array( );

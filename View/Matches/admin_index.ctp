@@ -12,6 +12,8 @@
 		<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('tournament_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo $this->Paginator->sort('quality'); ?></th>
 			<th>Team 1</th>
 			<th>Team 2</th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
@@ -23,6 +25,8 @@
 		<tr class="table-hover">
 			<td><?php echo h($match['Match']['id']); ?>&nbsp;</td>
 			<td><?php echo $this->Html->link($match['Tournament']['Game']['name'], array('controller' => 'games', 'action' => 'view', $match['Tournament']['Game']['id'])).' @ '.$this->Html->link($match['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $match['Tournament']['id'])); ?>&nbsp;</td>
+			<td><?php echo h($match['Match']['name']); ?>&nbsp;</td>
+			<td><?php echo h($match['Match']['quality']); ?>&nbsp;</td>
 			<td>
 				<strong><?php echo $this->Html->link($match['Team'][0]['name'] ?: 'Team 1', array('controller' => 'teams', 'action' => 'view', $match['Team'][0]['id'])); ?></strong><br>
 				<?php

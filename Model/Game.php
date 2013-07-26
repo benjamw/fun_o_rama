@@ -28,28 +28,15 @@ class Game extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'GameType' => array(
-			'className' => 'GameType',
-			'foreignKey' => 'game_type_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
+		'GameType',
 	);
 
 	public $hasMany = array(
-		'Tournament' => array(
-			'className' => 'Tournament',
-			'foreignKey' => 'tournament_id',
+		'PlayerStat' => array(
 			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => '',
+		),
+		'Tournament' => array(
+			'dependent' => true,
 		),
 	);
 

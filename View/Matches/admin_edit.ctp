@@ -9,7 +9,9 @@
 					echo $this->Form->input('id');
 				}
 				echo $this->Form->input('tournament_id');
-				echo $this->Form->input('winning_team_id');
+				echo $this->Form->input('name');
+				echo $this->Form->input('quality', array('min' => 0, 'max' => 100, 'value' => ife($this->request->data['Match']['quality'], 0)));
+				echo $this->Form->input('winning_team_id', array('empty' => '-- None --'));
 			?>
 
 		</fieldset>

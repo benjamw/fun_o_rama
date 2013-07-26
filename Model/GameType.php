@@ -29,30 +29,10 @@ class GameType extends AppModel {
 
 	public $hasMany = array(
 		'Game' => array(
-			'className' => 'Game',
-			'foreignKey' => 'game_type_id',
 			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => '',
 		),
 		'PlayerRanking' => array(
-			'className' => 'PlayerRanking',
-			'foreignKey' => 'game_type_id',
 			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => '',
 		),
 	);
 

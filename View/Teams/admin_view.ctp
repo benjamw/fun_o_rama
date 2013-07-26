@@ -8,10 +8,16 @@
 		<dd><?php echo h($team['Team']['id']); ?>&nbsp;</dd>
 
 		<dt><?php echo __('Tournament'); ?></dt>
-		<dd><?php echo $this->Html->link($team['Match']['Game']['name'], array('controller' => 'games', 'action' => 'view', $team['Match']['Game']['id'])).' @ '.$this->Html->link($team['Match']['created'], array('controller' => 'matches', 'action' => 'view', $team['Match']['id'])); ?>&nbsp;</dd>
+		<dd><?php echo $this->Html->link($team['Tournament']['Game']['name'], array('controller' => 'games', 'action' => 'view', $team['Tournament']['Game']['id'])).' @ '.$this->Html->link($team['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $team['Tournament']['id'])); ?>&nbsp;</dd>
 
 		<dt><?php echo __('Name'); ?></dt>
 		<dd><?php echo h($team['Team']['name']); ?>&nbsp;</dd>
+
+		<dt><?php echo __('Start Seed'); ?></dt>
+		<dd><?php echo h($team['Team']['start_seed']); ?>&nbsp;</dd>
+
+		<dt><?php echo __('Seed'); ?></dt>
+		<dd><?php echo h($team['Team']['seed']); ?>&nbsp;</dd>
 
 	</dl>
 
@@ -32,18 +38,20 @@
 	<table class="table table-striped table-bordered table-condensed">
 		<tr>
 			<th><?php echo __('ID'); ?></th>
-			<th><?php echo __('Game ID'); ?></th>
+			<th><?php echo __('Name'); ?></th>
+			<th><?php echo __('Quality'); ?></th>
 			<th><?php echo __('Created'); ?></th>
-			<th><?php echo __('Winning Team ID'); ?></th>
+			<th><?php echo __('Winning Team'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
 	<?php foreach ($team['Match'] as $match) { ?>
 		<tr class="table-hover">
 			<td><?php echo $match['id']; ?>&nbsp;</td>
-			<td><?php echo $match['game_id']; ?>&nbsp;</td>
+			<td><?php echo $match['name']; ?>&nbsp;</td>
+			<td><?php echo $match['quality']; ?>&nbsp;</td>
 			<td><?php echo $match['created']; ?>&nbsp;</td>
-			<td><?php echo $match['winning_team_id']; ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($match['WinningTeam']['name'], array('controller' => 'teams', 'action' => 'view', $match['WinningTeam']['id'])); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'matches', 'action' => 'view', $match['id']), array('class' => 'btn btn-small')); ?>
@@ -79,7 +87,7 @@
 	<?php foreach ($team['Player'] as $player) { ?>
 		<tr class="table-hover">
 			<td><?php echo $player['id']; ?>&nbsp;</td>
-			<td><?php echo $player['name']; ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($player['name'], array('controller' => 'players', 'action' => 'view', $player['id'])); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'players', 'action' => 'view', $player['id']), array('class' => 'btn btn-small')); ?>

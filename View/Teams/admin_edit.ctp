@@ -10,7 +10,10 @@
 				}
 				echo $this->Form->input('tournament_id');
 				echo $this->Form->input('name');
+				echo $this->Form->input('start_seed', array('min' => 1, 'value' => ife($this->request->data['Team']['start_seed'], 1)));
+				echo $this->Form->input('seed', array('min' => 1, 'value' => ife($this->request->data['Team']['seed'], 1)));
 				echo $this->Form->input('Player', array('multiple' => 'checkbox'));
+				echo $this->Form->input('Match', array('multiple' => 'checkbox'));
 			?>
 
 		</fieldset>

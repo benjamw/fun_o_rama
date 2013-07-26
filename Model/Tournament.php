@@ -52,41 +52,15 @@ class Tournament extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'Game' => array(
-			'className' => 'Game',
-			'foreignKey' => 'game_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
+		'Game',
 	);
 
 	public $hasMany = array(
 		'Match' => array(
-			'className' => 'Match',
-			'foreignKey' => 'tournament_id',
 			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => '',
 		),
 		'Team' => array(
-			'className' => 'Team',
-			'foreignKey' => 'tournament_id',
 			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => '',
 		),
 	);
 
@@ -141,11 +115,11 @@ class Tournament extends AppModel {
 
 		$data['num_teams'] = (int) floor(count($data['player_id']) / $data['team_size']);
 
-		$data['num_byes'] = count($data['player_id']) - ($data['num_teams'] * $data['team_size']);
+		$data['num_sitting_out'] = count($data['player_id']) - ($data['num_teams'] * $data['team_size']);
 
-// do this until a bye handler is built
-if ($data['num_byes']) {
-	throw new CakeException('Teams are not even.  Teams must be even until I get a Bye system built');
+// do this until a sitting out handler is built
+if ($data['num_sitting_out']) {
+	throw new CakeException('Teams are not even.  Teams must be even until I get a Sitting Out system built');
 }
 
 		$tourny = array(
@@ -155,10 +129,10 @@ if ($data['num_byes']) {
 				'team_size' => $data['team_size'],
 			),
 			'Team' => array( ),
-			'Bye' => array( ),
+			'SittingOut' => array( ),
 		);
 
-		$data['byes'] = $this->create_byes($data);
+		$data['sitting_out'] = $this->create_sitting_outs($data);
 
 		list($data['teams'], $data['quality'], $data['seed']) = $this->create_teams($data);
 
@@ -342,8 +316,8 @@ if ($data['num_byes']) {
 	}
 
 
-	protected function create_byes($data) {
-		if ( ! $data['num_byes']) {
+	protected function create_sitting_outs($data) {
+		if ( ! $data['num_sitting_out']) {
 			return array( );
 		}
 
@@ -352,77 +326,81 @@ if ($data['num_byes']) {
 
 
 	protected function round_robin( ) {
-		// if matches have already been created, just skip this whole thing
-		$matches = $this->Match->find('count', array(
+		// find any unfinished matches
+		$unfinished = $this->Match->find('count', array(
 			'conditions' => array(
 				'Match.tournament_id' => $this->id,
+				'Match.winning_team_id IS NULL',
 			),
 		));
 
-		if ($matches) {
+		if ($unfinished) {
 			return true;
 		}
 
-		// create all possible matches up front
-		// every team plays one game against every other team
-		$team_ids = Set::extract('/Team/id', $this->data);
+		$rankings = $this->get_round_robin_results($this->id);
+		if ($rankings) {
+			// sort the rankings by wins
+			$wins = Set::combine($rankings, '/id', '/wins');
 
-		$match = array(
-			'Match' => array(
-				'tournament_id' => $this->id,
-			),
-			'Team' => array(
-				'Team' => array( ),
-			),
-		);
+			arsort($wins);
+
+			$team_ids = array( );
+			$max_win = 0;
+			foreach ($wins as $id => $count) {
+				if ($count < $max_win) {
+					break;
+				}
+
+				$max_win = $count;
+				$team_ids[] = $id;
+			}
+
+			// there aren't enough teams to create a match
+			if (2 > count($team_ids)) {
+				return true;
+			}
+
+			// grab the last round match
+			$last = $this->Match->find('first', array(
+				'fields' => array(
+					'Match.name',
+				),
+				'conditions' => array(
+					'Match.tournament_id' => $this->id,
+				),
+				'order' => array(
+					'Match.name' => 'DESC',
+				),
+			));
+
+			if ($last && preg_match('%^Round (\d+):%i', $last['Match']['name'], $round_num)) {
+				$round_num = (int) $round_num[1];
+				$round_num += 1;
+			}
+			else {
+				throw new CakeException('Previous round name not found');
+			}
+
+			shuffle($team_ids);
+		}
+		else {
+			// create all possible matches up front
+			// every team plays one game against every other team
+			$team_ids = Set::extract('/Team/id', $this->data);
+
+			$round_num = 1;
+		}
 
 		$matches = iterator_to_array($this->combinations($team_ids, 2), false);
 
 		shuffle($matches);
 
-		foreach ($matches as $teams) {
-			shuffle($teams);
-
-			$this_match = $match;
-			$this_match['Team']['Team'] = $teams;
-
-			$calc_teams = array( );
-			foreach ($teams as $team_id) {
-				foreach ($this->data['Team'] as $team) {
-					if ((int) $team['id'] !== (int) $team_id) {
-						continue;
-					}
-
-					$calc_team = array( );
-
-					foreach ($team['Player'] as $player) {
-						$calc_team[] = array(
-							'id' => $player['id'],
-							'mean' => $player['PlayerRanking'][0]['mean'],
-							'std_dev' => $player['PlayerRanking'][0]['std_deviation'],
-						);
-					}
-				}
-
-				$calc_teams[] = $calc_team;
-			}
-$first_seed = 1;
-$second_seed = 2;
-
-			$this_match['Match']['quality'] = $this->getQuality($calc_teams) * 100;
-			$this_match['Match']['name'] = 'Round 1: #'.$first_seed.' vs #'.$second_seed.'';
-
-			$this->Match->create( );
-			if ( ! $this->Match->saveAssociated($this_match, array('deep' => true))) {
-				return false;
-			}
-		}
-
-		return true;
+		return $this->create_matches($round_num, $matches);
 	}
 
 
-	function single_elimination( ) {
+	protected function single_elimination( ) {
 		// find any unfinished matches
 		$unfinished = $this->Match->find('count', array(
 			'conditions' => array(
@@ -436,8 +414,7 @@ $second_seed = 2;
 		}
 
 		// pull teams that have not played yet, as well as teams that have not lost a match
-		// this query does both
-		// note that the Model::find has been overridden to allow for HAVING clauses
+		// this set of queries does both, split out due to multiple joins issues
 		$matches_played = $this->Team->find('all', array(
 			'fields' => array(
 				'Team.id',
@@ -557,7 +534,11 @@ $second_seed = 2;
 			);
 		}
 
+		return $this->create_matches($round_num, $round);
+	}
 
+
+	protected function create_matches($round_num, $round_teams) {
 		$match = array(
 			'Match' => array(
 				'tournament_id' => $this->id,
@@ -567,14 +548,14 @@ $second_seed = 2;
 			),
 		);
 
-		foreach ($round as $round_match) {
+		foreach ($round_teams as $round_team) {
 			$this_match = $match;
-			$this_match['Team']['Team'] = $round_match;
+			$this_match['Team']['Team'] = $round_team;
 
 			$first_seed = $second_seed = 0;
 
 			$calc_teams = array( );
-			foreach ($round_match as $team_id) {
+			foreach ($round_team as $team_id) {
 				foreach ($this->data['Team'] as $team) {
 					if ((int) $team['id'] !== (int) $team_id) {
 						continue;
@@ -604,6 +585,8 @@ $second_seed = 2;
 			$this_match['Match']['quality'] = $this->getQuality($calc_teams) * 100;
 			$this_match['Match']['name'] = 'Round '.$round_num.': #'.$first_seed.' vs #'.$second_seed.'';
 
+			shuffle($this_match['Team']['Team']);
+
 			$this->Match->create( );
 			if ( ! $this->Match->saveAssociated($this_match, array('deep' => true))) {
 				return false;
@@ -614,10 +597,69 @@ $second_seed = 2;
 	}
 
 
-	protected function double_elimination( ) {
-		// double elimination starts out just like single elimination
-		// the difference comes after matches have been played
-		$this->single_elimination( );
+	public function get_round_robin_results($id = null) {
+		if ( ! $id) {
+			$id = $this->id;
+		}
+
+		$this->contain(array(
+			'Game' => array(
+				'GameType',
+			),
+			'Match' => array(
+				'Team',
+			),
+			'Team' => array(
+				'Player' => array(
+					'PlayerRanking',
+				),
+			),
+		));
+		$this->read(null, $id);
+
+		if ('round_robin' !== $this->data['Tournament']['tournament_type']) {
+			return false;
+		}
+
+		if ( ! $this->data['Match']) {
+			return false;
+		}
+
+		$outcome = Set::combine($this->data['Team'], '/id', '/');
+		foreach ($outcome as & $team) { // mind the reference
+			$team['wins'] = 0;
+			$team['losses'] = 0;
+			$team['draws'] = 0;
+			$team['remaining_matches'] = 0;
+			unset($team['Player']);
+		}
+		unset($team); // kill the reference
+
+		// take a look at the rounds and calculate the wins and losses
+		foreach ($this->data['Match'] as $match) {
+			if (is_null($match['winning_team_id'])) {
+				foreach ($match['Team'] as $team) {
+					$outcome[$team['id']]['remaining_matches'] += 1;
+				}
+			}
+			elseif (0 === (int) $match['winning_team_id']) {
+				foreach ($match['Team'] as $team) {
+					$outcome[$team['id']]['draws'] += 1;
+				}
+			}
+			else {
+				foreach ($match['Team'] as $team) {
+					if ((int) $match['winning_team_id'] === (int) $team['id']) {
+						$outcome[$team['id']]['wins'] += 1;
+					}
+					else {
+						$outcome[$team['id']]['losses'] += 1;
+					}
+				}
+			}
+		}
+
+		return $outcome;
 	}
 
 
@@ -685,21 +727,6 @@ $second_seed = 2;
 
 		return $this->{$this->data['Tournament']['tournament_type']}( );
 	}
-
-
-	public function check_rounds($tournament_id) {
-		$this->contain(array(
-			'Team' => array(
-				'Player',
-			),
-			'Match' => array(
-				'Team',
-			),
-		));
-		$this->read(null, $tournament_id);
-
-	}
-
 
 }
 

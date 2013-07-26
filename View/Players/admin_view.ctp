@@ -72,7 +72,7 @@
 	<table class="table table-striped table-bordered table-condensed">
 		<tr>
 			<th><?php echo __('ID'); ?></th>
-			<th><?php echo __('Game ID'); ?></th>
+			<th><?php echo __('Game'); ?></th>
 			<th><?php echo __('Wins'); ?></th>
 			<th><?php echo __('Draws'); ?></th>
 			<th><?php echo __('Losses'); ?></th>
@@ -82,7 +82,7 @@
 	<?php foreach ($player['PlayerStat'] as $playerStat) { ?>
 		<tr class="table-hover">
 			<td><?php echo $playerStat['id']; ?>&nbsp;</td>
-			<td><?php echo $playerStat['game_id']; ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($playerStat['Game']['name'], array('controller' => 'games', 'action' => 'view', $playerStat['game_id'])); ?>&nbsp;</td>
 			<td><?php echo $playerStat['wins']; ?>&nbsp;</td>
 			<td><?php echo $playerStat['draws']; ?>&nbsp;</td>
 			<td><?php echo $playerStat['losses']; ?>&nbsp;</td>

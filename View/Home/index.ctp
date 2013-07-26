@@ -35,20 +35,7 @@
 		<br><br>
 	<?php foreach ($tourny['Match'] as $match) { ?>
 
-		<div class="match well well-bright">
-			<strong>Match</strong> started on <?php echo date('F j, Y @ h:ia', strtotime($match['created'])); ?>
-			<div class="outcomes pull-right">
-				<button class="btn btn-mini btn-success" title="<?php echo implode(', ', Set::extract('/Player/name', $match['Team'][0])); ?>" id="res_<?php echo $match['id'].'_'.$match['Team'][0]['id']; ?>"><?php
-					echo $match['Team'][0]['name'];
-					echo (( ! empty($match['Team'][0]['seed'])) ? ' (#'.$match['Team'][0]['seed'].')' : ' (Team 1)');
-				?></button>
-				<button class="btn btn-mini btn-success" title="<?php echo implode(', ', Set::extract('/Player/name', $match['Team'][1])); ?>" id="res_<?php echo $match['id'].'_'.$match['Team'][1]['id']; ?>"><?php
-					echo $match['Team'][1]['name'];
-					echo (( ! empty($match['Team'][1]['seed'])) ? ' (#'.$match['Team'][1]['seed'].')' : ' (Team 1)');
-				?></button>
-				<button class="btn btn-mini btn-warning" id="res_<?php echo $match['id'].'_0'; ?>">Tie</button>
-			</div>
-		</div>
+		<?php echo $this->element('match', array('match' => $match)); ?>
 
 	<?php } ?>
 	</div>
@@ -60,11 +47,8 @@
 
 <hr />
 
-<?php if ($geobootstrap) { ?>
-<marquee behavior="alternate">Please select the game and players below, then click on "Create Teams" to get your auto-generated teams!</marquee>
-<?php } else { ?>
-<div class="info">Please select the game and players below, then click on "Create Teams" to get your auto-generated teams!</div>
-<?php } ?>
+<marquee behavior="alternate" class="geobootstrap">Please select the game and players below, then click on "Create Teams" to get your auto-generated teams!</marquee>
+<div class="info not_geobootstrap">Please select the game and players below, then click on "Create Teams" to get your auto-generated teams!</div>
 
 <div class="home form">
 	<?php echo $this->Form->create('Tournament', array('action' => 'start')); ?>
@@ -82,9 +66,9 @@
 				<?php echo $this->Form->input('player_id', array('label' => 'Players', 'type' => 'select', 'multiple' => 'checkbox', 'div' => array('class' => 'checkboxes'))); ?>
 			</div>
 		</fieldset>
-		<?php if ($geobootstrap) { echo $this->Html->image('hot.gif'); } ?>
-		<?php echo $this->Form->submit(__('Create Teams'), array('class' => 'btn btn-primary', 'div' => ! $geobootstrap)); ?>
-		<?php if ($geobootstrap) { echo $this->Html->image('hot.gif'); } ?>
+		<?php echo $this->Html->image('hot.gif', array('class' => 'geobootstrap')); ?>
+		<?php echo $this->Form->submit(__('Create Teams'), array('class' => 'btn btn-primary', 'div' => false)); ?>
+		<?php echo $this->Html->image('hot.gif', array('class' => 'geobootstrap')); ?>
 	<?php echo $this->Form->end( ); ?>
 </div>
 

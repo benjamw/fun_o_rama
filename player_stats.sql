@@ -1,0 +1,13 @@
+
+DROP TABLE IF EXISTS `player_stats`;
+CREATE TABLE IF NOT EXISTS `player_stats` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  `player_id` INT UNSIGNED NOT NULL ,
+  `game_id` INT UNSIGNED NOT NULL ,
+  `wins` INT UNSIGNED NOT NULL ,
+  `draws` INT UNSIGNED NOT NULL ,
+  `losses` INT UNSIGNED NOT NULL ,
+  UNIQUE ( `player_id` , `game_id` )
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
+
+

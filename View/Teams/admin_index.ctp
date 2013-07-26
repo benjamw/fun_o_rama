@@ -13,6 +13,8 @@
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('tournament_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo $this->Paginator->sort('start_seed'); ?></th>
+			<th><?php echo $this->Paginator->sort('seed'); ?></th>
 			<th>Players</th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
@@ -20,8 +22,10 @@
 	<?php foreach ($teams as $team) { ?>
 		<tr class="table-hover">
 			<td><?php echo h($team['Team']['id']); ?>&nbsp;</td>
-			<td><?php echo $this->Html->link($team['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $team['Tournament']['id'])); ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($team['Tournament']['Game']['name'], array('controller' => 'games', 'action' => 'view', $team['Tournament']['Game']['id'])).' @ '.$this->Html->link($team['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $team['Tournament']['id'])); ?>&nbsp;</td>
 			<td><?php echo h($team['Team']['name']); ?>&nbsp;</td>
+			<td><?php echo h($team['Team']['start_seed']); ?>&nbsp;</td>
+			<td><?php echo h($team['Team']['seed']); ?>&nbsp;</td>
 			<td><?php
 				$players = array( );
 				foreach ($team['Player'] as $player) {

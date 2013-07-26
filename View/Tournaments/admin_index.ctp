@@ -14,6 +14,7 @@
 			<th><?php echo $this->Paginator->sort('game_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('tournament_type'); ?></th>
 			<th><?php echo $this->Paginator->sort('team_size'); ?></th>
+			<th><?php echo $this->Paginator->sort('quality'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
@@ -22,8 +23,9 @@
 		<tr class="table-hover">
 			<td><?php echo h($tournament['Tournament']['id']); ?>&nbsp;</td>
 			<td><?php echo $this->Html->link($tournament['Game']['name'], array('controller' => 'games', 'action' => 'view', $tournament['Game']['id'])); ?>&nbsp;</td>
-			<td><?php echo h($tournament['Tournament']['tournament_type']); ?>&nbsp;</td>
+			<td><?php echo h(Inflector::humanize($tournament['Tournament']['tournament_type'])); ?>&nbsp;</td>
 			<td><?php echo h($tournament['Tournament']['team_size']); ?>&nbsp;</td>
+			<td><?php echo h($tournament['Tournament']['quality']); ?>&nbsp;</td>
 			<td><?php echo h($tournament['Tournament']['created']); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
