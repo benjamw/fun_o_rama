@@ -19,10 +19,8 @@ class StatsController extends AppController {
 				'GameType.name' => 'ASC',
 			),
 		));
-
 		$this->set('game_types', $game_types);
 
-		// win-loss stats for each player for each game
 		$games = $this->Game->find('list', array(
 			'joins' => array(
 				array(
@@ -39,7 +37,6 @@ class StatsController extends AppController {
 				'Game.name' => 'ASC',
 			),
 		));
-
 		$this->set('games', $games);
 
 		// player rankings
@@ -56,98 +53,19 @@ class StatsController extends AppController {
 
 		$this->set('player_rankings', $player_rankings);
 
-		// the base query
-		$query = array(
-			'fields' => array(
-				'Player.*',
-			),
-			'joins' => array(
-				array(
-					'table' => 'players_teams',
-					'alias' => 'PlayerTeam',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'PlayerTeam.player_id = Player.id',
-					),
-				),
-				array(
-					'table' => 'teams',
-					'alias' => 'Team',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'Team.id = PlayerTeam.team_id',
-					),
-				),
-			),
-			'conditions' => array( ),
-			'group' => array(
-				'Player.id',
-			),
-			'order' => array(
-				'Player.name' => 'ASC',
-			),
-		);
+		// player stats
+		$stats = $this->Player->PlayerStat->find('all');
 
-		$i = 0;
-		foreach ($games as $game_id => $game_name) {
-			++$i;
-
-			$query['fields'] = array_merge($query['fields'], array(
-				'"'.$game_name.'" AS game_'.$i.'_name',
-				'"'.$game_id.'" AS game_'.$i.'_id',
-				'COUNT(Game'.$i.'WinMatches.id) AS game_'.$i.'_wins',
-				'COUNT(Game'.$i.'LoseMatches.id) AS game_'.$i.'_losses',
-			));
-
-			$query['joins'][] = array(
-				'table' => 'matches',
-				'alias' => 'Game'.$i.'WinMatches',
-				'type' => 'LEFT',
-				'conditions' => array(
-					'Game'.$i.'WinMatches.id = Team.match_id',
-					'Game'.$i.'WinMatches.winning_team_id = Team.id',
-					'Game'.$i.'WinMatches.game_id' => $game_id,
-				),
-			);
-
-			$query['joins'][] = array(
-				'table' => 'matches',
-				'alias' => 'Game'.$i.'LoseMatches',
-				'type' => 'LEFT',
-				'conditions' => array(
-					'Game'.$i.'LoseMatches.id = Team.match_id',
-					'Game'.$i.'LoseMatches.winning_team_id <> Team.id',
-					'Game'.$i.'LoseMatches.winning_team_id <>' => 0,
-					'Game'.$i.'LoseMatches.game_id' => $game_id,
-				),
-			);
-		}
-
-		$win_loss = $this->Player->find('all', $query);
-
-		$type_games = array( );
-		foreach ($game_types as $game_type) {
-			foreach ($game_type['Game'] as $game) {
-				$type_games[$game['id']] = $game_type['GameType']['id'];
-			}
-		}
-
-		foreach ($win_loss as & $player) { // mind the reference
-			$games = $player[0];
-			unset($player[0]);
-
-			$player['Game'] = array( );
-			foreach ($games as $key => $value) {
-				$key = explode('_', $key);
-
-				$player['Game'][$key[1]][$key[2]] = $value;
+		$player_stats = array( );
+		foreach ($stats as $stat) {
+			if ( ! isset($player_stats[$stat['PlayerStat']['player_id']])) {
+				$player_stats[$stat['PlayerStat']['player_id']] = array( );
 			}
 
-			$player['Game'] = array_values($player['Game']);
+			$player_stats[$stat['PlayerStat']['player_id']][$stat['PlayerStat']['game_id']] = $stat;
 		}
-		unset($player); // kill the reference
 
-		$this->set('win_loss', $win_loss);
+		$this->set('player_stats', $player_stats);
 
 // ========================================================================
 
@@ -182,11 +100,19 @@ class StatsController extends AppController {
 						),
 					),
 					array(
+						'table' => 'tournaments',
+						'alias' => 'Tournament',
+						'type' => 'LEFT',
+						'conditions' => array(
+							'Tournament.id = Team.tournament_id',
+						),
+					),
+					array(
 						'table' => 'matches',
 						'alias' => 'Match',
 						'type' => 'LEFT',
 						'conditions' => array(
-							'Match.id = Team.match_id',
+							'Match.tournament_id = Tournament.id',
 						),
 					),
 					array(
@@ -194,7 +120,7 @@ class StatsController extends AppController {
 						'alias' => 'Game',
 						'type' => 'LEFT',
 						'conditions' => array(
-							'Game.id = Match.game_id',
+							'Game.id = Tournament.game_id',
 						),
 					),
 				),

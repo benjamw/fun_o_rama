@@ -28,26 +28,23 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($win_loss as $player) { ?>
+		<?php foreach ($players as $player) { ?>
 		<tr>
 			<td class="name"><span class="badge badge-warning"><?php echo $badges[$player['Player']['id']]; ?></span> <?php echo $this->Html->link($player['Player']['name'], array('controller' => 'players', 'action' => 'view', $player['Player']['id'])); ?></td>
 
 			<?php
-				$n = 0;
 				foreach ($game_types as $game_type) {
 					$rank = $player_rankings[$player['Player']['id']][$game_type['GameType']['id']]['PlayerRanking'];
 
-					echo '<td class="num">'.number_format($rank['mean'], 2).'</th>';
-					echo '<td class="num">'.number_format($rank['std_deviation'], 3).'</th>';
+					echo '<td class="num">'.number_format($rank['mean'], 2).'</td>';
+					echo '<td class="num">'.number_format($rank['std_deviation'], 3).'</td>';
 
-					for ($i = $n, $len = $n + count($game_type['Game']); $i < $len; ++$i, ++$n) {
-						$game = $player['Game'][$i];
-
-						echo '<td class="num">'.$game['wins'].'</td>';
-						echo '<td class="num">'.$game['losses'].'</td>';
+					foreach ($game_type['Game'] as $game) {
+						echo '<td class="num">'.$player_stats[$player['Player']['id']][$game['id']]['PlayerStat']['wins'].'</td>';
+						echo '<td class="num">'.$player_stats[$player['Player']['id']][$game['id']]['PlayerStat']['losses'].'</td>';
 					}
 
-					echo '<td class="num">'.$rank['games_played'].'</th>';
+					echo '<td class="num">'.$rank['games_played'].'</td>';
 				}
 			?>
 

@@ -11,19 +11,22 @@
 	<table class="table table-striped table-bordered table-condensed">
 		<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('game_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('tournament_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo $this->Paginator->sort('quality'); ?></th>
 			<th>Team 1</th>
 			<th>Team 2</th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('winning_team_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('sat_out'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
 	<?php foreach ($matches as $match) { ?>
 		<tr class="table-hover">
 			<td><?php echo h($match['Match']['id']); ?>&nbsp;</td>
-			<td><?php echo $this->Html->link($match['Game']['name'], array('controller' => 'games', 'action' => 'view', $match['Game']['id'])); ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($match['Tournament']['Game']['name'], array('controller' => 'games', 'action' => 'view', $match['Tournament']['Game']['id'])).' @ '.$this->Html->link($match['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $match['Tournament']['id'])); ?>&nbsp;</td>
+			<td><?php echo h($match['Match']['name']); ?>&nbsp;</td>
+			<td><?php echo h($match['Match']['quality']); ?>&nbsp;</td>
 			<td>
 				<strong><?php echo $this->Html->link($match['Team'][0]['name'] ?: 'Team 1', array('controller' => 'teams', 'action' => 'view', $match['Team'][0]['id'])); ?></strong><br>
 				<?php
@@ -65,7 +68,6 @@
 					}
 				}
 			?>&nbsp;</td>
-			<td><?php echo $this->Html->link($match['SatOutPlayer']['name'], array('controller' => 'players', 'action' => 'view', $match['SatOutPlayer']['id'])); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('action' => 'view', $match['Match']['id']), array('class' => 'btn btn-small')); ?>

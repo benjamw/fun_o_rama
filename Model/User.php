@@ -112,28 +112,12 @@ class User extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'Group' => array(
-			'className' => 'Group',
-			'foreignKey' => 'group_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
+		'Group',
 	);
 
 	public $hasOne = array(
 		'Forgot' => array(
-			'className' => 'Forgot',
-			'foreignKey' => 'user_id',
 			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => '',
 		),
 	);
 

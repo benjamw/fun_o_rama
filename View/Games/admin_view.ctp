@@ -26,61 +26,31 @@
 </div>
 
 <div class="related well">
-	<h3><?php echo __('Related Matches'); ?></h3>
+	<h3><?php echo __('Related Player Stats'); ?></h3>
 
-<?php if ( ! empty($game['Match'])) { ?>
+<?php if ( ! empty($game['PlayerStat'])) { ?>
 	<table class="table table-striped table-bordered table-condensed">
 		<tr>
 			<th><?php echo __('ID'); ?></th>
-			<th>Team 1</th>
-			<th>Team 2</th>
-			<th><?php echo __('Created'); ?></th>
-			<th><?php echo __('Winning Team'); ?></th>
-			<th><?php echo __('Sat Out'); ?></th>
+			<th><?php echo __('Player'); ?></th>
+			<th><?php echo __('Wins'); ?></th>
+			<th><?php echo __('Draws'); ?></th>
+			<th><?php echo __('Losses'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
-	<?php foreach ($game['Match'] as $match) { ?>
+	<?php foreach ($game['PlayerStat'] as $playerStat) { ?>
 		<tr class="table-hover">
-			<td><?php echo $match['id']; ?></td>
-			<td>
-				<strong><?php echo $this->Html->link($match['Team'][0]['name'], array('controller' => 'teams', 'action' => 'view', $match['Team'][0]['id'])); ?></strong><br>
-				<?php
-					$players = array( );
-					foreach ($match['Team'][0]['Player'] as $player) {
-						$players[] = $this->Html->link($player['name'], array('controller' => 'players', 'action' => 'view', $player['id']));
-					}
-					echo implode(', ', $players);
-				?>&nbsp;
-			</td>
-			<td>
-				<strong><?php echo $this->Html->link($match['Team'][1]['name'], array('controller' => 'teams', 'action' => 'view', $match['Team'][1]['id'])); ?></strong><br>
-				<?php
-					$players = array( );
-					foreach ($match['Team'][1]['Player'] as $player) {
-						$players[] = $this->Html->link($player['name'], array('controller' => 'players', 'action' => 'view', $player['id']));
-					}
-					echo implode(', ', $players);
-				?>&nbsp;
-			</td>
-			<td><?php echo h($match['created']); ?>&nbsp;</td>
-			<td><?php
-				if (0 === $match['winning_team_id']) {
-					echo 'Tie';
-				}
-				elseif ( ! $match['winning_team_id']) {
-					echo 'Unfinished';
-				}
-				else {
-					echo $this->Html->link($match['WinningTeam']['name'], array('controller' => 'teams', 'action' => 'view', $match['WinningTeam']['id']));
-				}
-			?>&nbsp;</td>
-			<td><?php echo ( ! empty($match['SatOutPlayer']['name']) ? $this->Html->link($match['SatOutPlayer']['name'], array('controller' => 'players', 'action' => 'view', $match['SatOutPlayer']['id'])) : ''); ?></td>
+			<td><?php echo $playerStat['id']; ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($playerStat['Player']['name'], array('controller' => 'players', 'action' => 'view', $playerStat['Player']['id'])); ?>&nbsp;</td>
+			<td><?php echo $playerStat['wins']; ?>&nbsp;</td>
+			<td><?php echo $playerStat['draws']; ?>&nbsp;</td>
+			<td><?php echo $playerStat['losses']; ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
-					<?php echo $this->Html->link(__('View'), array('controller' => 'matches', 'action' => 'view', $match['id']), array('class' => 'btn btn-small')); ?>
-					<?php echo $this->Html->link(__('Edit'), array('controller' => 'matches', 'action' => 'edit', $match['id']), array('class' => 'btn btn-small')); ?>
-					<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'matches', 'action' => 'delete', $match['id']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete Match #%s?', $match['id'])); ?>
+					<?php echo $this->Html->link(__('View'), array('controller' => 'player_stats', 'action' => 'view', $playerStat['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Html->link(__('Edit'), array('controller' => 'player_stats', 'action' => 'edit', $playerStat['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'player_stats', 'action' => 'delete', $playerStat['id']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete Player Stat #%s?', $playerStat['id'])); ?>
 				</div>
 			</td>
 		</tr>
@@ -91,8 +61,50 @@
 
 	<div class="actions">
 		<ul class="nav nav-pills">
-			<li><?php echo $this->Html->link(__('List Matches'), array('controller' => 'matches', 'action' => 'index')); ?> </li>
-			<li><?php echo $this->Html->link(__('New Match'), array('controller' => 'matches', 'action' => 'add')); ?> </li>
+			<li><?php echo $this->Html->link(__('List Player Stats'), array('controller' => 'player_stats', 'action' => 'index')); ?> </li>
+			<li><?php echo $this->Html->link(__('New Player Stat'), array('controller' => 'player_stats', 'action' => 'add')); ?> </li>
+		</ul>
+	</div>
+</div>
+
+<div class="related well">
+	<h3><?php echo __('Related Tournaments'); ?></h3>
+
+<?php if ( ! empty($game['Tournament'])) { ?>
+	<table class="table table-striped table-bordered table-condensed">
+		<tr>
+			<th><?php echo __('ID'); ?></th>
+			<th><?php echo __('Tournament Type'); ?></th>
+			<th><?php echo __('Team Size'); ?></th>
+			<th><?php echo __('Quality'); ?></th>
+			<th><?php echo __('Created'); ?></th>
+			<th class="actions"><?php echo __('Actions'); ?></th>
+		</tr>
+
+	<?php foreach ($game['Tournament'] as $tournament) { ?>
+		<tr class="table-hover">
+			<td><?php echo $tournament['id']; ?>&nbsp;</td>
+			<td><?php echo Inflector::humanize($tournament['tournament_type']); ?>&nbsp;</td>
+			<td><?php echo $tournament['team_size']; ?>&nbsp;</td>
+			<td><?php echo $tournament['quality']; ?>&nbsp;</td>
+			<td><?php echo $tournament['created']; ?>&nbsp;</td>
+			<td class="actions">
+				<div class="btn-group">
+					<?php echo $this->Html->link(__('View'), array('controller' => 'tournaments', 'action' => 'view', $tournament['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Html->link(__('Edit'), array('controller' => 'tournaments', 'action' => 'edit', $tournament['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'tournaments', 'action' => 'delete', $tournament['id']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete Tournament #%s?', $tournament['id'])); ?>
+				</div>
+			</td>
+		</tr>
+	<?php } ?>
+
+	</table>
+<?php } ?>
+
+	<div class="actions">
+		<ul class="nav nav-pills">
+			<li><?php echo $this->Html->link(__('List Tournaments'), array('controller' => 'tournaments', 'action' => 'index')); ?> </li>
+			<li><?php echo $this->Html->link(__('New Tournament'), array('controller' => 'tournaments', 'action' => 'add')); ?> </li>
 		</ul>
 	</div>
 </div>

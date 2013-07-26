@@ -10,6 +10,9 @@
 		<dt><?php echo __('Name'); ?></dt>
 		<dd><?php echo h($gameType['GameType']['name']); ?>&nbsp;</dd>
 
+		<dt><?php echo __('Max Team Size'); ?></dt>
+		<dd><?php echo h($gameType['GameType']['max_team_size']); ?>&nbsp;</dd>
+
 	</dl>
 
 </div>

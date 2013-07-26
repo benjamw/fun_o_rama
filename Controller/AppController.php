@@ -53,11 +53,8 @@ class AppController extends Controller {
 	}
 
 	public function beforeFilter( ) {
-		$this->set('geobootstrap', true);
-
-// log the IP addresses accessing the site
-// so I can filter out anything not DAZ later
-CakeLog::write('debug', env('REMOTE_ADDR'));
+// log the user agents accessing the site
+// so I can make the site more responsive in the future
 CakeLog::write('debug', env('HTTP_USER_AGENT'));
 
 		if (env('REMOTE_ADDR') && ! in_array(env('REMOTE_ADDR'), $this->allowed_ips)) {
@@ -217,8 +214,11 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 			foreach ($controllerList as $controllerItem) {
 				$controller = Inflector::underscore(str_replace('Controller', '', $controllerItem));
 				$hide = array( // add the controller to this array to hide it from the menu
+					'adjectives',
 					'admin',
+					'animals',
 					'app',
+					'colors',
 					'contact',
 					'home',
 					'forgots',
@@ -616,19 +616,19 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 
 		// grab the games list in order of most played
 		if (isset($this->viewVars['games'])) {
-			$this->set('games', m('Match')->Game->find('list', array(
+			$this->set('games', m('Tournament')->Game->find('list', array(
 				'joins' => array(
 					array(
-						'table' => 'matches',
-						'alias' => 'Match',
+						'table' => 'tournaments',
+						'alias' => 'Tournament',
 						'type' => 'LEFT',
 						'conditions' => array(
-							'Match.game_id = Game.id',
+							'Tournament.game_id = Game.id',
 						),
 					),
 				),
 				'order' => array(
-					'COUNT(Match.id)' => 'DESC',
+					'COUNT(Tournament.id)' => 'DESC',
 					'Game.name' => 'ASC',
 				),
 				'group' => array(

@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.5
+-- version 4.0.2
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: May 30, 2013 at 02:23 PM
--- Server version: 5.1.68-cll-lve
--- PHP Version: 5.3.17
+-- Host: 127.0.0.1
+-- Generation Time: Jun 13, 2013 at 11:02 AM
+-- Server version: 5.6.10
+-- PHP Version: 5.4.13
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `iohelixn_daz_fun`
+-- Database: `daz_fun`
 --
 
 -- --------------------------------------------------------
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `adjectives` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1145 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `animals` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=322 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `badges` (
   `description` text NOT NULL,
   `icon` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `badges_players` (
   `player_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `badge_id` (`badge_id`,`player_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=376 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `colors` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=180 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `forgots` (
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `token` (`token`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `games` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `game_type_id` (`game_type_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `game_types` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -155,14 +155,14 @@ CREATE TABLE IF NOT EXISTS `groups` (
 DROP TABLE IF EXISTS `matches`;
 CREATE TABLE IF NOT EXISTS `matches` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `game_id` int(10) unsigned NOT NULL,
+  `tournament_id` int(10) unsigned NOT NULL,
   `created` datetime NOT NULL,
   `winning_team_id` int(10) unsigned DEFAULT NULL,
   `sat_out` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `game_id` (`game_id`),
+  KEY `tournament_id` (`tournament_id`),
   KEY `winning_team_id` (`winning_team_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=71 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `active` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `slug` (`slug`,`active`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `name` varchar(255) NOT NULL,
   `avatar` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -210,7 +210,22 @@ CREATE TABLE IF NOT EXISTS `players_teams` (
   `team_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `player_id` (`player_id`,`team_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=511 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `players_tournaments`
+--
+
+DROP TABLE IF EXISTS `players_tournaments`;
+CREATE TABLE IF NOT EXISTS `players_tournaments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `player_id` int(10) unsigned NOT NULL,
+  `tournament_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `player_id` (`player_id`,`tournament_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -228,7 +243,7 @@ CREATE TABLE IF NOT EXISTS `player_rankings` (
   `games_played` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `player_id` (`player_id`,`game_type_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -245,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `default` text,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -260,7 +275,24 @@ CREATE TABLE IF NOT EXISTS `teams` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `match_id` (`match_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=141 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tournaments`
+--
+
+DROP TABLE IF EXISTS `tournaments`;
+CREATE TABLE IF NOT EXISTS `tournaments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `game_id` int(10) unsigned NOT NULL,
+  `tournament_type` varchar(255) NOT NULL,
+  `team_size` tinyint(2) unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `game_type_id` (`game_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -288,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `group_id` (`group_id`),
   KEY `active` (`active`),
   KEY `ident` (`ident`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

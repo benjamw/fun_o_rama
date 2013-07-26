@@ -5,7 +5,7 @@ App::uses('AppModel', 'Model');
 class Team extends AppModel {
 
 	public $validate = array(
-		'match_id' => array(
+		'tournament_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
@@ -28,31 +28,12 @@ class Team extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'Match' => array(
-			'className' => 'Match',
-			'foreignKey' => 'match_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
+		'Tournament',
 	);
 
 	public $hasAndBelongsToMany = array(
-		'Player' => array(
-			'className' => 'Player',
-			'joinTable' => 'players_teams',
-			'foreignKey' => 'team_id',
-			'associationForeignKey' => 'player_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => '',
-		),
+		'Match',
+		'Player',
 	);
 
 	public function beforeSave($options = array( )) {
@@ -83,16 +64,20 @@ class Team extends AppModel {
 		$colors = m('Color')->find('list', $conds);
 		$animals = m('Animal')->find('list', $conds);
 
-		shuffle($adjectives);
-		shuffle($adjectives);
+		// if alliteration was attempted, but a match was not found
+		// kill the alliteration, and just pull all values
+		if ( ! $adjectives || ! $colors || ! $animals) {
+			$conds = array( );
+
+			$adjectives = m('Adjective')->find('list', $conds);
+			$colors = m('Color')->find('list', $conds);
+			$animals = m('Animal')->find('list', $conds);
+		}
+
 		shuffle($adjectives);
 
 		shuffle($colors);
-		shuffle($colors);
-		shuffle($colors);
 
-		shuffle($animals);
-		shuffle($animals);
 		shuffle($animals);
 
 		$name = trim(reset($adjectives)).' '.trim(reset($colors)).' '.Inflector::pluralize(trim(reset($animals)));
