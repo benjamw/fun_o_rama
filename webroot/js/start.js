@@ -1,33 +1,32 @@
 
-var jqXHR = false;
 
-jQuery('h2.name').find('span.clickable').on('click', function( ) {
-	var $elem = $(this),
-		team_num = $elem.closest('.well').attr('id').split('_'),
-		team_id = jQuery('#team_'+ team_num[1] +' ul').attr('id').slice(5);
+jQuery('div.team').find('.name').find('span.clickable').on('click', function( ) {
+	var team_id = $(this).closest('.well').attr('id').split('_');
 
 	jQuery.ajax({
-		url: MATCH_UPDATE_URL,
+		url: TOURNAMENT_URL,
 		type: 'POST',
-		data: 'rename='+team_id,
+		data: 'rename='+team_id[1],
 		success: function(msg) {
-			$elem.text(msg);
+			jQuery('.'+team_id[0]+'_'+team_id[1]).find('.name').find('span.clickable').text(msg);
 		}
 	});
 }).css({'cursor': 'pointer', 'border-bottom': '1px dashed #08c'});
 
-jQuery('#team_1 ul, #team_2 ul, #team_out ul, #the_rest ul').sortable({
+var jqXHR = false;
+jQuery('ul.swappable').sortable({
 	connectWith: '.swappable',
 	placeholder: 'ui-state-highlight',
 	tolerance: 'pointer',
 	stop: function( ) {
-		var team1 = jQuery('#team_1 ul').sortable('serialize', { key: 'team1[]' });
-		team1 += '&team1_id='+jQuery('#team_1 ul').attr('id').slice(5);
+		data = 'tournament_id='+pkid;
 
-		var team2 = jQuery('#team_2 ul').sortable('serialize', { key: 'team2[]' });
-		team2 += '&team2_id='+jQuery('#team_2 ul').attr('id').slice(5);
-
-		var team_out = jQuery('#team_out ul').sortable('serialize', { key: 'sat_out[]' });
+		jQuery('ul.swappable').each( function(idx, elem) {
+			data = data+'&'+jQuery(elem).sortable('serialize', {
+				key: jQuery(elem).closest('.well').attr('id')+'[]',
+				expression: /^(.+)$/
+			});
+		});
 
 		if (jqXHR) {
 			jqXHR.abort( );
@@ -35,9 +34,9 @@ jQuery('#team_1 ul, #team_2 ul, #team_out ul, #the_rest ul').sortable({
 		}
 
 		jqXHR = jQuery.ajax({
-			url: MATCH_UPDATE_URL,
+			url: TOURNAMENT_URL,
 			type: 'POST',
-			data: 'match_id='+pkid+'&'+team1+'&'+team2+'&'+team_out,
+			data: data,
 			success: function( ) {
 				jqXHR = false;
 			}
@@ -46,9 +45,9 @@ jQuery('#team_1 ul, #team_2 ul, #team_out ul, #the_rest ul').sortable({
 }).disableSelection( );
 
 jQuery.fn.editable.defaults.mode = 'inline';
-jQuery('h1 strong').editable({
+jQuery('h3 strong').editable({
 	type: 'select',
-	url: MATCH_UPDATE_URL,
+	url: TOURNAMENT_URL,
 	name: 'game_id',
 	pk: pkid,
 	source: games

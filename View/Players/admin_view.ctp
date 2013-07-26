@@ -66,6 +66,48 @@
 </div>
 
 <div class="related well">
+	<h3><?php echo __('Related Player Stats'); ?></h3>
+
+<?php if ( ! empty($player['PlayerStat'])) { ?>
+	<table class="table table-striped table-bordered table-condensed">
+		<tr>
+			<th><?php echo __('ID'); ?></th>
+			<th><?php echo __('Game'); ?></th>
+			<th><?php echo __('Wins'); ?></th>
+			<th><?php echo __('Draws'); ?></th>
+			<th><?php echo __('Losses'); ?></th>
+			<th class="actions"><?php echo __('Actions'); ?></th>
+		</tr>
+
+	<?php foreach ($player['PlayerStat'] as $playerStat) { ?>
+		<tr class="table-hover">
+			<td><?php echo $playerStat['id']; ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($playerStat['Game']['name'], array('controller' => 'games', 'action' => 'view', $playerStat['game_id'])); ?>&nbsp;</td>
+			<td><?php echo $playerStat['wins']; ?>&nbsp;</td>
+			<td><?php echo $playerStat['draws']; ?>&nbsp;</td>
+			<td><?php echo $playerStat['losses']; ?>&nbsp;</td>
+			<td class="actions">
+				<div class="btn-group">
+					<?php echo $this->Html->link(__('View'), array('controller' => 'player_stats', 'action' => 'view', $playerStat['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Html->link(__('Edit'), array('controller' => 'player_stats', 'action' => 'edit', $playerStat['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'player_stats', 'action' => 'delete', $playerStat['id']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete Player Stat #%s?', $playerStat['id'])); ?>
+				</div>
+			</td>
+		</tr>
+	<?php } ?>
+
+	</table>
+<?php } ?>
+
+	<div class="actions">
+		<ul class="nav nav-pills">
+			<li><?php echo $this->Html->link(__('List Player Stats'), array('controller' => 'player_stats', 'action' => 'index')); ?> </li>
+			<li><?php echo $this->Html->link(__('New Player Stat'), array('controller' => 'player_stats', 'action' => 'add')); ?> </li>
+		</ul>
+	</div>
+</div>
+
+<div class="related well">
 	<h3><?php echo __('Related Badges'); ?></h3>
 
 <?php if ( ! empty($player['Badge'])) { ?>
@@ -112,16 +154,26 @@
 	<table class="table table-striped table-bordered table-condensed">
 		<tr>
 			<th><?php echo __('ID'); ?></th>
-			<th><?php echo __('Match'); ?></th>
+			<th><?php echo __('Tournament'); ?></th>
 			<th><?php echo __('Name'); ?></th>
+			<th><?php echo __('Players'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
 	<?php foreach ($player['Team'] as $team) { ?>
 		<tr class="table-hover">
 			<td><?php echo $team['id']; ?>&nbsp;</td>
-			<td><?php echo $this->Html->link($team['Match']['Game']['name'], array('controller' => 'games', 'action' => 'view', $team['Match']['Game']['id'])).' @ '.$this->Html->link($team['Match']['created'], array('controller' => 'matches', 'action' => 'view', $team['Match']['id'])); ?>&nbsp;</td>
+			<td><?php echo $this->Html->link($team['Tournament']['Game']['name'], array('controller' => 'games', 'action' => 'view', $team['Tournament']['Game']['id'])).' @ '.$this->Html->link($team['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $team['Tournament']['id'])); ?>&nbsp;</td>
 			<td><?php echo $team['name']; ?>&nbsp;</td>
+			<td>
+				<?php
+					$players = array( );
+					foreach ($team['Player'] as $player) {
+						$players[] = $this->Html->link($player['name'], array('controller' => 'players', 'action' => 'view', $player['id']));
+					}
+					echo implode(', ', $players);
+				?>&nbsp;
+			</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'teams', 'action' => 'view', $team['id']), array('class' => 'btn btn-small')); ?>

@@ -28,30 +28,35 @@ class Game extends AppModel {
 	);
 
 	public $belongsTo = array(
-		'GameType' => array(
-			'className' => 'GameType',
-			'foreignKey' => 'game_type_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-		),
+		'GameType',
 	);
 
 	public $hasMany = array(
-		'Match' => array(
-			'className' => 'Match',
-			'foreignKey' => 'game_id',
+		'PlayerStat' => array(
 			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => '',
+		),
+		'Tournament' => array(
+			'dependent' => true,
 		),
 	);
+
+	public function afterSave($created) {
+		parent::afterSave($created);
+
+		if ($created) {
+			// create an entry in the PlayerStat table for this game
+			// for every player.  the values are defaulted in the table
+			$players = array_keys($this->PlayerStat->Player->find('list'));
+
+			foreach ($players as $player) {
+				$this->PlayerStat->create( );
+				$this->PlayerStat->save(array('PlayerStat' => array(
+					'player_id' => $player,
+					'game_id' => $this->id,
+				)), false);
+			}
+		}
+	}
 
 }
 

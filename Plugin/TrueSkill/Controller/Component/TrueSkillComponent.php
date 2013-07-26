@@ -2,10 +2,13 @@
 
 $path = App::path('Vendor', 'TrueSkill');
 
+require_once $path[0].'TrueSkill/TrueSkill/FactorGraphTrueSkillCalculator.php';
 require_once $path[0].'TrueSkill/TrueSkill/TwoTeamTrueSkillCalculator.php';
 require_once $path[0].'TrueSkill/Teams.php';
 require_once $path[0].'Combinations.php';
+require_once $path[0].'TeamCombinations.php';
 
+use Moserware\Skills\TrueSkill\FactorGraphTrueSkillCalculator;
 use Moserware\Skills\TrueSkill\TwoTeamTrueSkillCalculator;
 use Moserware\Skills\GameInfo;
 use Moserware\Skills\Player;
@@ -14,17 +17,27 @@ use Moserware\Skills\Team;
 use Moserware\Skills\Teams;
 use Moserware\Skills\SkillCalculator;
 use Moserware\Skills\Combinations;
+use Moserware\Skills\TeamCombinations;
 
 class TrueSkillComponent extends Component {
 
 	private $GameInfo;
-	private $Calculator;
+	private $TwoTeamCalculator;
+	private $MultiTeamCalculator;
 
+
+	/**
+	 * Initialize the component
+	 *
+	 * @param Controller linked controller (not used)
+	 * @return void
+	 */
 	public function initialize(Controller $controller) {
 		parent::initialize($controller);
 
 		$this->GameInfo = new GameInfo( );
-		$this->Calculator = new TwoTeamTrueSkillCalculator( );
+		$this->TwoTeamCalculator = new TwoTeamTrueSkillCalculator( );
+		$this->MultiTeamCalculator = new FactorGraphTrueSkillCalculator( );
 	}
 
 
@@ -86,7 +99,7 @@ class TrueSkillComponent extends Component {
 				return false;
 		}
 
-		$new_ratings = $this->Calculator->calculateNewRatings($this->GameInfo, $teams, $result);
+		$new_ratings = $this->TwoTeamCalculator->calculateNewRatings($this->GameInfo, $teams, $result);
 
 		$return = array( );
 		foreach ($teams as $team) {
@@ -120,34 +133,52 @@ class TrueSkillComponent extends Component {
 	 *	Odd count players will be handled, but are not recommended
 	 *
 	 * @param array player data including rank
+	 * @param int optional number of players per team
 	 * @return array team arrays of player ids
 	 */
-	public function calculateBestMatch($players) {
+	public function calculateBestMatch($players, $team_size = 2) {
 		if ( ! $players) {
 			return false;
 		}
 
-		$player_spots = array_keys($players);
+		$num_teams = count($players) / $team_size;
+
+		if ((int) $num_teams != $num_teams) {
+			return false;
+		}
+
+		$calculator = ((2 === $num_teams) ? $this->TwoTeamCalculator : $this->MultiTeamCalculator);
+
+// TODO: this whole thing is running out of memory
+// need to find a way to iterate through all possible matches
+// while keeping the memory footprint small and also running as fast as possible
 
 		$team_quality = array( );
-		foreach (new Combinations(implode('', $player_spots), (int) ceil(count($player_spots) / 2)) as $team1_spots) {
-			$spots = $team = array( );
+		$highest_quality = 0;
+		foreach (new TeamCombinations(range(0, count($players) - 1), $team_size) as $teams) {
+			$calc_teams = array( );
+			foreach ($teams as $player_spots) {
+				$team = new Team( );
 
-			$spots[0] = str_split($team1_spots);
-			$spots[1] = array_diff($player_spots, $spots[0]);
-
-			$team[0] = new Team( );
-			$team[1] = new Team( );
-
-			for ($i = 0; $i <= 1; ++$i) {
-				foreach ($spots[$i] as $spot) {
-					$team[$i]->addPlayer(new Player($players[$spot]['id']), new Rating($players[$spot]['mean'], $players[$spot]['std_dev']));
+				foreach ($player_spots as $idx) {
+					$team->addPlayer(new Player($players[$idx]['id']), new Rating($players[$idx]['mean'], $players[$idx]['std_dev']));
 				}
+
+				$calc_teams[] = $team;
 			}
 
-			$teams = Teams::concat($team[0], $team[1]);
+			$quality = $calculator->calculateMatchQuality($this->GameInfo, $calc_teams);
 
-			$quality = (string) $this->Calculator->calculateMatchQuality($this->GameInfo, $teams);
+			if ($quality < $highest_quality) {
+				continue;
+			}
+			elseif ($quality > $highest_quality) {
+				unset($team_quality);
+				$team_quality = array( );
+			}
+
+			$highest_quality = $quality;
+
 			$quality = number_format($quality, 10);
 
 			if ( ! isset($team_quality[$quality])) {
@@ -166,18 +197,86 @@ class TrueSkillComponent extends Component {
 		$top_teams = $first['value'];
 
 		shuffle($top_teams);
-		shuffle($top_teams);
-		shuffle($top_teams);
 
 		return array(reset($top_teams), $top_quality);
 	}
 
+
+	/**
+	 * Calculate the match quality with the given teams
+	 *
+	 *	$teams = array(
+	 *		array(
+	 *			array(
+	 *				'id' => [player_id],
+	 *				'mean' => [player_ranking_mean],
+	 *				'std_dev' => [player_ranking_standard_deviation],
+	 *			),
+	 *			...
+	 *		),
+	 *		array(
+	 *			array(
+	 *				'id' => [player_id],
+	 *				'mean' => [player_ranking_mean],
+	 *				'std_dev' => [player_ranking_standard_deviation],
+	 *			),
+	 *			...
+	 *		),
+	 *	);
+	 *
+	 * @param array teams of Player data including PlayerRanking data
+	 * @return float match quality
+	 */
+	public function getQuality($teams) {
+		$num_teams = count($teams);
+
+		$calculator = ((2 === $num_teams) ? $this->TwoTeamCalculator : $this->MultiTeamCalculator);
+
+		foreach ($teams as $players) {
+			$team = new Team( );
+
+			foreach ($players as $player) {
+				$team->addPlayer(new Player($player['id']), new Rating($player['mean'], $player['std_dev']));
+			}
+
+			$calc_teams[] = $team;
+		}
+
+		return $calculator->calculateMatchQuality($this->GameInfo, $calc_teams);
+	}
+
+
+	/**
+	 * Getter for the default mean value
+	 *
+	 * @param void
+	 * @return float default mean
+	 */
 	public function getDefaultMean( ) {
 		return $this->GameInfo->getDefaultRating( )->getMean( );
 	}
 
+
+	/**
+	 * Getter for the default standard deviation value
+	 *
+	 * @param void
+	 * @return float default standard deviation
+	 */
 	public function getDefaultStandardDeviation( ) {
 		return $this->GameInfo->getDefaultRating( )->getStandardDeviation( );
+	}
+
+
+	/**
+	 * Getter for the Combinations Iterator
+	 *
+	 * @param array|string set S of elements
+	 * @param int k number of elements to choose
+	 * @return Combinations Iterator
+	 */
+	public function combinations($s, $k) {
+		return new Combinations($s, $k);
 	}
 
 }

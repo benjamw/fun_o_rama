@@ -19,6 +19,28 @@ class AppModel extends Model {
 	);
 
 
+	// override the find method to include HAVING clause
+	public function find($type = 'first', $query = array( )) {
+		if ( ! empty($query['having']) && is_array($query['having']) && ! empty($query['group'])) {
+			// is type = 'all' the only place this is valid?
+			if ($type == 'all') {
+				if ( ! is_array($query['group'])) {
+					$query['group'] = array($query['group']);
+				}
+
+				$ds = $this->getDataSource( );
+				$having = $ds->conditions($query['having'], true, false);
+				$query['group'][count($query['group']) - 1] .= " HAVING {$having} ";
+			}
+			else {
+				unset($query['having']);
+			}
+		}
+
+		return parent::find($type, $query);
+	}
+
+
 	// cake has a pretty major bug in which it duplicates entries
 	// if the data is coming from a multi-linked HABTM relationships
 	// http://cakephp.lighthouseapp.com/projects/42648/tickets/1598

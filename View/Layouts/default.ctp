@@ -12,11 +12,11 @@
 		echo $this->fetch('meta');
 
 		echo $this->Html->css('bootstrap.min.css');
-		if ($geobootstrap) { echo $this->Html->css('geocities/bootstrap.min.css'); }
+		echo $this->Html->css('geocities/bootstrap.min.css');
 		echo $this->Html->css('bootstrap-between.css');
 		echo $this->Html->css('bootstrap-responsive.min.css');
 		echo $this->Html->css('//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
-		if ($geobootstrap) { echo $this->Html->css('geocities/jquery-ui-1.10.2.custom.min.css'); }
+		echo $this->Html->css('geocities/jquery-ui-1.10.2.custom.min.css');
 		echo $this->fetch('css');
 
 	?>
@@ -26,10 +26,11 @@
 
 	<header class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<span class="brand"><?php echo ($geobootstrap) ? $this->Html->image('Daz3D_23016.gif') : 'DAZ'; ?> Fun-☺-rama <?php echo ($geobootstrap) ? $this->Html->image('me.jpg') : 'ME'; ?>&reg;</span>
+			<span class="brand"><?php echo $this->Html->image('Daz3D_23016.gif', array('class' => 'geobootstrap')); ?><span class="not_geobootstrap">DAZ</span> Fun-☺-rama <?php echo $this->Html->image('me.jpg', array('class' => 'geobootstrap')); ?><span class="not_geobootstrap">ME</span>&reg;</span>
 			<?php
 				$menu = array(
 					array('Home', array('controller' => 'home', 'action' => 'index')),
+					array('Tournaments', array('controller' => 'tournaments', 'action' => 'index')),
 //					array('Players', array('controller' => 'players', 'action' => 'index')),
 //					array('Games', array('controller' => 'games', 'action' => 'index')),
 					array('Stats', array('controller' => 'stats', 'action' => 'index')),
@@ -42,12 +43,10 @@
 	</header>
 
 	<div class="container">
-		<?php if ($geobootstrap) { ?>
-			<?php echo $this->Html->image('Winking.gif'); ?>
-			<?php echo $this->Html->image('http://www.textfiles.com/underconstruction/mamagnolia_acresunderconstruction.gif'); ?>
-			<?php echo $this->Html->image('http://2.bp.blogspot.com/_Ze5Xm5fW-4o/TUnUBt6ADUI/AAAAAAAABJA/2WGSLTNK1K4/s1600/broken-link-image-gif.jpg', array('width' => 100, 'height' => 100)); ?>
-			<?php echo $this->Html->image('NakedGrayChick.gif'); ?>
-		<?php } ?>
+		<?php echo $this->Html->image('Winking.gif', array('class' => 'geobootstrap')); ?>
+		<?php echo $this->Html->image('http://www.textfiles.com/underconstruction/mamagnolia_acresunderconstruction.gif', array('class' => 'geobootstrap')); ?>
+		<?php echo $this->Html->image('http://2.bp.blogspot.com/_Ze5Xm5fW-4o/TUnUBt6ADUI/AAAAAAAABJA/2WGSLTNK1K4/s1600/broken-link-image-gif.jpg', array('class' => 'geobootstrap', 'width' => 100, 'height' => 100)); ?>
+		<?php echo $this->Html->image('NakedGrayChick.gif', array('class' => 'geobootstrap')); ?>
 
 		<div class="row">
 			<div id="content" class="span12">
@@ -58,8 +57,7 @@
 		</div>
 	</div>
 
-	<footer>
-	<?php if ($geobootstrap) { ?>
+	<footer class="geobootstrap">
 		<?php echo $this->Html->image('flames.gif'); ?>
 		<?php echo $this->Html->image('flames.gif'); ?>
 		<br />
@@ -70,18 +68,18 @@
 		Built with: <?php echo $this->Html->image('logo-powerpoint.gif'); ?>
 		<a href="/guestbook.asp">Sign our GuestBook!</a>
 		¡Hasta Mañana!
-	<?php } ?>
 	</footer>
 
 	<?php
 
 		echo $this->Html->scriptblock('var ROOT_URL = "'.$this->Html->url('/').'";');
-		echo $this->Html->script('//code.jquery.com/jquery-2.0.1.js');
+		echo $this->Html->script('//code.jquery.com/jquery-2.0.3.min.js');
 		echo $this->Html->script('//code.jquery.com/ui/1.10.3/jquery-ui.js');
 		echo $this->Html->script('bootstrap.min.js');
 		echo $this->fetch('script');
 
 		echo $this->fetch('scriptBottom');
+		echo $this->Html->script('jquery.konami.js');
 
 	?>
 
