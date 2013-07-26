@@ -49,21 +49,7 @@ class Badge extends AppModel {
 	);
 
 	public $hasAndBelongsToMany = array(
-		'Player' => array(
-			'className' => 'Player',
-			'joinTable' => 'badges_players',
-			'foreignKey' => 'badge_id',
-			'associationForeignKey' => 'player_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => '',
-		),
+		'Player',
 	);
 
 	public function beforeSave($options = array( )) {

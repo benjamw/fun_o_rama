@@ -9,19 +9,7 @@ class Group extends AppModel {
 	);
 
 	public $hasMany = array(
-		'User' => array(
-			'className' => 'User',
-			'foreignKey' => 'group_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => '',
-		),
+		'User',
 	);
 
 	public function parentNode( ) {
