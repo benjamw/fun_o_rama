@@ -4,6 +4,17 @@ App::uses('AppController', 'Controller');
 
 class MatchesController extends AppController {
 
+	public function admin_index( ) {
+		$this->paginate = array(
+			'order' => array(
+				'created' => 'DESC',
+			),
+		);
+
+		parent::admin_index( );
+	}
+
+
 	function _setSelects($active = true) {
 		if (false !== strpos($this->request->params['action'], 'edit')) {
 			// the winning teams can only be selected from the teams that actually played

@@ -300,6 +300,17 @@ class TournamentsController extends AppController {
 	}
 
 
+	public function admin_index( ) {
+		$this->paginate = array(
+			'order' => array(
+				'created' => 'DESC',
+			),
+		);
+
+		parent::admin_index( );
+	}
+
+
 	protected function _setSelects($active_only = false) {
 		parent::_setSelects($active_only);
 
