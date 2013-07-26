@@ -22,9 +22,8 @@
 
 <?php if ($single) { ?>
 <div class="alert alert-block alert-info">
-	<?php if ($geobootstrap) { ?><marquee behavior="alternate"><?php } ?>
-	Feel free to move players around as needed to balance the teams a little better.
-	<?php if ($geobootstrap) { ?></marquee><?php } ?>
+	<marquee behavior="alternate" class="geoboostrap">Feel free to move players around as needed to balance the teams a little better.</marquee>
+	<span class="not_geobootstrap">Feel free to move players around as needed to balance the teams a little better.</span>
 </div>
 <?php } else { ?>
 <h4>Teams</h4>

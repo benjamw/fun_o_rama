@@ -53,8 +53,6 @@ class AppController extends Controller {
 	}
 
 	public function beforeFilter( ) {
-		$this->set('geobootstrap', true);
-
 // log the user agents accessing the site
 // so I can make the site more responsive in the future
 CakeLog::write('debug', env('HTTP_USER_AGENT'));
