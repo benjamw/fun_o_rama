@@ -152,10 +152,6 @@ class TrueSkillBehavior extends ModelBehavior {
 
 		$calculator = ((2 === $num_teams) ? $this->TwoTeamCalculator : $this->MultiTeamCalculator);
 
-// TODO: this whole thing is running out of memory
-// need to find a way to iterate through all possible matches
-// while keeping the memory footprint small and also running as fast as possible
-
 		$team_quality = array( );
 		$highest_quality = 0;
 		foreach (new TeamCombinations(range(0, count($players) - 1), $team_size) as $teams) {
