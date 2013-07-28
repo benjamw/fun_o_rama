@@ -20,7 +20,14 @@
 		<tr class="table-hover">
 			<td><?php echo h($player['Player']['id']); ?>&nbsp;</td>
 			<td><?php echo h($player['Player']['name']); ?>&nbsp;</td>
-			<td><?php if ( ! empty($player['Player']['avatar']['main'])) echo $this->Html->image($player['Player']['avatar']['main']); ?>&nbsp;</td>
+			<td><?php
+				if ( ! empty($player['Player']['avatar']['main'])) {
+					echo $this->Html->image($player['Player']['avatar']['main']);
+				}
+				else {
+					echo $this->Identicon->create($player['Player']['id']);
+				}
+			?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('action' => 'view', $player['Player']['id']), array('class' => 'btn btn-small')); ?>

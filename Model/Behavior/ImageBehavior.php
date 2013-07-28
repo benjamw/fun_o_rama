@@ -528,13 +528,16 @@ class ImageBehavior extends ModelBehavior {
 
 		if ($resize) {
 			$image = call_user_func('imagecreatefrom'.$types[$size[2]], $url);
-			if (function_exists('imagecreatetruecolor') && ($temp = imagecreatetruecolor($width, $height))) {
-				imagecopyresampled($temp, $image, 0, 0, $start_x, $start_y, $width, $height, $src_w, $src_h);
-			}
-			else {
-				$temp = imagecreate($width, $height);
-				imagecopyresized($temp, $image, 0, 0, $start_x, $start_y, $width, $height, $src_w, $src_h);
-			}
+			$temp = imagecreatetruecolor($width, $height);
+
+			imagealphablending($temp, false);
+
+			$transparent = imagecolorallocatealpha($temp, 0, 0, 0, 127);
+			imagefill($temp, 0, 0, $transparent);
+
+			imagecopyresampled($temp, $image, 0, 0, $start_x, $start_y, $width, $height, $src_w, $src_h);
+
+			imagesavealpha($temp, true);
 
 			call_user_func('image'.$types[$size[2]], $temp, $cachefile);
 			imagedestroy($image);
@@ -602,13 +605,21 @@ class ImageBehavior extends ModelBehavior {
 
 		// make our adjustments to the main image
 		$image = call_user_func('imagecreatefrom'.$types[$size[2]], $main_image);
-		if (function_exists('imagecreatetruecolor') && ($temp = imagecreatetruecolor($width, $height))) {
-			imagecopyresampled($temp, $image, 0, 0, $start_x, $start_y, $width, $height, $width, $height);
-		}
-		else {
-			$temp = imagecreate($width, $height);
-			imagecopyresized($temp, $image, 0, 0, $start_x, $start_y, $width, $height, $width, $height);
-		}
+gi($image);
+
+		$temp = imagecreatetruecolor($width, $height);
+gi($temp);
+
+		imagealphablending($temp, false);
+
+		$transparent = imagecolorallocatealpha($temp, 0, 0, 0, 127);
+		imagefill($temp, 0, 0, $transparent);
+gi($temp);
+
+		imagecopyresampled($temp, $image, 0, 0, $start_x, $start_y, $width, $height, $width, $height);
+gi($temp);
+
+		imagesavealpha($temp, true);
 
 		call_user_func('image'.$types[$size[2]], $temp, $main_image);
 		imagedestroy($image);

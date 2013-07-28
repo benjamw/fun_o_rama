@@ -17,8 +17,7 @@
 
 		<?php foreach ($tourny['Results'] as $result) { ?>
 			<tr class="table-hover">
-<?php // TODO: replace this with a more detailed team name with hover states and all that ?>
-				<td class="name"><?php echo $result['name']; ?></td>
+				<td class="name"><?php echo $this->element('team_name', compact('result', 'tourny')); ?></td>
 				<td><?php echo $result['start_seed']; ?></td>
 				<td><?php echo $result['wins']; ?></td>
 				<td><?php echo $result['losses']; ?></td>

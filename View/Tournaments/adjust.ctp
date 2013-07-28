@@ -34,7 +34,7 @@
 	<?php
 		$swap = $link = true;
 		foreach ($tournament['Team'] as $team) {
-			echo $this->element('team', compact('team', 'game_type_id', 'swap', 'link'));
+			echo $this->element('team_block', compact('team', 'game_type_id', 'swap', 'link'));
 		}
 	?>
 </div>
@@ -81,7 +81,7 @@
 			$span = 'span5';
 			$swap = $link = $single;
 			foreach ($match['Team'] as $team_num => $team) {
-				echo $this->element('team', compact('team', 'game_type_id', 'swap', 'link', 'span'));
+				echo $this->element('team_block', compact('team', 'game_type_id', 'swap', 'link', 'span'));
 			}
 		?>
 		</div>

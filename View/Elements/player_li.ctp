@@ -20,6 +20,13 @@
 ?>
 
 	<li id="pl_<?php echo $pl['id'].'_'.$unique; ?>"><?php
+		if ( ! empty($pl['avatar']['main'])) {
+			echo $this->Html->image($pl['avatar']['main'], array('alt' => $pl['name'])).' ';
+		}
+		else {
+			echo $this->Identicon->create($pl['id']).' ';
+		}
+
 		if ($link) {
 			echo $this->Html->link($pl['name'], array('controller' => 'players', 'action' => 'view', $pl['id']));
 		}

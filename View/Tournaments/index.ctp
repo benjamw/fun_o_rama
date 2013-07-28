@@ -10,7 +10,7 @@
 	<div class="well clearfix">
 		<strong><?php echo Inflector::humanize($tourny['Tournament']['tournament_type']).' '.$tourny['Game']['name']; ?> Tournament</strong> started on <?php echo date('F j, Y @ h:ia', strtotime($tourny['Tournament']['created'])); ?>
 <?php // TODO: show the teams and players here ?>
-		<?php echo $this->element($tourny['Tournament']['tournament_type'], array('tourny' => $tourny)); ?>
+		<?php echo $this->element($tourny['Tournament']['tournament_type'], compact('tourny')); ?>
 	</div>
 	<?php } ?>
 <?php } ?>
@@ -22,7 +22,7 @@
 	<div class="well clearfix">
 		<strong><?php echo Inflector::humanize($tourny['Tournament']['tournament_type']).' '.$tourny['Game']['name']; ?> Tournament</strong> started on <?php echo date('F j, Y @ h:ia', strtotime($tourny['Tournament']['created'])); ?>
 <?php // TODO: show the teams and players here ?>
-		<?php echo $this->element($tourny['Tournament']['tournament_type'], array('tourny' => $tourny)); ?>
+		<?php echo $this->element($tourny['Tournament']['tournament_type'], compact('tourny')); ?>
 	</div>
 	<?php } ?>
 <?php } ?>

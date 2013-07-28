@@ -7,7 +7,6 @@
 
 	// set some global vars for the recursive function
 	global $tourny,
-		$total_team_count, $total_round_count, $root,
 		$team_id, $team_seed, $match_name,
 		$rounds;
 
@@ -70,12 +69,11 @@
 	// this function works backwards, starting at round n and working
 	// towards round 1, because that's how the HTML is built out
 if ( ! function_exists('tourny_round')) {
-	function tourny_round($round, $path = array( )) {
+	function tourny_round($that, $round, $path = array( )) {
 		// i know this is bad, but it's so much easier
 		// i'm not editing anything in the globals list, just reading.
 		// anything that gets edited or passed along gets passed as arguments
 		global $tourny,
-			$total_team_count, $total_round_count, $root,
 			$team_id, $team_seed, $match_name,
 			$rounds;
 
@@ -99,13 +97,9 @@ if ( ! function_exists('tourny_round')) {
 				$winner = '';
 			}
 			else {
-				// TODO: replace this with a more detailed team name with hover states and all that
-				$winner = $team_id[$match_name[$name]['winning_team_id']]['name'];
+				$winner = $that->element('team_name', array('team' => $team_id[$match_name[$name]['winning_team_id']]));
 			}
 		}
-// TODO: find a way to figure out if the round has been generated yet
-// and don't show anything if it hasn't
-// because the ELSE below will catch everything
 		else {
 			if (2 === $round) {
 				$empty = empty($rounds[$round - 1][$top_idx]);
@@ -115,8 +109,7 @@ if ( ! function_exists('tourny_round')) {
 					// the winner is a higher seeded team that had a bye
 					// drop down a round, and grab the team seeded in this spot
 					$winner = '#'.$rounds[$round][$idx].'- ';
-					// TODO: replace this with a more detailed team name with hover states and all that
-					$winner .= $team_seed[$rounds[$round][$idx]]['name'];
+					$winner .= $that->element('team_name', array('team' => $team_seed[$rounds[$round][$idx]]));
 				}
 			}
 
@@ -142,8 +135,7 @@ if ( ! function_exists('tourny_round')) {
 					// the winner is a higher seeded team that had a bye
 					// drop down a round, and grab the team seeded in this spot
 					$winner = '#'.$rounds[$round - 1][$top_idx].'- ';
-					// TODO: replace this with a more detailed team name with hover states and all that
-					$winner .= $team_seed[$rounds[$round - 1][$top_idx]]['name'];
+					$winner .= $that->element('team_name', array('team' => $team_seed[$rounds[$round - 1][$top_idx]]));
 				}
 				else {
 					// this round has not been generated yet, don't show anything
@@ -159,14 +151,13 @@ if ( ! function_exists('tourny_round')) {
 			<?php $top_path = $path; ?>
 			<?php $top_path[] = '0'; ?>
 			<?php if (1 < ($round - 1)) { ?>
-				<?php echo tourny_round($round - 1, $top_path); ?>
+				<?php echo tourny_round($that, $round - 1, $top_path); ?>
 			<?php
 				}
 				elseif ( ! $empty) {
 					// look in Round 1, for the given location
 					echo '#'.$rounds[1][$top_idx].'- ';
-					// TODO: replace this with a more detailed team name with hover states and all that
-					echo $team_seed[$rounds[1][$top_idx]]['name'];
+					echo $that->element('team_name', array('team' => $team_seed[$rounds[1][$top_idx]]));
 				}
 			?>
 
@@ -175,14 +166,13 @@ if ( ! function_exists('tourny_round')) {
 			<?php $bottom_path = $path; ?>
 			<?php $bottom_path[] = '1'; ?>
 			<?php if (1 < ($round - 1)) { ?>
-				<?php echo tourny_round($round - 1, $bottom_path); ?>
+				<?php echo tourny_round($that, $round - 1, $bottom_path); ?>
 			<?php
 				}
 				elseif ( ! $empty) {
 					// look in Round 1, for the given location
 					echo '#'.$rounds[1][$bot_idx].'- ';
-					// TODO: replace this with a more detailed team name with hover states and all that
-					echo $team_seed[$rounds[1][$bot_idx]]['name'];
+					echo $that->element('team_name', array('team' => $team_seed[$rounds[1][$bot_idx]]));
 				}
 			?>
 
@@ -195,7 +185,7 @@ if ( ! function_exists('tourny_round')) {
 
 <div class="well clearfix" id="tourny_<?php echo $tourny['Tournament']['id']; ?>">
 	<div class="tournament<?php echo $root; ?>-wrap">
-		<?php tourny_round($total_round_count + 1); ?>
+		<?php tourny_round($this, $total_round_count + 1); ?>
 	</div>
 </div>
 
