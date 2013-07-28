@@ -2,7 +2,7 @@
 <?php $this->Html->script('jquery.tablesorter.js', array('block' => 'script')); ?>
 <?php $this->Html->script('round_robin.js', array('block' => 'scriptBottom')); ?>
 
-<div class="well" id="tourny_<?php echo $tourny['Tournament']['id']; ?>">
+<div id="tourny_<?php echo $tourny['Tournament']['id']; ?>">
 	<table class="table table-striped table-bordered table-condensed tablesorter round_robin">
 		<thead>
 			<tr>

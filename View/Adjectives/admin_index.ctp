@@ -1,6 +1,6 @@
 
 <div class="adjectives index">
-	<h2><?php echo __('Adjectives'); ?> <?php echo $this->Html->link(__('New Adjective'), array('action' => 'add'), array('class' => 'btn btn-mini btn-info')); ?></h2>
+	<h2><?php echo __('Adjectives'); ?> <?php echo $this->Html->link(__('New Adjective'), array('action' => 'add'), array('class' => 'btn btn-small btn-info')); ?></h2>
 
 	<div class="clearfix">
 		<?php echo $this->element('admin_filter'); ?>

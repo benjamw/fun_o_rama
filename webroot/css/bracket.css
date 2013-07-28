@@ -5,7 +5,7 @@
 /****** round 1 ******/
 .round1-top, .round1-bottom {
 	float: left;
-	width: 197px;
+	width: 200px;
 	height: 2em;
 	padding-left: 3px;
 	overflow: hidden;
@@ -19,13 +19,13 @@
 }
 
 .round2-topwrap .round1-bottom {
-	width: 196px;
+	width: 200px;
 	border-top: 1px solid #000;
 	border-right: 1px solid #000;
 }
 
 .round2-bottomwrap .round1-top {
-	width: 196px;
+	width: 200px;
 	border-bottom: 1px solid #000;
 	border-right: 1px solid #000;
 }
@@ -34,7 +34,7 @@
 
 .round2-top, .round2-bottom {
 	float: right;
-	width: 197px;
+	width: 200px;
 	height: 4em;
 	padding-left: 3px;
 	overflow: hidden;
@@ -49,13 +49,13 @@
 
 
 .round3-topwrap .round2-bottom {
-	width: 196px;
+	width: 200px;
 	border-top: 1px solid #000;
 	border-right: 1px solid #000;
 }
 
 .round3-bottomwrap .round2-top {
-	width: 196px;
+	width: 200px;
 	border-bottom: 1px solid #000;
 	border-right: 1px solid #000;
 }
@@ -74,7 +74,7 @@
 
 .round3-top, .round3-bottom {
 	float: right;
-	width: 197px;
+	width: 200px;
 	height: 8em;
 	padding-left: 3px;
 	overflow: hidden;
@@ -88,13 +88,13 @@
 }
 
 .round4-topwrap .round3-bottom {
-	width: 196px;
+	width: 200px;
 	border-top: 1px solid #000;
 	border-right: 1px solid #000;
 }
 
 .round4-bottomwrap .round3-top {
-	width: 196px;
+	width: 200px;
 	border-bottom: 1px solid #000;
 	border-right: 1px solid #000;
 }
@@ -113,7 +113,7 @@
 
 .round4-top, .round4-bottom {
 	float: right;
-	width: 197px;
+	width: 200px;
 	height: 16em;
 	padding-left: 3px;
 	overflow: hidden;
@@ -128,13 +128,13 @@
 
 
 .round5-topwrap .round4-bottom {
-	width: 196px;
+	width: 200px;
 	border-top: 1px solid #000;
 	border-right: 1px solid #000;
 }
 
 .round5-bottomwrap .round4-top {
-	width: 196px;
+	width: 200px;
 	border-bottom: 1px solid #000;
 	border-right: 1px solid #000;
 }
@@ -152,7 +152,7 @@
 
 .round5-top, .round5-bottom {
 	float: right;
-	width: 197px;
+	width: 200px;
 	height: 32em;
 	padding-left: 3px;
 	overflow: hidden;
@@ -178,7 +178,7 @@
 
 .round6-top, .round6-bottom {
 	float: right;
-	width: 197px;
+	width: 200px;
 	height: 32em;
 	padding-left: 3px;
 	overflow: hidden;

@@ -13,8 +13,8 @@
 
 		echo $this->Html->css('bootstrap.min.css');
 		echo $this->Html->css('geocities/bootstrap.min.css');
-		echo $this->Html->css('bootstrap-between.css');
-		echo $this->Html->css('bootstrap-responsive.min.css');
+		echo $this->Html->css('bootstrap3-between.css');
+//		echo $this->Html->css('bootstrap-responsive.min.css');
 		echo $this->Html->css('//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
 		echo $this->Html->css('geocities/jquery-ui-1.10.2.custom.min.css');
 		echo $this->fetch('css');
@@ -25,20 +25,30 @@
 <body>
 
 	<header class="navbar navbar-fixed-top">
-		<div class="navbar-inner">
-			<span class="brand"><?php echo $this->Html->image('Daz3D_23016.gif', array('class' => 'geobootstrap')); ?><span class="not_geobootstrap">DAZ</span> Fun-☺-rama <?php echo $this->Html->image('me.jpg', array('class' => 'geobootstrap')); ?><span class="not_geobootstrap">ME</span>&reg;</span>
-			<?php
-				$menu = array(
-					array('Home', array('controller' => 'home', 'action' => 'index')),
-					array('Tournaments', array('controller' => 'tournaments', 'action' => 'index')),
-//					array('Players', array('controller' => 'players', 'action' => 'index')),
-//					array('Games', array('controller' => 'games', 'action' => 'index')),
-					array('Stats', array('controller' => 'stats', 'action' => 'index')),
-				);
-			?>
-			<ul class="nav">
-				<?php echo $this->Menu->menu($menu); ?>
-			</ul>
+		<div class="container">
+			<!-- .navbar-toggle is used as the toggle for collapsed navbar content -->
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+
+			<span class="navbar-brand">DAZ Fun-☺-rama</span>
+
+			<div class="nav-collapse collapse navbar-responsive-collapse">
+				<?php
+					$menu = array(
+						array('Home', array('controller' => 'home', 'action' => 'index')),
+						array('Tournaments', array('controller' => 'tournaments', 'action' => 'index')),
+//						array('Players', array('controller' => 'players', 'action' => 'index')),
+//						array('Games', array('controller' => 'games', 'action' => 'index')),
+						array('Stats', array('controller' => 'stats', 'action' => 'index')),
+					);
+				?>
+				<ul class="nav navbar-nav">
+					<?php echo $this->Menu->menu($menu); ?>
+				</ul>
+			</div>
 		</div>
 	</header>
 

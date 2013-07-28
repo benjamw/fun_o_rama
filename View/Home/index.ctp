@@ -13,14 +13,14 @@
 	<div class="tourny match well">
 		<strong><?php echo $tourny['Game']['name']; ?></strong> started on <?php echo date('F j, Y @ h:ia', strtotime($match['created'])); ?>
 		<div class="outcomes pull-right">
-			<?php echo $this->Html->link('Adjust', array('controller' => 'tournaments', 'action' => 'adjust', $tourny['Tournament']['id']), array('class' => 'btn btn-mini btn-info')); ?>
+			<?php echo $this->Html->link('Adjust', array('controller' => 'tournaments', 'action' => 'adjust', $tourny['Tournament']['id']), array('class' => 'btn btn-small btn-info')); ?>
 			<?php foreach ($match['Team'] as $team_num => $team) { ?>
 
 				<?php echo $this->element('team_button', compact('team', 'team_num', 'match_id')); ?>
 
 			<?php } ?>
-			<button class="btn btn-mini btn-warning" id="res_<?php echo $match['id'].'_0'; ?>">Tie</button>
-			<button class="btn btn-mini btn-danger" id="res_<?php echo $tourny['Tournament']['id'].'_null'; ?>">Didn't Play</button>
+			<button class="btn btn-small btn-warning" id="res_<?php echo $match['id'].'_0'; ?>">Tie</button>
+			<button class="btn btn-small btn-danger" id="res_<?php echo $tourny['Tournament']['id'].'_null'; ?>">Didn't Play</button>
 		</div>
 	</div>
 
@@ -29,8 +29,8 @@
 	<div class="tourny well">
 		<strong><?php echo Inflector::humanize($tourny['Tournament']['tournament_type']).' '.$tourny['Game']['name']; ?> Tournament</strong> started on <?php echo date('F j, Y @ h:ia', strtotime($tourny['Tournament']['created'])); ?>
 		<div class="pull-right">
-			<?php echo $this->Html->link('Adjust', array('controller' => 'tournaments', 'action' => 'adjust', $tourny['Tournament']['id']), array('class' => 'btn btn-mini btn-info')); ?>
-			<button class="btn btn-mini btn-danger" id="res_<?php echo $tourny['Tournament']['id'].'_null'; ?>">Didn't Play</button>
+			<?php echo $this->Html->link('Adjust', array('controller' => 'tournaments', 'action' => 'adjust', $tourny['Tournament']['id']), array('class' => 'btn btn-small btn-info')); ?>
+			<button class="btn btn-small btn-danger" id="res_<?php echo $tourny['Tournament']['id'].'_null'; ?>">Didn't Play</button>
 		</div>
 		<br><br>
 	<?php foreach ($tourny['Match'] as $match) { ?>
@@ -56,11 +56,11 @@
 			<legend>Start a match / tournament</legend>
 
 			<div class="row">
-				<div class="span3">
-					<?php echo $this->Form->input('game_id'); ?>
-					<?php echo $this->Form->input('tournament_type'); ?>
-					<?php echo $this->Form->input('team_size', array('type' => 'select', 'empty' => 'Even Split', 'options' => array_combine(range(4, 1), range(4, 1)))); ?>
-					<?php echo $this->Form->input('min_team_size', array('type' => 'select', 'empty' => 'Maximum', 'options' => array_combine(range(4, 1), range(4, 1)))); ?>
+				<div class="col-lg-3">
+					<?php echo $this->Form->input('game_id', array('class' => 'input-small')); ?>
+					<?php echo $this->Form->input('tournament_type', array('class' => 'input-small')); ?>
+					<?php echo $this->Form->input('team_size', array('type' => 'select', 'empty' => 'Even Split', 'options' => array_combine(range(4, 1), range(4, 1)), 'class' => 'input-small')); ?>
+					<?php echo $this->Form->input('min_team_size', array('type' => 'select', 'empty' => 'Maximum', 'options' => array_combine(range(4, 1), range(4, 1)), 'class' => 'input-small')); ?>
 				</div>
 
 				<?php echo $this->Form->input('player_id', array('label' => 'Players', 'type' => 'select', 'multiple' => 'checkbox', 'div' => array('class' => 'checkboxes'))); ?>

@@ -1,6 +1,6 @@
 
 <div class="teams index">
-	<h2><?php echo __('Teams'); ?> <?php echo $this->Html->link(__('New Team'), array('action' => 'add'), array('class' => 'btn btn-mini btn-info')); ?></h2>
+	<h2><?php echo __('Teams'); ?> <?php echo $this->Html->link(__('New Team'), array('action' => 'add'), array('class' => 'btn btn-small btn-info')); ?></h2>
 
 	<div class="clearfix">
 		<?php echo $this->element('admin_filter'); ?>

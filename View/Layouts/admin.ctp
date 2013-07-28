@@ -12,8 +12,8 @@
 		echo $this->fetch('meta');
 
 		echo $this->Html->css('bootstrap.min.css');
-		echo $this->Html->css('bootstrap-between.css');
-		echo $this->Html->css('bootstrap-responsive.min.css');
+		echo $this->Html->css('bootstrap3-between.css');
+//		echo $this->Html->css('bootstrap-responsive.min.css');
 		echo $this->fetch('css');
 
 	?>
@@ -23,8 +23,8 @@
 
 	<header class="navbar navbar-fixed-top navbar-inverse">
 		<div class="navbar-inner">
-			<span class="brand">Admin</span>
-			<ul class="nav">
+			<span class="navbar-brand">Admin</span>
+			<ul class="nav navbar-nav">
 				<li><?php echo $this->Html->link('Home', '/'); ?></li>
 				<?php echo $this->Menu->menu($admin); ?>
 			</ul>

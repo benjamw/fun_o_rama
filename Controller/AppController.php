@@ -13,7 +13,9 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 
-	public $helpers = array('Session', 'Html', 'Form', 'Plural', 'Menu', 'Identicon.Identicon');
+	public $helpers = array('Session', 'Html', 'Form', 'Plural', 'Menu', 'Identicon.Identicon',
+		'Form' => array('className' => 'TwitterBootstrap.BootstrapForm'),
+	);
 	public $components = array('Session', 'Auth', 'DebugKit.Toolbar');
 
 	public $user = array( );

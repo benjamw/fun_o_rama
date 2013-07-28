@@ -183,7 +183,7 @@ if ( ! function_exists('tourny_round')) {
 
 ?>
 
-<div class="well clearfix" id="tourny_<?php echo $tourny['Tournament']['id']; ?>">
+<div class="clearfix" id="tourny_<?php echo $tourny['Tournament']['id']; ?>">
 	<div class="tournament<?php echo $root; ?>-wrap">
 		<?php tourny_round($this, $total_round_count + 1); ?>
 	</div>

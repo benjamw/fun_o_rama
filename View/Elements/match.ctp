@@ -20,6 +20,6 @@
 
 		<?php } ?>
 
-			<button class="btn btn-mini btn-warning" id="res_<?php echo $match['id'].'_0'; ?>">Tie</button>
+			<button class="btn btn-small btn-warning" id="res_<?php echo $match['id'].'_0'; ?>">Tie</button>
 		</div>
 	</div>
