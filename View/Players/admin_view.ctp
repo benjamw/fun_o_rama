@@ -128,14 +128,7 @@
 			<td><?php echo $badge['id']; ?>&nbsp;</td>
 			<td><?php echo h($badge['name']); ?>&nbsp;</td>
 			<td><?php echo h($badge['description']); ?>&nbsp;</td>
-			<td><?php
-				if ( ! empty($player['Player']['avatar']['main'])) {
-					echo $this->Html->image($player['Player']['avatar']['main']);
-				}
-				else {
-					echo $this->Identicon->create($player['Player']['id']);
-				}
-			?>&nbsp;</td>
+			<td><?php if ( ! empty($badge['icon']['main'])) { echo $this->Html->image($badge['icon']['main']); } ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'badges', 'action' => 'view', $badge['id']), array('class' => 'btn btn-small')); ?>

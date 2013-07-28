@@ -641,6 +641,8 @@ class Identicon {
 	function build($seed = '', $altImgText = '', $img = true, $outsize = '', $write = true, $random = true, $displaysize = '', $gravataron = true) {
 		//make an identicon and return the filepath or if write=false return picture directly
 		if (function_exists("gd_info")) {
+			$memory_limit = ini_set('memory_limit', '256M');
+
 			// init random seed
 			if ($random) {
 				$id = substr(sha1($seed), 0, 10);
@@ -709,6 +711,8 @@ class Identicon {
 			if ($img) {
 				$filename = '<img class="identicon" src="' . $filename . '" alt="' . str_replace('"', "'", $altImgText) . ' Identicon Icon" height="' . $displaysize . '" width="' . $displaysize . '" />';
 			} //$img
+
+			ini_set('memory_limit', $memory_limit);
 
 			return $filename;
 		} //function_exists("gd_info")

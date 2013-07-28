@@ -605,19 +605,15 @@ class ImageBehavior extends ModelBehavior {
 
 		// make our adjustments to the main image
 		$image = call_user_func('imagecreatefrom'.$types[$size[2]], $main_image);
-gi($image);
 
 		$temp = imagecreatetruecolor($width, $height);
-gi($temp);
 
 		imagealphablending($temp, false);
 
 		$transparent = imagecolorallocatealpha($temp, 0, 0, 0, 127);
 		imagefill($temp, 0, 0, $transparent);
-gi($temp);
 
 		imagecopyresampled($temp, $image, 0, 0, $start_x, $start_y, $width, $height, $width, $height);
-gi($temp);
 
 		imagesavealpha($temp, true);
 
