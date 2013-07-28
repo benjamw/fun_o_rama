@@ -1,7 +1,15 @@
 
 <div class="players view">
 
-	<h2><?php echo $player['Player']['name']; ?>'s Amazing Stuff!!</h2>
+	<h2><?php
+		if ( ! empty($player['Player']['avatar']['main'])) {
+			echo $this->Html->image($player['Player']['avatar']['main']).' ';
+		}
+		else {
+			echo $this->Identicon->create($player['Player']['id']).' ';
+		}
+
+		echo $player['Player']['name']; ?>'s Amazing Stuff!!</h2>
 
 	<div class="well">
 		<h3 class="badges" data-href="<?php echo $this->Html->url(array('admin' => true, 'prefix' => 'admin', 'controller' => 'players', 'action' => 'badges', $player['Player']['id'])); ?>">
