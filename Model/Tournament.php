@@ -100,7 +100,8 @@ class Tournament extends AppModel {
 			do {
 				$num_teams = (int) floor($player_count / $team_size);
 				$sitting_out[$player_count - ($num_teams * $team_size)][] = $team_size;
-			} while ($data['min_team_size'] !== $team_size--);
+				--$team_size;
+			} while ($data['min_team_size'] <= $team_size);
 
 			ksort($sitting_out);
 			list($sitting_out, $team_sizes) = each($sitting_out);
