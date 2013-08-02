@@ -66,6 +66,9 @@ class Tournament extends AppModel {
 
 
 	public function start($data) {
+		// sort the player ids to prevent issues later
+		sort($data['player_id']);
+
 		// grab the max team size from the game type
 		$data['game'] = $this->Game->find('first', array(
 			'contain' => array(
@@ -226,6 +229,8 @@ if ($data['num_sitting_out']) {
 		// if this function is going to be running for a while
 		// just skip it and manually create the teams
 		if (150000 >= $num_combos) {
+// TODO: if team size is set to 1, the last team returned has a player index of 1 instead of 0
+// look into that and make sure it's not a larger problem
 			list($teams, $quality) = $this->calculateBestMatch($calc_players, $data['team_size']);
 		}
 		else {
@@ -305,13 +310,13 @@ if ($data['num_sitting_out']) {
 		$seed = array_flip(array_keys($seed));
 
 		// convert team indexes to team ids
-		foreach ($teams as & $team) {
-			foreach ($team as & $player) {
+		foreach ($teams as & $team) { // mind the reference
+			foreach ($team as & $player) { // mind the reference
 				$player = (int) $calc_players[$player]['id'];
 			}
-			unset($player);
+			unset($player); // kill the reference
 		}
-		unset($team);
+		unset($team); // kill the reference
 
 		return array($teams, $quality, $seed);
 	}
