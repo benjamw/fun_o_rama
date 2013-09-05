@@ -229,6 +229,8 @@ if ($data['num_sitting_out']) {
 		// if this function is going to be running for a while
 		// just skip it and manually create the teams
 		if (150000 >= $num_combos) {
+// TODO: if team size is set to 1, the last team returned has a player index of 1 instead of 0
+// look into that and make sure it's not a larger problem
 			list($teams, $quality) = $this->calculateBestMatch($calc_players, $data['team_size']);
 		}
 		else {
