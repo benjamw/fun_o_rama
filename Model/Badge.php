@@ -49,7 +49,9 @@ class Badge extends AppModel {
 	);
 
 	public $hasAndBelongsToMany = array(
-		'Player',
+		'Player' => array(
+			'unique' => 'keepExisting',
+		),
 	);
 
 	public function beforeSave($options = array( )) {

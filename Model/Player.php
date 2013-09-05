@@ -48,8 +48,12 @@ class Player extends AppModel {
 	);
 
 	public $hasAndBelongsToMany = array(
-		'Badge',
-		'Team',
+		'Badge' => array(
+			'unique' => 'keepExisting',
+		),
+		'Team' => array(
+			'unique' => 'keepExisting',
+		),
 	);
 
 	public function afterSave($created) {

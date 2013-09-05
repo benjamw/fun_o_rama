@@ -66,6 +66,9 @@ class Tournament extends AppModel {
 
 
 	public function start($data) {
+		// sort the player ids to prevent issues later
+		sort($data['player_id']);
+
 		// grab the max team size from the game type
 		$data['game'] = $this->Game->find('first', array(
 			'contain' => array(
@@ -100,7 +103,8 @@ class Tournament extends AppModel {
 			do {
 				$num_teams = (int) floor($player_count / $team_size);
 				$sitting_out[$player_count - ($num_teams * $team_size)][] = $team_size;
-			} while ($data['min_team_size'] !== $team_size--);
+				--$team_size;
+			} while ($data['min_team_size'] <= $team_size);
 
 			ksort($sitting_out);
 			list($sitting_out, $team_sizes) = each($sitting_out);
@@ -304,13 +308,13 @@ if ($data['num_sitting_out']) {
 		$seed = array_flip(array_keys($seed));
 
 		// convert team indexes to team ids
-		foreach ($teams as & $team) {
-			foreach ($team as & $player) {
+		foreach ($teams as & $team) { // mind the reference
+			foreach ($team as & $player) { // mind the reference
 				$player = (int) $calc_players[$player]['id'];
 			}
-			unset($player);
+			unset($player); // kill the reference
 		}
-		unset($team);
+		unset($team); // kill the reference
 
 		return array($teams, $quality, $seed);
 	}
