@@ -227,9 +227,33 @@ if ($data['num_sitting_out']) {
 			$num_players -= $data['team_size'];
 		}
 
-		// if this function is going to be running for a while
-		// just skip it and manually create the teams
-		if (150000 >= $num_combos) {
+		if ('random' === $data['build_method']) {
+			// randomly match players together
+			$entry_ids = array_keys($calc_players);
+			shuffle($entry_ids);
+
+			$i = 0;
+			$teams = array( );
+			while (count($entry_ids)) {
+				for ($j = 0; $j < $data['team_size']; ++$j) {
+					$teams[$i][$j] = array_pop($entry_ids);
+				}
+
+				++$i;
+			}
+
+			$calc_teams = array( );
+			foreach ($teams as $t => $team) {
+				foreach ($team as $p => $player) {
+					$calc_teams[$t][$p] = $calc_players[$player];
+				}
+			}
+
+			$quality = $this->getQuality($calc_teams);
+		}
+		elseif (150000 >= $num_combos) {
+			// if this function is going to be running for a while
+			// just skip it and manually create the teams
 // TODO: if team size is set to 1, the last team returned has a player index of 1 instead of 0
 // look into that and make sure it's not a larger problem
 			list($teams, $quality) = $this->calculateBestMatch($calc_players, $data['team_size']);

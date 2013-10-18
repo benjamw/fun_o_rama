@@ -62,6 +62,7 @@
 					<?php echo $this->Form->input('ranked', array('type' => 'checkbox', 'checked' => 'checked')); ?>
 					<?php echo $this->Form->input('team_size', array('type' => 'select', 'empty' => 'Even Split', 'options' => array_combine(range(4, 1), range(4, 1)))); ?>
 					<?php echo $this->Form->input('min_team_size', array('type' => 'select', 'empty' => 'Maximum', 'options' => array_combine(range(4, 1), range(4, 1)))); ?>
+					<?php echo $this->Form->input('build_method', array('type' => 'radio', 'options' => array('best' => 'Best Match', 'random' => 'Random Teams'), 'value' => 'best', 'legend' => false)); ?>
 				</div>
 
 				<?php echo $this->Form->input('player_id', array('label' => 'Players', 'type' => 'select', 'multiple' => 'checkbox', 'div' => array('class' => 'checkboxes'))); ?>
