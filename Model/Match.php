@@ -60,6 +60,10 @@ class Match extends AppModel {
 			),
 		));
 
+		if ( ! $match['Tournament']['ranked']) {
+			return false;
+		}
+
 		$i = 1;
 		$outcome = 0;
 		$players = array( );

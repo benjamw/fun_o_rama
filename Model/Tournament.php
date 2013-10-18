@@ -131,6 +131,7 @@ if ($data['num_sitting_out']) {
 				'game_id' => $data['game']['Game']['id'],
 				'tournament_type' => $data['tournament_type'],
 				'team_size' => $data['team_size'],
+				'ranked' => $data['ranked'],
 			),
 			'Team' => array( ),
 			'SittingOut' => array( ),

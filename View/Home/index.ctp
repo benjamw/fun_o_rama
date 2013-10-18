@@ -59,6 +59,7 @@
 				<div class="span3">
 					<?php echo $this->Form->input('game_id'); ?>
 					<?php echo $this->Form->input('tournament_type'); ?>
+					<?php echo $this->Form->input('ranked', array('type' => 'checkbox', 'checked' => 'checked')); ?>
 					<?php echo $this->Form->input('team_size', array('type' => 'select', 'empty' => 'Even Split', 'options' => array_combine(range(4, 1), range(4, 1)))); ?>
 					<?php echo $this->Form->input('min_team_size', array('type' => 'select', 'empty' => 'Maximum', 'options' => array_combine(range(4, 1), range(4, 1)))); ?>
 				</div>
