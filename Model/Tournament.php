@@ -162,6 +162,10 @@ if ($data['num_sitting_out']) {
 			}
 		}
 
+		if (2 === count($data['teams'])) {
+			$tourny['Tournament']['tournament_type'] = 'round_robin';
+		}
+
 		$this->create( );
 		if ( ! $this->saveAssociated($tourny, array('deep' => true))) {
 			return false;
