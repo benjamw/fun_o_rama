@@ -70,7 +70,7 @@ class User extends AppModel {
 		'current' => array(
 			'current' => array(
 				'rule' => array('validateCurrentPassword'),
-				'message' => 'You must enter your current password',
+				'message' => 'Please enter your current password',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -80,7 +80,7 @@ class User extends AppModel {
 		'password' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				'message' => 'You must enter a password',
+				'message' => 'Please enter a password',
 				//'allowEmpty' => false,
 				'required' => true,
 				//'last' => false, // Stop validation after this rule
@@ -90,7 +90,7 @@ class User extends AppModel {
 		'confirm' => array(
 			'required' => array(
 				'rule' => array('notempty'),
-				'message' => 'You must verify your password',
+				'message' => 'Please verify your password',
 				//'allowEmpty' => false,
 				'required' => true,
 				//'last' => false, // Stop validation after this rule
@@ -108,7 +108,7 @@ class User extends AppModel {
 	);
 
 	public $actsAs = array(
-		'Acl' => array('requester'),
+		'Acl' => array('type' => 'requester'),
 	);
 
 	public $belongsTo = array(
@@ -129,8 +129,8 @@ class User extends AppModel {
 	public function passConfirm($data) {
 		list($field, $confirm) = each($data);
 
-		$id_empty = empty($this->request->data[$this->alias]['id']);
-		$pass_missing = empty($this->request->data[$this->alias][$this->auth_password]);
+		$id_empty = empty($this->data[$this->alias]['id']);
+		$pass_missing = empty($this->data[$this->alias][$this->auth_password]);
 		$pass_empty = ($pass_missing || (0 === strcmp('', $this->data[$this->alias][$this->auth_password])));
 		$confirm_empty = (0 === strcmp('', $confirm));
 
@@ -139,7 +139,7 @@ class User extends AppModel {
 			return true;
 		}
 
-		$passes_equal = (0 === strcmp($confirm, $this->request->data[$this->alias][$this->auth_password]));
+		$passes_equal = (0 === strcmp($confirm, $this->data[$this->alias][$this->auth_password]));
 
 		if ( ! $pass_empty && $passes_equal) {
 			return true;
@@ -154,25 +154,25 @@ class User extends AppModel {
 		$current_empty = (0 === strcmp('', $current));
 
 		if ($current_empty) {
-			$pass_missing = empty($this->request->data[$this->alias][$this->auth_password]);
+			$pass_missing = empty($this->data[$this->alias][$this->auth_password]);
 			$pass_empty = ($pass_missing || (0 === strcmp('', $this->data[$this->alias][$this->auth_password])));
 
 			return ($pass_missing || $pass_empty);
 		}
 
-		$current_pass_match = (0 === strcmp(Security::hash($current, 'blowfish'), $this->field($this->auth_password)));
+		$current_pass_match = (0 === strcmp(Security::hash($current, 'blowfish', $this->field($this->auth_password)), $this->field($this->auth_password)));
 
 		return $current_pass_match;
 	}
 
 	public function parentNode( ) {
-		if ( ! $this->id && empty($this->request->data)) {
+		if ( ! $this->id && empty($this->data)) {
 			return null;
 		}
 
-		$data = $this->request->data;
+		$data = $this->data;
 		if ( ! empty($this->id)) {
-			$data = array_merge($this->read( ), $this->request->data);
+			$data = array_merge($this->read( ), $this->data);
 		}
 
 		if (empty($data['User']['group_id'])) {
@@ -189,8 +189,8 @@ class User extends AppModel {
 
 	public function beforeSave($options = array( )) {
 		// make sure the user has a group, but only if we are creating the user fresh
-		if (empty($this->id) && empty($this->request->data['User']['id']) && empty($this->request->data['Group']['id']) && empty($this->request->data['User']['group_id'])) {
-			$this->request->data['User']['group_id'] = 2;
+		if (empty($this->id) && empty($this->data['User']['id']) && empty($this->data['Group']['id']) && empty($this->data['User']['group_id'])) {
+			$this->data['User']['group_id'] = 2;
 		}
 
 		// hash the password if we have one, remove it if we don't
@@ -199,6 +199,10 @@ class User extends AppModel {
 		}
 		else {
 			unset($this->data['User'][$this->auth_password]);
+		}
+
+		if (isset($this->data['User']['email'])) {
+			$this->data['User']['email'] = strtolower($this->data['User']['email']);
 		}
 
 		return parent::beforeSave($options);

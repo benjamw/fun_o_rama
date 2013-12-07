@@ -5,7 +5,7 @@ App::uses('AppModel', 'Model');
 class Group extends AppModel {
 
 	public $actsAs = array(
-		'Acl' => array('requester'),
+		'Acl' => array('type' => 'requester'),
 	);
 
 	public $hasMany = array(

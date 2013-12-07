@@ -20,11 +20,12 @@
 include 'functions.php';
 $pluralHumanName = replace_tlis($pluralHumanName);
 $singularHumanName = replace_tlis($singularHumanName);
+$controller = Inflector::tableize($modelClass);
 
 ?>
 
 <div class="<?php echo $pluralVar; ?> index">
-	<h2><?php echo "<?php echo __('{$pluralHumanName}'); ?> <?php echo \$this->Html->link(__('New {$singularHumanName}'), array('action' => 'add'), array('class' => 'btn btn-mini btn-info')); ?>"; ?></h2>
+	<h2><?php echo "<?php echo __('{$pluralHumanName}'); ?> <?php echo \$this->Html->link(__('New {$singularHumanName}'), array('controller' => '{$controller}', 'action' => 'add'), array('class' => 'btn btn-mini btn-info')); ?>"; ?></h2>
 
 	<div class="clearfix">
 		<?php echo "<?php echo \$this->element('admin_filter'); ?>\n"; ?>
@@ -49,7 +50,7 @@ $singularHumanName = replace_tlis($singularHumanName);
 		foreach ($fields as $field) {
 			$isKey = false;
 
-			if (!empty($associations['belongsTo'])) {
+			if ( ! empty($associations['belongsTo'])) {
 				foreach ($associations['belongsTo'] as $alias => $details) {
 					if ($field === $details['foreignKey']) {
 						$isKey = true;
@@ -59,7 +60,7 @@ $singularHumanName = replace_tlis($singularHumanName);
 				}
 			}
 
-			if ($isKey !== true) {
+			if (true !== $isKey) {
 				if ('active' != $field) {
 					echo "\t\t\t<td><?php echo h(\${$singularVar}['{$modelClass}']['{$field}']); ?>&nbsp;</td>\n";
 				}
@@ -71,9 +72,9 @@ $singularHumanName = replace_tlis($singularHumanName);
 
 		echo "\t\t\t<td class=\"actions\">\n";
 		echo "\t\t\t\t<div class=\"btn-group\">\n";
-		echo "\t\t\t\t\t<?php echo \$this->Html->link(__('View'), array('action' => 'view', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-small')); ?>\n";
-	 	echo "\t\t\t\t\t<?php echo \$this->Html->link(__('Edit'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-small')); ?>\n";
-	 	echo "\t\t\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete {$singularHumanName} #%s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
+		echo "\t\t\t\t\t<?php echo \$this->Html->link(__('View'), array('controller' => '{$controller}', 'action' => 'view', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-small')); ?>\n";
+	 	echo "\t\t\t\t\t<?php echo \$this->Html->link(__('Edit'), array('controller' => '{$controller}', 'action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-small')); ?>\n";
+	 	echo "\t\t\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('controller' => '{$controller}', 'action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete {$singularHumanName} #%s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?>\n";
 		echo "\t\t\t\t</div>\n";
 		echo "\t\t\t</td>\n";
 
@@ -88,7 +89,7 @@ $singularHumanName = replace_tlis($singularHumanName);
 </div>
 <div class="actions">
 	<ul class="nav nav-pills">
-		<li><?php echo "<?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('action' => 'add')); ?>"; ?></li>
+		<li><?php echo "<?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('controller' => '{$controller}', 'action' => 'add')); ?>"; ?></li>
 	</ul>
 </div>
 

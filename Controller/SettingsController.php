@@ -114,6 +114,10 @@ class SettingsController extends AppController {
 		debug('Schema Updated');
 //* ---- */
 
+		if ( ! $this->use_acl) {
+			die('DONE - NO ACL');
+		}
+
 		// kill all the ArosAcos
 		$query = "
 			TRUNCATE TABLE `{$this->Acl->Aro->Permission->tablePrefix}{$this->Acl->Aro->Permission->table}`
@@ -132,7 +136,7 @@ class SettingsController extends AppController {
 		// rebuild the aco table
 
 		// aco sync
-		$return = shell_exec("{$cake} acl_extras aco_sync 2> tmp/output");
+		$return = shell_exec("{$cake} AclExtras.AclExtras aco_sync 2> tmp/output");
 		debug($return ? $return : join('', file('tmp/output')));
 		unlink('tmp/output');
 //* ---- */
@@ -143,10 +147,14 @@ class SettingsController extends AppController {
 
 			switch ($id) {
 				case 1 : // admin
+					debug('--- ADMIN ---');
+
 					$this->Acl->allow($aro, 'controllers');
 					break;
 
 				case 2 : // users
+					debug('--- USERS ---');
+
 					$deny = array(
 						// 'Act' => '*',
 					);
@@ -173,8 +181,6 @@ class SettingsController extends AppController {
 
 							if ($not_admin && ! $facebook && ! ($deny_all || $deny_child)) {
 								debug($child['Aco']['alias'].'/'.$sub_child['Aco']['alias']);
-								debug($sub_child);
-
 								$this->Acl->allow($aro, $child['Aco']['alias'].'/'.$sub_child['Aco']['alias']);
 							}
 						}
@@ -182,49 +188,21 @@ class SettingsController extends AppController {
 					break;
 
 				case 3 : // strangers / guests
+					debug('--- GUESTS ---');
+
 					$allowed = array(
 						'CakeError' => '*',
-						'Cities' => '*',
 						'Contact' => '*',
-						'FaqCategories' => '*',
-						'HomePageImages' => '*',
-						'HowItWorksItems' => '*',
-						'NewsStories' => '*',
 						'Pages' => '*',
-						'Properties' => array(
-							'contact',
-							'calendar',
-							'view',
-							'contact_me',
-							'create_space',
-							'create_space_with_fb',
-							'email_host',
-							'calculate_cost',
-						),
-						'Reports' => '*',
-						'Searches' => array(
-							'get_state',
-							'index',
-							'results',
-							'state',
-							'store_compare',
-							'share_results',
-						),
-						'States' => array(
-							'get_states',
-						),
 						'Users' => array(
 							'add',
 							'login',
 							'logout',
-//							'signup',
-							'login_pop',
-							'activate',
 						),
 					);
 
 					if ($this->use_forgot_pass) {
-						$allowed['Forgots'] = array('*');
+						$allowed['Forgots'] = array('index');
 					}
 
 					$deny = array(
@@ -256,8 +234,6 @@ class SettingsController extends AppController {
 
 							if ($not_admin && ! $facebook && ($allow_all || $allow_child || $allow_ac) && ! ($deny_all || $deny_child)) {
 								debug($child['Aco']['alias'].'/'.$sub_child['Aco']['alias']);
-								debug($sub_child);
-
 								$this->Acl->allow($aro, $child['Aco']['alias'].'/'.$sub_child['Aco']['alias']);
 							}
 						}

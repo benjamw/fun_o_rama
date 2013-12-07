@@ -12,7 +12,7 @@ class MigrateShell extends Shell {
 
 	function initialize( ) {
 		$this->path = APP . 'Config' . DS . 'Schema' . DS . 'migrations';
-		$this->db =& ConnectionManager::getDataSource('default');
+		$this->db = ConnectionManager::getDataSource('default');
 		$this->prefix = empty($this->db->config['prefix']) ? '' : $this->db->config['prefix'];
 	}
 

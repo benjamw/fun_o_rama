@@ -6,7 +6,6 @@ App::uses('Folder', 'Utility');
 
 class ImgsController extends AppController {
 
-	public $name = 'Imgs';
 	public $uses = array( );
 	public $allowed = array(
 //			'image/bmp',

@@ -35,7 +35,6 @@
 	}
 
 
-<?php $compact = array( ); ?>
 	public function <?php echo $admin ?>add( ) {
 		if ($this->request->is('post')) {
 			$this-><?php echo $currentModelName; ?>->create( );
@@ -47,18 +46,17 @@
 				$this->flash(__('<?php echo ucfirst(strtolower($currentModelName)); ?> saved.'), array('action' => 'index'));
 <?php } ?>
 			}
-			else {
 <?php if ($wannaUseSession) { ?>
+			else {
 				$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> could not be saved. Please, try again.'), 'flash_error');
-<?php } ?>
 			}
+<?php } ?>
 		}
 
 		$this->_setSelects( );
 	}
 
 
-<?php $compact = array( ); ?>
 	public function <?php echo $admin; ?>edit($id = null) {
 		$this-><?php echo $currentModelName; ?>->id = $id;
 
@@ -75,11 +73,11 @@
 				$this->flash(__('The <?php echo strtolower($singularHumanName); ?> has been saved.'), array('action' => 'index'));
 <?php } ?>
 			}
-			else {
 <?php if ($wannaUseSession) { ?>
+			else {
 				$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> could not be saved. Please, try again.'), 'flash_error');
-<?php } ?>
 			}
+<?php } ?>
 		}
 		else {
 			$this->request->data = $this-><?php echo $currentModelName; ?>->read(null, $id);
@@ -108,11 +106,10 @@
 			$this->flash(__('<?php echo ucfirst(strtolower($singularHumanName)); ?> deleted'), array('action' => 'index'));
 <?php } ?>
 		}
-<?php if ($wannaUseSession) { ?>
 
+<?php if ($wannaUseSession) { ?>
 		$this->Session->setFlash(__('<?php echo ucfirst(strtolower($singularHumanName)); ?> was not deleted'), 'flash_error');
 <?php } else { ?>
-
 		$this->flash(__('<?php echo ucfirst(strtolower($singularHumanName)); ?> was not deleted'), array('action' => 'index'));
 <?php } ?>
 

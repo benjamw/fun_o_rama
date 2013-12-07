@@ -20,6 +20,7 @@
 include 'functions.php';
 $pluralHumanName = replace_tlis($pluralHumanName);
 $singularHumanName = replace_tlis($singularHumanName);
+$controller = Inflector::tableize($modelClass);
 
 ?>
 
@@ -61,10 +62,10 @@ $singularHumanName = replace_tlis($singularHumanName);
 <div class="actions">
 	<ul class="nav nav-pills">
 <?php
-	echo "\t\t<li><?php echo \$this->Html->link(__('Edit " . $singularHumanName ."'), array('action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
-	echo "\t\t<li><?php echo \$this->Form->postLink(__('Delete " . $singularHumanName . "'), array('action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'delete'), __('Are you sure you want to delete {$singularHumanName} #%s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
-	echo "\t\t<li><?php echo \$this->Html->link(__('List " . $pluralHumanName . "'), array('action' => 'index')); ?> </li>\n";
-	echo "\t\t<li><?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('action' => 'add')); ?> </li>\n";
+	echo "\t\t<li><?php echo \$this->Html->link(__('Edit " . $singularHumanName ."'), array('controller' => '{$controller}', 'action' => 'edit', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
+	echo "\t\t<li><?php echo \$this->Form->postLink(__('Delete " . $singularHumanName . "'), array('controller' => '{$controller}', 'action' => 'delete', \${$singularVar}['{$modelClass}']['{$primaryKey}']), array('class' => 'delete'), __('Are you sure you want to delete {$singularHumanName} #%s?', \${$singularVar}['{$modelClass}']['{$primaryKey}'])); ?> </li>\n";
+	echo "\t\t<li><?php echo \$this->Html->link(__('List " . $pluralHumanName . "'), array('controller' => '{$controller}', 'action' => 'index')); ?> </li>\n";
+	echo "\t\t<li><?php echo \$this->Html->link(__('New " . $singularHumanName . "'), array('controller' => '{$controller}', 'action' => 'add')); ?> </li>\n";
 ?>
 	</ul>
 </div>
@@ -151,7 +152,7 @@ foreach ($relations as $alias => $details) {
 		}
 
 		if ('active' != $field) {
-			echo "\t\t\t<td><?php echo \${$otherSingularVar}['{$field}']; ?>&nbsp;</td>\n";
+			echo "\t\t\t<td><?php echo h(\${$otherSingularVar}['{$field}']); ?>&nbsp;</td>\n";
 		}
 		else {
 			echo "\t\t\t<td><?php echo ucfirst(Set::enum((int) \${$otherSingularVar}['{$field}'])); ?>&nbsp;</td>\n";

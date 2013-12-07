@@ -22,6 +22,8 @@ class AppController extends Controller {
 	public $use_remember_me = true;
 	public $use_forgot_pass = true;
 	public $main_page = '/';
+	public $filter_skip_fields = array( );
+	public $filter_skip_models = array( );
 
 	public $allowed = array(
 		'*' => '*',
@@ -41,7 +43,6 @@ class AppController extends Controller {
 		}
 
 		if ($this->use_remember_me) {
-			$this->components[] = 'RememberMe';
 			$this->components[] = 'Cookie';
 		}
 
@@ -64,15 +65,9 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 
 		parent::beforeFilter();
 
-/* -- DEBUGGING --
-		Configure::write('debug', 2);
-		if (Configure::read('debug')) {
-			$this->Auth->allow($this->action);
-		}
-//* -- END DEBUGGING -- */
-
 		if (isset($this->Cookie)) {
 			$this->Cookie->path = preg_replace('%/+%', '/', '/'.APP_DIR.'/');
+			$this->Cookie->type('rijndael'); //Enable AES symetric encryption of cookie
 		}
 
 		if (isset($this->Auth)) {
@@ -88,19 +83,17 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 					// do not edit the following values, edit the values in the User model
 					'fields' => array('username' => m('User')->auth_username, 'password' => m('User')->auth_password),
 					'scope' => array('User.active' => 1),
+					'userModel' => 'User',
 				),
+				'Cookie',
 				'Blowfish',
 			);
 
 			$this->Auth->loginError = __('Username / Password does not match.  Please try again.');
 			$this->Auth->loginAction = array('admin' => true, 'prefix' => 'admin', 'controller' => 'users', 'action' => 'login');
+			$this->Auth->unauthorizedRedirect = array('admin' => true, 'prefix' => 'admin', 'controller' => 'users', 'action' => 'login');
 			$this->Auth->loginRedirect = array('admin' => true, 'prefix' => 'admin', 'controller' => 'users', 'action' => 'index');
 			$this->Auth->logoutRedirect = '/';
-
-			if ($this->use_remember_me) {
-				$this->Auth->autoRedirect = false;
-				$this->RememberMe->check( );
-			}
 
 			// this is only valid _after_ login, not during
 			m('User')->contain('Group');
@@ -112,25 +105,17 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 
 				// check this guest aro for access
 				if ($this->use_acl && $this->Acl->check($guest_alias, $this->name.'/'.$this->action)) {
-					$this->Auth->allow('*');
+					$this->Auth->allow( );
 				}
 				else {
 					$this->Auth->deny( );
 				}
 			}
 
-			// only test if we are logged in, and we are not trying to log in or out
-			if (
-				(
-					('users' !== $this->request->params['controller'])
-					|| ! in_array($this->request->params['action'], array('login', 'logout', 'admin_login', 'admin_logout'))
-				)
-				&& ! empty($this->user['User']['id'])
-				&& $this->use_remember_me
-				&& ! $this->RememberMe->check_lock( )
-			) {
-				$this->redirect(array('admin' => false, 'prefix' => false, 'controller' => 'users', 'action' => 'logout'));
-			}
+//* -- DEBUGGING --
+		Configure::write('debug', 2);
+		$this->Auth->allow( );
+//* -- END DEBUGGING -- */
 
 			// if the request has the admin prefix switch the layout
 			if ( ! empty($this->request->params['admin'])) {
@@ -142,7 +127,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 
 				$this->Auth->allow($this->action);
 			}
-			elseif (true || (isset($this->allowed)
+			elseif ( ! $this->use_acl && (isset($this->allowed)
 				// set the preceding to true to always allow non-admin pages to guests
 				&& array_key_exists($this->request['params']['controller'], $this->allowed)
 				&& ('*' == $this->allowed[$this->request['params']['controller']]
@@ -171,7 +156,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 			$flash = $this->Session->read('Message.flash');
 
 			if ($flash['element'] == 'default') {
-				$flash['element'] = 'flash_error';
+				$flash['element'] = 'flash_info';
 				$this->Session->write('Message.flash', $flash);
 			}
 		}
@@ -181,7 +166,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 			$auth = $this->Session->read('Message.auth');
 
 			if ($auth['element'] == 'default') {
-				$auth['element'] = 'flash_error';
+				$auth['element'] = 'flash_info';
 				$this->Session->write('Message.auth', $auth);
 			}
 		}
@@ -536,7 +521,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 		$models = array_unique($models);
 
 		foreach ($models as $model) {
-			if ( ! isset($this->viewVars['parents'])
+			if ( ! array_key_exists('parents', $this->viewVars)
 				&& (array_key_exists('Tree', (array) $this->{$model}->actsAs)
 					|| in_array('Tree', (array) $this->{$model}->actsAs))
 			) {
@@ -575,7 +560,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 				foreach ($associatedModels as $assoc_model) {
 					$var_name = Inflector::variable(Inflector::pluralize($assoc_model));
 
-					if (isset($this->viewVars[$var_name])) {
+					if (array_key_exists($var_name, $this->viewVars)) {
 						continue;
 					}
 
@@ -590,7 +575,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 					if (isset($this->{$model}->{$assoc_model}->actsAs['Tree'])
 						|| $this->{$model}->{$assoc_model}->actsAs && in_array('Tree', $this->{$model}->{$assoc_model}->actsAs))
 					{
-						$items = $this->{$model}->{$assoc_model}->generateTreeList( );
+						$items = $this->{$model}->{$assoc_model}->generateTreeList($conditions);
 					}
 					else {
 						$order = array( );
@@ -667,7 +652,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 			));
 		}
 		else {
-			$filter_selects = $Model->generatetreelist( );
+			$filter_selects = $Model->generateTreeList( );
 		}
 		$this->set('filter_selects', $filter_selects);
 		$this->Session->write('AdminFilter.selects', $filter_selects);
@@ -684,28 +669,39 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 			'Group',
 			'PlayerRanking',
 			'User',
+			'Forgot',
 		);
 
 		$related = $this->_get_related_models($this->{$this->modelClass}, $used);
 
 		// flatten this array and sort
 		$related = array_unique(array_flatten_keys($related));
-		foreach ($related as $key => & $value) {
-			$value = 'Model.'.$value;
 
+		// fix the keys
+		$related = array_flip($related);
+		foreach ($related as & $value) {
+			$value = 'Model.'.$value;
+		}
+		unset($value);
+
+		// fix the values
+		$related = array_flip($related);
+		foreach ($related as $key => & $value) {
 			if (false !== strpos($value, 'TREE')) {
-				$related[substr($key, 0, -5).' Anywhere'] = $value;
-				unset($related[$key]);
+				$value = substr($value, 0, -5).' Anywhere';
 			}
 		}
 		unset($value);
 
-		ksort($related);
-		$related = array_flip($related);
+		asort($related);
 
 		// now grab all of the table fields and humanize
 		$fields = array( );
 		foreach ($this->{$this->modelClass}->_schema as $field => $null) {
+			if (in_array($field, $this->filter_skip_fields)) {
+				continue;
+			}
+
 			// skip the related models
 			if ('_id' == substr($field, -3)) {
 				// but only if it's actually a related model
@@ -718,10 +714,16 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 			$fields[$field] = Inflector::humanize($field);
 		}
 
-		$filter_items = array(
-			'Related' => $related,
-			'Fields' => $fields,
-		);
+		$filter_items = array( );
+
+		if ( ! empty($related)) {
+			$filter_items['Related'] = $related;
+		}
+
+		if ( ! empty($fields)) {
+			$filter_items['Fields'] = $fields;
+		}
+
 		$this->set('filter_items', $filter_items);
 
 		if ($this->Session->check('AdminFilter.item')) {
@@ -950,7 +952,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 				$related[$table] = $this->_get_related_models($Model->{$table}, $used, $relationships);
 
 				// check and see if it's a tree
-				if (in_array('Tree', $Model->{$table}->actsAs)) {
+				if (in_array('Tree', $Model->{$table}->actsAs) || array_key_exists('Tree', $Model->{$table}->actsAs)) {
 					$related[$table.'.TREE'] = array( );
 				}
 			}

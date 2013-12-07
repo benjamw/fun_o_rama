@@ -4,13 +4,11 @@ App::uses('AppModel', 'Model');
 
 class Page extends AppModel {
 
-	public $displayField = 'title';
-
 	public $validate = array(
 		'title' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				'message' => 'You must enter a page title',
+				'message' => 'Please enter a page title',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -19,9 +17,9 @@ class Page extends AppModel {
 		),
 		'slug' => array(
 			'notempty' => array(
-				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
+				'rule' => array('/^[a-z][0-9a-z_\-]*$/i'),
+				'message' => 'Please enter a valid page slug',
+				'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
@@ -30,7 +28,7 @@ class Page extends AppModel {
 		'copy' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
+				'message' => 'Please enter the page copy',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule

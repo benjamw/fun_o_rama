@@ -12,13 +12,13 @@ You can find a list of commands by running `Console/cake AclExtras.AclExtras -h`
 
 ### Setting up the contorller
 
-You'll need to configure AuthComponent to use the Actions authorization method.
+You'll need to configure AuthComponent to use the Actions authorization method.  
 In your `beforeFilter` add the following:
 
-	$this->Auth->authorize = 'actions';
-	$this->Auth->actionPath = 'controllers/';
+    $this->Auth->authorize = 'actions';
+    $this->Auth->actionPath = 'controllers/';
 
-## Issues
+## Issues 
 
 If you find an issue in the code or want to suggest something, please use the tickets at http://github.com/markstory/acl_extras/issues
 

@@ -20,9 +20,13 @@
 include 'functions.php';
 $pluralHumanName = replace_tlis($pluralHumanName);
 $singularHumanName = replace_tlis($singularHumanName);
+$controller = Inflector::tableize($modelClass);
 
 $admin = Configure::read('Routing.prefixes.0');
-if ($admin) { $admin .= '_'; }
+if ($admin) {
+	$admin .= '_';
+}
+
 $ad_len = strlen($admin);
 
 // search for a field like the following and add the file type if found
@@ -34,13 +38,13 @@ $file_types = array(
 
 $file_type = '';
 if (array_intersect($file_types, $fields)) {
-	$file_type = ", 'type' => 'file'";
+	$file_type = ", array('type' => 'file')";
 }
 
 ?>
 
 <div class="<?php echo $pluralVar; ?> form">
-	<?php echo "<?php echo \$this->Form->create('{$modelClass}'); ?>\n"; ?>
+	<?php echo "<?php echo \$this->Form->create('{$modelClass}'". $file_type ."); ?>\n"; ?>
 		<fieldset>
 			<legend><?php echo "<?php echo __(Inflector::humanize(substr(\$this->action, {$ad_len})).' {$singularHumanName}'); ?>"; ?></legend>
 
@@ -89,10 +93,10 @@ if (array_intersect($file_types, $fields)) {
 	<ul class="nav nav-pills">
 <?php if (strpos($action, 'add') === false) { ?>
 		<?php echo "<?php if (false !== strpos(\$this->action, 'edit')) { ?>\n"; ?>
-		<li><?php echo "<?php echo \$this->Form->postLink(__('Delete'), array('action' => 'delete', \$this->Form->value('{$modelClass}.{$primaryKey}')), array('class' => 'delete'), __('Are you sure you want to delete {$singularHumanName} #%s?', \$this->Form->value('{$modelClass}.{$primaryKey}'))); ?>"; ?></li>
+		<li><?php echo "<?php echo \$this->Form->postLink(__('Delete'), array('controller' => '{$controller}', 'action' => 'delete', \$this->Form->value('{$modelClass}.{$primaryKey}')), array('class' => 'delete'), __('Are you sure you want to delete {$singularHumanName} #%s?', \$this->Form->value('{$modelClass}.{$primaryKey}'))); ?>"; ?></li>
 		<?php echo "<?php } ?>\n"; ?>
 <?php } ?>
-		<li><?php echo "<?php echo \$this->Html->link(__('List " . $pluralHumanName . "'), array('action' => 'index')); ?>"; ?></li>
+		<li><?php echo "<?php echo \$this->Html->link(__('List " . $pluralHumanName . "'), array('controller' => '{$controller}', 'action' => 'index')); ?>"; ?></li>
 	</ul>
 </div>
 

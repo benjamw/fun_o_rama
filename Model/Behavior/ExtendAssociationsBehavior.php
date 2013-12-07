@@ -88,7 +88,7 @@ class ExtendAssociationsBehavior extends ModelBehavior {
 			}
 
 			// if the * (all) is set then we want to delete all
-			if($assoc_ids[0] == '*') {
+			if ($assoc_ids && ('*' === reset($assoc_ids))) {
 				$data[$assoc][$assoc] = array();
 			}
 			else {

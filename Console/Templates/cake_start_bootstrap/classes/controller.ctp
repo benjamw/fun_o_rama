@@ -21,6 +21,7 @@
 
 echo "<?php\n\n";
 echo "App::uses('{$plugin}AppController', '{$pluginPath}Controller');\n\n";
+
 ?>
 class <?php echo $controllerName; ?>Controller extends <?php echo $plugin; ?>AppController {
 <?php if ($isScaffold) { ?>

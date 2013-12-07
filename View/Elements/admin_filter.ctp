@@ -21,5 +21,5 @@ $this->Html->script('admin_filter.js', array('block' => 'scriptBottom'));
 		<?php echo $this->Form->text('value', array('value' => $filter_value)); ?>
 		<?php echo $this->Form->submit('Filter', array('div' => false, 'class' => 'btn btn-info')); ?>
 	<?php echo $this->Form->end( ); ?>
-</div><!-- #filter -->
+</div><!-- #admin_filter -->
 

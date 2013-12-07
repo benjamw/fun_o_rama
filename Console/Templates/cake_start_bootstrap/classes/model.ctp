@@ -21,6 +21,7 @@
 
 echo "<?php\n\n";
 echo "App::uses('{$plugin}AppModel', '{$pluginPath}Model');\n\n";
+
 ?>
 class <?php echo $name ?> extends <?php echo $plugin; ?>AppModel {
 <?php if ('default' != $useDbConfig) { ?>
@@ -75,9 +76,9 @@ foreach (array('hasOne', 'belongsTo') as $assocType) {
 			$out = "\n\t\t'{$relation['alias']}' => array(\n";
 			$out .= "\t\t\t'className' => '{$relation['className']}',\n";
 			$out .= "\t\t\t'foreignKey' => '{$relation['foreignKey']}',\n";
-			$out .= "\t\t\t'conditions' => '',\n";
-			$out .= "\t\t\t'fields' => '',\n";
-			$out .= "\t\t\t'order' => '',\n";
+			$out .= "\t\t\t//'conditions' => '',\n";
+			$out .= "\t\t\t//'fields' => '',\n";
+			$out .= "\t\t\t//'order' => '',\n";
 			$out .= "\t\t),";
 			echo $out;
 		}
@@ -95,15 +96,15 @@ if ( ! empty($associations['hasMany'])) {
 		$out = "\n\t\t'{$relation['alias']}' => array(\n";
 		$out .= "\t\t\t'className' => '{$relation['className']}',\n";
 		$out .= "\t\t\t'foreignKey' => '{$relation['foreignKey']}',\n";
-		$out .= "\t\t\t'dependent' => false,\n";
-		$out .= "\t\t\t'conditions' => '',\n";
-		$out .= "\t\t\t'fields' => '',\n";
-		$out .= "\t\t\t'order' => '',\n";
-		$out .= "\t\t\t'limit' => '',\n";
-		$out .= "\t\t\t'offset' => '',\n";
-		$out .= "\t\t\t'exclusive' => '',\n";
-		$out .= "\t\t\t'finderQuery' => '',\n";
-		$out .= "\t\t\t'counterQuery' => '',\n";
+		$out .= "\t\t\t'dependent' => true,\n";
+		$out .= "\t\t\t//'conditions' => '',\n";
+		$out .= "\t\t\t//'fields' => '',\n";
+		$out .= "\t\t\t//'order' => '',\n";
+		$out .= "\t\t\t//'limit' => '',\n";
+		$out .= "\t\t\t//'offset' => '',\n";
+		$out .= "\t\t\t//'exclusive' => '',\n";
+		$out .= "\t\t\t//'finderQuery' => '',\n";
+		$out .= "\t\t\t//'counterQuery' => '',\n";
 		$out .= "\t\t),";
 		echo $out;
 	}
@@ -123,14 +124,14 @@ if ( ! empty($associations['hasAndBelongsToMany'])) {
 		$out .= "\t\t\t'foreignKey' => '{$relation['foreignKey']}',\n";
 		$out .= "\t\t\t'associationForeignKey' => '{$relation['associationForeignKey']}',\n";
 		$out .= "\t\t\t'unique' => true,\n";
-		$out .= "\t\t\t'conditions' => '',\n";
-		$out .= "\t\t\t'fields' => '',\n";
-		$out .= "\t\t\t'order' => '',\n";
-		$out .= "\t\t\t'limit' => '',\n";
-		$out .= "\t\t\t'offset' => '',\n";
-		$out .= "\t\t\t'finderQuery' => '',\n";
-		$out .= "\t\t\t'deleteQuery' => '',\n";
-		$out .= "\t\t\t'insertQuery' => '',\n";
+		$out .= "\t\t\t//'conditions' => '',\n";
+		$out .= "\t\t\t//'fields' => '',\n";
+		$out .= "\t\t\t//'order' => '',\n";
+		$out .= "\t\t\t//'limit' => '',\n";
+		$out .= "\t\t\t//'offset' => '',\n";
+		$out .= "\t\t\t//'finderQuery' => '',\n";
+		$out .= "\t\t\t//'deleteQuery' => '',\n";
+		$out .= "\t\t\t//'insertQuery' => '',\n";
 		$out .= "\t\t),";
 		echo $out;
 	}

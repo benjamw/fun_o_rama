@@ -93,6 +93,32 @@ class AppModel extends Model {
 	}
 
 
+	/**
+	 * Removes 'fields' key from count query on custom finds when it is an array,
+	 * as it will completely break the Model::_findCount() call
+	 *
+	 * @param string $state Either "before" or "after"
+	 * @param array $query
+	 * @param array $results
+	 * @return int The number of records found, or false
+	 * @access protected
+	 * @see Model::find()
+	 */
+	protected function _findCount($state, $query, $results = array()) {
+		if ($state === 'before') {
+			if (isset($query['type']) && isset($this->findMethods[$query['type']])) {
+				$query = $this->{'_find' . ucfirst($query['type'])}('before', $query);
+				if (!empty($query['fields']) && is_array($query['fields'])) {
+					if (!preg_match('/^count/i', current($query['fields']))) {
+						unset($query['fields']);
+					}
+				}
+			}
+		}
+		return parent::_findCount($state, $query, $results);
+	}
+
+
 	// this is to set the recursion level for admin_edit pages
 	// in the models, this can be overriden with an actual contain( ) call
 	public function _setContains( ) {

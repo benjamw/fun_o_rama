@@ -6,8 +6,9 @@
 
 	<?php
 
-		echo $this->Html->charset( );
+		echo $this->Html->charset('UTF-8');
 		echo $this->Html->meta('icon');
+		echo $this->Html->meta(array('name' => 'X-UA-Compatible', 'content' => 'IE=edge'));
 		echo $this->Html->meta(array('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0'));
 		echo $this->fetch('meta');
 
@@ -19,7 +20,7 @@
 	?>
 
 </head>
-<body>
+<body class="admin">
 
 	<header class="navbar navbar-fixed-top navbar-inverse">
 		<div class="navbar-inner">
@@ -44,7 +45,8 @@
 	<?php
 
 		echo $this->Html->scriptblock('var ROOT_URL = "'.$this->Html->url('/').'";');
-		echo $this->Html->script('//code.jquery.com/jquery-2.0.1.js');
+		echo $this->Html->script('//code.jquery.com/jquery-2.0.3.min.js');
+		echo $this->Html->script('//code.jquery.com/ui/1.10.3/jquery-ui.js');
 		echo $this->Html->script('bootstrap.min.js');
 		echo $this->fetch('script');
 
