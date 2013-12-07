@@ -20,12 +20,11 @@
 
 <h3><strong><?php echo $tournament['Game']['name']; ?></strong> started on <span class="date"><?php echo date('F j, Y @ h:ia', strtotime($tournament['Tournament']['created'])); ?></span></h3>
 
-<?php if ($single) { ?>
 <div class="alert alert-block alert-info">
-	<marquee behavior="alternate" class="geoboostrap">Feel free to move players around as needed to balance the teams a little better.</marquee>
+	<marquee behavior="alternate" class="geobootstrap">Feel free to move players around as needed to balance the teams a little better.</marquee>
 	<span class="not_geobootstrap">Feel free to move players around as needed to balance the teams a little better.</span>
 </div>
-<?php } else { ?>
+
 <h4>Teams</h4>
 <?php if ( ! empty($tournament['Tournament']['quality'])) { ?>
 <h6>Tournament Quality: <?php echo number_format($tournament['Tournament']['quality'], 2); ?>%</h6>
@@ -38,7 +37,6 @@
 		}
 	?>
 </div>
-<?php } ?>
 
 <?php if (false && ($adjusting || ! empty($sitting_out))) { ?>
 <div class="well" id="team_out">
@@ -66,10 +64,10 @@
 </div>
 <?php } ?>
 
-<?php if ( ! $single) { ?>
+
 <h4>Current Matches</h4>
 <div class="matches well">
-<?php } ?>
+
 	<?php foreach ($tournament['Match'] as $match) { ?>
 	<div class="match well">
 		<?php if ( ! empty($match['quality'])) { ?>
@@ -87,9 +85,7 @@
 		</div>
 	</div>
 	<?php } ?>
-<?php if ( ! $single) { ?>
 </div>
-<?php } ?>
 
 
 <?php $this->Html->scriptblock('
