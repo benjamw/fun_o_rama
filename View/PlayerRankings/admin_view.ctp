@@ -34,3 +34,28 @@
 	</ul>
 </div>
 
+<div class="related well">
+	<h3><?php echo __('Related Rank History'); ?></h3>
+
+<?php if ( ! empty($playerRanking['RankHistory'])) { ?>
+	<table class="table table-striped table-bordered table-condensed">
+		<tr>
+			<th><?php echo __('ID'); ?></th>
+			<th><?php echo __('Mean (&mu;)'); ?></th>
+			<th><?php echo __('Std Dev. (&sigma;)'); ?></th>
+			<th><?php echo __('Created'); ?></th>
+		</tr>
+
+	<?php foreach ($playerRanking['RankHistory'] as $rankHistory) { ?>
+		<tr class="table-hover">
+			<td><?php echo $rankHistory['id']; ?>&nbsp;</td>
+			<td><?php echo $rankHistory['mean']; ?>&nbsp;</td>
+			<td><?php echo $rankHistory['std_deviation']; ?>&nbsp;</td>
+			<td><?php echo $rankHistory['created']; ?>&nbsp;</td>
+		</tr>
+	<?php } ?>
+
+	</table>
+<?php } ?>
+</div>
+

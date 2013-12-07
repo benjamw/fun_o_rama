@@ -64,5 +64,11 @@ class PlayerRanking extends AppModel {
 		'GameType',
 	);
 
+	public $hasMany = array(
+		'RankHistory' => array(
+			'dependent' => true,
+		),
+	);
+
 }
 

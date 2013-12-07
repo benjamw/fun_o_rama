@@ -68,6 +68,8 @@ class Match extends AppModel {
 		$outcome = 0;
 		$players = array( );
 
+		$previous_rankings = array( );
+
 		// convert to a format that is usable by the plugin
 		foreach ($match['Team'] as $match_team) {
 			if (empty($match_team['Player'])) {
@@ -88,6 +90,8 @@ class Match extends AppModel {
 						break;
 					}
 				}
+
+				$previous_rankings[] = $ranking;
 
 				$players[$player['id']] = array(
 					'id' => $player['id'],
@@ -125,6 +129,16 @@ class Match extends AppModel {
 
 			$data = array('PlayerRanking' => $player);
 			$this->Team->Player->PlayerRanking->save($data);
+		}
+
+		foreach ($previous_rankings as $prev_ranking) {
+			$data = array('RankHistory' => array(
+				'player_ranking_id' => $prev_ranking['id'],
+				'mean' => $prev_ranking['mean'],
+				'std_deviation' => $prev_ranking['std_deviation'],
+			));
+			$this->Team->Player->PlayerRanking->RankHistory->create( );
+			$this->Team->Player->PlayerRanking->RankHistory->save($data);
 		}
 	}
 
