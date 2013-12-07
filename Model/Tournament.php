@@ -701,8 +701,13 @@ if ($data['num_sitting_out']) {
 			),
 			'conditions' => array(
 				'Match.id' => $match_id,
+				'Match.winning_team_id IS NULL',
 			),
 		));
+
+		if ( ! $match) {
+			return false;
+		}
 
 		$data = array(
 			'Match' => array(
