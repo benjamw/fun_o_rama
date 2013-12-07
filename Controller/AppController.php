@@ -33,8 +33,6 @@ class AppController extends Controller {
 
 	public $allowed_ips = array(
 		'127.0.0.1', // local
-		'216.51.47.3', // daz office
-		'67.186.247.34', // home
 	);
 
 	public function __construct($request = null, $response = null) {
