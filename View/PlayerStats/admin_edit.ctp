@@ -13,6 +13,7 @@
 				echo $this->Form->input('wins');
 				echo $this->Form->input('draws');
 				echo $this->Form->input('losses');
+				echo $this->Form->input('streak');
 			?>
 
 		</fieldset>

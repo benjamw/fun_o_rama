@@ -110,3 +110,27 @@ ul.swappable {
 	margin: 10px;
 	line-height: 20px;
 }
+
+#win_loss {
+	border-collapse: ;
+}
+
+#win_loss .name,
+#win_loss .type {
+	border-right: 2px solid #669;
+}
+
+#win_loss .total {
+	border-right: 2px solid #669;
+	border-left: 2px solid #aaa;
+}
+
+#win_loss .win,
+#win_loss .game {
+	border-left: 2px solid #aaa;
+}
+
+#win_loss .rank {
+	font-weight: bold;
+}
+

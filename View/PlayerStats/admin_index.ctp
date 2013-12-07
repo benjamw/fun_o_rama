@@ -16,6 +16,7 @@
 			<th><?php echo $this->Paginator->sort('wins'); ?></th>
 			<th><?php echo $this->Paginator->sort('draws'); ?></th>
 			<th><?php echo $this->Paginator->sort('losses'); ?></th>
+			<th><?php echo $this->Paginator->sort('streak'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
@@ -27,6 +28,7 @@
 			<td><?php echo h($playerStat['PlayerStat']['wins']); ?>&nbsp;</td>
 			<td><?php echo h($playerStat['PlayerStat']['draws']); ?>&nbsp;</td>
 			<td><?php echo h($playerStat['PlayerStat']['losses']); ?>&nbsp;</td>
+			<td><?php echo h($playerStat['PlayerStat']['streak']); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('action' => 'view', $playerStat['PlayerStat']['id']), array('class' => 'btn btn-small')); ?>

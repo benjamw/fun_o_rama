@@ -22,6 +22,9 @@
 		<dt><?php echo __('Losses'); ?></dt>
 		<dd><?php echo h($playerStat['PlayerStat']['losses']); ?>&nbsp;</dd>
 
+		<dt><?php echo __('Streak'); ?></dt>
+		<dd><?php echo h($playerStat['PlayerStat']['streak']); ?>&nbsp;</dd>
+
 	</dl>
 
 </div>

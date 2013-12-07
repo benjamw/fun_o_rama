@@ -174,12 +174,27 @@ class Match extends AppModel {
 
 				if ($draw) {
 					$stat['draws'] += 1;
+					$stat['streak'] = 0;
 				}
 				elseif ($winner) {
 					$stat['wins'] += 1;
+
+					if (0 <= $stat['streak']) {
+						$stat['streak'] += 1;
+					}
+					else {
+						$stat['streak'] = 1;
+					}
 				}
 				else {
 					$stat['losses'] += 1;
+
+					if (0 >= $stat['streak']) {
+						$stat['streak'] -= 1;
+					}
+					else {
+						$stat['streak'] = -1;
+					}
 				}
 
 				$data = array('PlayerStat' => $stat);

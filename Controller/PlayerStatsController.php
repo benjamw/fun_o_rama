@@ -47,6 +47,7 @@ g('FILLING VALUES');
 					'wins' => 0,
 					'draws' => 0,
 					'losses' => 0,
+					'streak' => 0,
 				)));
 g($result);
 			}

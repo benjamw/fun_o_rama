@@ -36,6 +36,7 @@
 			<th><?php echo __('Wins'); ?></th>
 			<th><?php echo __('Draws'); ?></th>
 			<th><?php echo __('Losses'); ?></th>
+			<th><?php echo __('Streak'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
@@ -46,6 +47,7 @@
 			<td><?php echo $playerStat['wins']; ?>&nbsp;</td>
 			<td><?php echo $playerStat['draws']; ?>&nbsp;</td>
 			<td><?php echo $playerStat['losses']; ?>&nbsp;</td>
+			<td><?php echo $playerStat['streak']; ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'player_stats', 'action' => 'view', $playerStat['id']), array('class' => 'btn btn-small')); ?>
