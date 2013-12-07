@@ -159,7 +159,6 @@
 			<th><?php echo __('ID'); ?></th>
 			<th><?php echo __('Tournament'); ?></th>
 			<th><?php echo __('Name'); ?></th>
-			<th><?php echo __('Players'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
@@ -168,15 +167,6 @@
 			<td><?php echo $team['id']; ?>&nbsp;</td>
 			<td><?php echo $this->Html->link($team['Tournament']['Game']['name'], array('controller' => 'games', 'action' => 'view', $team['Tournament']['Game']['id'])).' @ '.$this->Html->link($team['Tournament']['created'], array('controller' => 'tournaments', 'action' => 'view', $team['Tournament']['id'])); ?>&nbsp;</td>
 			<td><?php echo $team['name']; ?>&nbsp;</td>
-			<td>
-				<?php
-					$players = array( );
-					foreach ($team['Player'] as $player) {
-						$players[] = $this->Html->link($player['name'], array('controller' => 'players', 'action' => 'view', $player['id']));
-					}
-					echo implode(', ', $players);
-				?>&nbsp;
-			</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'teams', 'action' => 'view', $team['id']), array('class' => 'btn btn-small')); ?>
