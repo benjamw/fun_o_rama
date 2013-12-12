@@ -114,6 +114,9 @@ g('PLAYING GAMES');
 			'conditions' => array(
 				'winning_team_id IS NOT NULL',
 			),
+			'order' => array(
+				'created' => 'asc',
+			),
 		));
 
 		foreach ($matches as $match) {
