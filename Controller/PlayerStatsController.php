@@ -13,13 +13,13 @@ class PlayerStatsController extends AppController {
 			exit;
 		}
 
-g('EMPTYING TABLE...');
+g('EMPTYING TABLE `player_stats`...');
 		$this->PlayerStat->query(
 			'TRUNCATE TABLE `player_stats`'
 		);
 
 		$rows = $this->PlayerStat->find('count');
-g('ROW COUNT = '.$rows);
+g('ROW COUNT `player_stats` = '.$rows);
 
 g('STARTING');
 		$this->fill_values( );
@@ -71,6 +71,26 @@ g('PLAYING GAMES');
 g($match);
 			$this->PlayerStat->Player->Team->Match->update_stats($match['Match']['id']);
 		}
+	}
+
+	public function reset_values( ) {
+		$this->autoRender = false;
+
+		if (self::KILL_SWITCH) {
+			exit;
+		}
+
+g('EMPTYING TABLE `player_stats`...');
+		$this->PlayerStat->query(
+			'TRUNCATE TABLE `player_stats`'
+		);
+
+		$rows = $this->PlayerStat->find('count');
+g('ROW COUNT `player_stats` = '.$rows);
+
+g('STARTING');
+		$this->fill_values( );
+g('DONE');
 	}
 
 }

@@ -127,5 +127,33 @@ g($match);
 		}
 	}
 
+	public function reset_values( ) {
+		$this->autoRender = false;
+
+		if (self::KILL_SWITCH) {
+			exit;
+		}
+
+g('EMPTYING TABLE `player_rankings`...');
+		$this->PlayerRanking->query(
+			'TRUNCATE TABLE `player_rankings`'
+		);
+
+		$rows = $this->PlayerRanking->find('count');
+g('ROW COUNT `player_rankings` = '.$rows);
+
+g('EMPTYING TABLE `rank_history`...');
+		$this->PlayerRanking->RankHistory->query(
+			'TRUNCATE TABLE `rank_history`'
+		);
+
+		$rows = $this->PlayerRanking->RankHistory->find('count');
+g('ROW COUNT `rank_history` = '.$rows);
+
+g('STARTING');
+		$this->fill_values( );
+g('DONE');
+	}
+
 }
 
