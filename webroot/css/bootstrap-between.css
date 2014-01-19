@@ -141,3 +141,17 @@ ul.swappable {
 #win_loss tr td.empty {
 	background: #ccc;
 }
+
+.chart {
+	width: 100%;
+	height: 300px;
+}
+
+.chart_tooltip {
+	position: absolute;
+	display: none;
+	padding: 2px;
+	background: #fff;
+	border: 1px solid #999;
+	opacity: 0.8;
+}

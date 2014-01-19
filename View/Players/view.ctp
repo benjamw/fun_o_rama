@@ -49,6 +49,7 @@
 		<?php foreach ($player['PlayerRanking'] as $ranking) { ?>
 		<div class="well">
 			<?php echo $ranking['GameType']['name'].' &mdash; Mean (Rank): <strong>'.number_format($ranking['mean'], 4).'</strong> &mdash; Std.Dev. (Accuracy): '.number_format($ranking['std_deviation'], 6); ?>
+			<?php echo $this->element('rank_chart', array('ranking' => $ranking)); ?>
 		</div>
 		<?php } ?>
 	</div>

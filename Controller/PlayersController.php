@@ -16,6 +16,12 @@ class PlayersController extends AppController {
 				'Badge',
 				'PlayerRanking' => array(
 					'GameType',
+					'RankHistory' => array(
+						'order' => array(
+							'RankHistory.created' => 'ASC',
+							'RankHistory.id' => 'ASC',
+						),
+					),
 				),
 				'PlayerStat' => array(
 					'Game',
