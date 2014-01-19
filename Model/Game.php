@@ -40,8 +40,8 @@ class Game extends AppModel {
 		),
 	);
 
-	public function afterSave($created) {
-		parent::afterSave($created);
+	public function afterSave($created, $options = array( )) {
+		parent::afterSave($created, $options);
 
 		if ($created) {
 			// create an entry in the PlayerStat table for this game

@@ -208,7 +208,7 @@ class User extends AppModel {
 		return parent::beforeSave($options);
 	}
 
-	public function afterSave($created) {
+	public function afterSave($created, $options = array( )) {
 		if ( ! $created) {
 			$parent = $this->parentNode( );
 			$parent = $this->node($parent);
@@ -220,7 +220,7 @@ class User extends AppModel {
 			$this->Aro->save($aro);
 		}
 
-		parent::afterSave($created);
+		parent::afterSave($created, $options);
 	}
 
 	public function reset_pass($user_id) {

@@ -121,7 +121,7 @@ class ImageBehavior extends ModelBehavior {
 	}
 
 
-	public function beforeValidate(Model $model)
+	public function beforeValidate(Model $model, $options = array( ))
 	{
 		foreach ($this->settings[$model->alias]['fields'] as $key => $setting) {
 			if ( ! empty($model->data[$model->alias][$key]['type'])) {
@@ -145,7 +145,7 @@ class ImageBehavior extends ModelBehavior {
 	 * @param AppModel $model
 	 * @return boolean True to continue, false to abort the save
 	 */
-	public function beforeSave(Model $model)
+	public function beforeSave(Model $model, $options = array( ))
 	{
 		extract($this->settings[$model->alias]);
 
@@ -173,7 +173,7 @@ class ImageBehavior extends ModelBehavior {
 	}
 
 
-	public function afterSave(Model $model, $created)
+	public function afterSave(Model $model, $created, $options = array( ))
 	{
 		extract($this->settings[$model->alias]);
 

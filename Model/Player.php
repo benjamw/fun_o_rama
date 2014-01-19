@@ -56,8 +56,8 @@ class Player extends AppModel {
 		),
 	);
 
-	public function afterSave($created) {
-		parent::afterSave($created);
+	public function afterSave($created, $options = array( )) {
+		parent::afterSave($created, $options);
 
 		if ($created) {
 			// create an entry in the PlayerRanking table for this player
