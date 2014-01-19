@@ -68,8 +68,6 @@ class Match extends AppModel {
 		$outcome = 0;
 		$players = array( );
 
-		$previous_rankings = array( );
-
 		// convert to a format that is usable by the plugin
 		foreach ($match['Team'] as $match_team) {
 			if (empty($match_team['Player'])) {
@@ -91,7 +89,20 @@ class Match extends AppModel {
 					}
 				}
 
-				$previous_rankings[] = $ranking;
+				if ('0' === (string) $ranking['games_played']) {
+					$ranking['mean'] = $this->getDefaultMean( );
+					$ranking['std_deviation'] = $this->getDefaultStandardDeviation( );
+
+					// create a history entry for the starting point
+					$history_data = array('RankHistory' => array(
+						'player_ranking_id' => $ranking['id'],
+						'mean' => $ranking['mean'],
+						'std_deviation' => $ranking['std_deviation'],
+						'created' => $match['Match']['created'],
+					));
+					$this->Team->Player->PlayerRanking->RankHistory->create( );
+					$this->Team->Player->PlayerRanking->RankHistory->save($history_data);
+				}
 
 				$players[$player['id']] = array(
 					'id' => $player['id'],
@@ -129,16 +140,16 @@ class Match extends AppModel {
 
 			$data = array('PlayerRanking' => $player);
 			$this->Team->Player->PlayerRanking->save($data);
-		}
 
-		foreach ($previous_rankings as $prev_ranking) {
-			$data = array('RankHistory' => array(
-				'player_ranking_id' => $prev_ranking['id'],
-				'mean' => $prev_ranking['mean'],
-				'std_deviation' => $prev_ranking['std_deviation'],
+			// create a history entry
+			$history_data = array('RankHistory' => array(
+				'player_ranking_id' => $data['PlayerRanking']['id'],
+				'mean' => $data['PlayerRanking']['mean'],
+				'std_deviation' => $data['PlayerRanking']['std_deviation'],
+				'created' => $match['Match']['created'],
 			));
 			$this->Team->Player->PlayerRanking->RankHistory->create( );
-			$this->Team->Player->PlayerRanking->RankHistory->save($data);
+			$this->Team->Player->PlayerRanking->RankHistory->save($history_data);
 		}
 	}
 

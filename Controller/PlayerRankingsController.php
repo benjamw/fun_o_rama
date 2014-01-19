@@ -59,13 +59,21 @@ class PlayerRankingsController extends AppController {
 			exit;
 		}
 
-g('EMPTYING TABLE...');
+g('EMPTYING TABLE `player_rankings`...');
 		$this->PlayerRanking->query(
 			'TRUNCATE TABLE `player_rankings`'
 		);
 
 		$rows = $this->PlayerRanking->find('count');
-g('ROW COUNT = '.$rows);
+g('ROW COUNT `player_rankings` = '.$rows);
+
+g('EMPTYING TABLE `rank_history`...');
+		$this->PlayerRanking->RankHistory->query(
+			'TRUNCATE TABLE `rank_history`'
+		);
+
+		$rows = $this->PlayerRanking->RankHistory->find('count');
+g('ROW COUNT `rank_history` = '.$rows);
 
 g('STARTING');
 		$this->fill_values( );
@@ -84,18 +92,12 @@ g('FILLING VALUES');
 		$players = array_keys($this->PlayerRanking->Player->find('list'));
 		$game_types = array_keys($this->PlayerRanking->GameType->find('list'));
 
-		$default_mean = $this->TrueSkill->getDefaultMean( );
-		$default_std_dev = $this->TrueSkill->getDefaultStandardDeviation( );
-
 		foreach ($game_types as $game_type_id) {
 			foreach ($players as $player_id) {
 				$this->PlayerRanking->create( );
 				$result = $this->PlayerRanking->save(array('PlayerRanking' => array(
 					'player_id' => $player_id,
 					'game_type_id' => $game_type_id,
-					'mean' => $default_mean,
-					'std_deviation' => $default_std_dev,
-					'games_played' => 0,
 				)));
 g($result);
 			}
@@ -110,14 +112,14 @@ g($result);
 		}
 
 g('PLAYING GAMES');
-		$matches = $this->PlayerRanking->Player->Team->Match->find('all', array(
+		$matches = array_values($this->PlayerRanking->Player->Team->Match->find('all', array(
 			'conditions' => array(
 				'winning_team_id IS NOT NULL',
 			),
 			'order' => array(
 				'created' => 'asc',
 			),
-		));
+		)));
 
 		foreach ($matches as $match) {
 g($match);

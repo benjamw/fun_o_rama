@@ -217,8 +217,8 @@ if ($data['num_sitting_out']) {
 		foreach ($players as $player) {
 			$calc_players[] = array(
 				'id' => $player['Player']['id'],
-				'mean' => ife($player['PlayerRanking']['mean'], $this->getDefaultMean( )),
-				'std_dev' => ife($player['PlayerRanking']['std_deviation'], $this->getDefaultStandardDeviation( )),
+				'mean' => ife($player['PlayerRanking']['mean'], $this->getDefaultMean( ), false),
+				'std_dev' => ife($player['PlayerRanking']['std_deviation'], $this->getDefaultStandardDeviation( ), false),
 			);
 		}
 

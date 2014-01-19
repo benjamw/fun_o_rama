@@ -134,3 +134,10 @@ ul.swappable {
 	font-weight: bold;
 }
 
+#win_loss tr:hover td {
+	background: #d9edf7;
+}
+
+#win_loss tr td.empty {
+	background: #ccc;
+}

@@ -38,8 +38,14 @@
 				foreach ($game_types as $game_type) {
 					$rank = $player_rankings[$player['Player']['id']][$game_type['GameType']['id']]['PlayerRanking'];
 
-					echo '<td class="num rank">'.number_format($rank['mean'], 2).'</td>';
-					echo '<td class="num">'.number_format($rank['std_deviation'], 3).'</td>';
+					if ( ! is_null($rank['mean'])) {
+						echo '<td class="num rank">'.number_format($rank['mean'], 2).'</td>';
+						echo '<td class="num">'.number_format($rank['std_deviation'], 3).'</td>';
+					}
+					else {
+						echo '<td class="num rank empty"></td>';
+						echo '<td class="num empty"></td>';
+					}
 
 					foreach ($game_type['Game'] as $game) {
 						echo '<td class="num win">'.$player_stats[$player['Player']['id']][$game['id']]['PlayerStat']['wins'].'</td>';

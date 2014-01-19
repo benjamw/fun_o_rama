@@ -44,10 +44,6 @@ g('FILLING VALUES');
 				$result = $this->PlayerStat->save(array('PlayerStat' => array(
 					'player_id' => $player_id,
 					'game_id' => $game_id,
-					'wins' => 0,
-					'draws' => 0,
-					'losses' => 0,
-					'streak' => 0,
 				)));
 g($result);
 			}
