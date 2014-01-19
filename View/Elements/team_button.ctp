@@ -7,7 +7,7 @@
 
 	$seed = (( ! empty($team['start_seed'])) ? ' (#'.$team['start_seed'].')' : ' (Team '.($team_num + 1).')');
 
-	echo $this->Form->button($team['name'].' ['.implode(', ', $team_players).']'.$seed, array(
+	echo $this->Form->button($team['name'].'<br>['.implode(', ', $team_players).']'.$seed, array(
 		'type' => 'button',
 		'class' => 'btn btn-mini btn-success teams',
 		'id' => 'res_'.$match_id.'_'.$team['id'],
