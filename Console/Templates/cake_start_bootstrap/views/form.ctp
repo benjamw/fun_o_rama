@@ -1,20 +1,4 @@
 <?php
-/**
- *
- * PHP 5
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       cake.console.libs.templates.views
- * @since         CakePHP(tm) v 1.2.0.5234
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
- */
 
 // run the names through our custom functions
 include 'functions.php';
@@ -38,55 +22,53 @@ $file_types = array(
 
 $file_type = '';
 if (array_intersect($file_types, $fields)) {
-	$file_type = ", array('type' => 'file')";
+	$file_type = ", 'type' => 'file'";
 }
 
 ?>
 
 <div class="<?php echo $pluralVar; ?> form">
-	<?php echo "<?php echo \$this->Form->create('{$modelClass}'". $file_type ."); ?>\n"; ?>
+	<?php echo "<?php echo \$this->Form->create('{$modelClass}', array('class' => 'form-horizontal'". $file_type .")); ?>\n"; ?>
 		<fieldset>
 			<legend><?php echo "<?php echo __(Inflector::humanize(substr(\$this->action, {$ad_len})).' {$singularHumanName}'); ?>"; ?></legend>
 
 <?php
-		echo "\t\t\t<?php\n";
+			echo "\t\t\t<?php\n";
 
-		foreach ($fields as $field) {
-			if ((false !== strpos($action, 'add')) && ($field == $primaryKey)) {
-				continue;
+			foreach ($fields as $field) {
+				if ((false !== strpos($action, 'add')) && ($field == $primaryKey)) {
+					continue;
+				}
+				elseif ($field == $primaryKey) {
+					echo "\t\t\t\tif (false !== strpos(\$this->action, 'edit')) {\n";
+					echo "\t\t\t\t\techo \$this->Form->input('{$field}');\n";
+					echo "\t\t\t\t}\n";
+				}
+				elseif (in_array($field, $file_types)) {
+					echo "\t\t\t\techo \$this->Form->input('{$field}', array('type' => 'file'));\n";
+				}
+				elseif ('sort' == $field) {
+					echo "\t\t\t\techo \$this->Form->input('{$field}', array('value' => isset(\$this->request->data['{$modelClass}']['sort']) ? \$this->request->data['{$modelClass}']['sort'] : 99999));\n";
+				}
+				elseif ('active' == $field) {
+					echo "\t\t\t\techo \$this->Form->input('{$field}', array('type' => 'checkbox'));\n";
+				}
+				elseif ( ! in_array($field, array('created', 'modified', 'updated'))) {
+					echo "\t\t\t\techo \$this->Form->input('{$field}');\n";
+				}
 			}
-			elseif ($field == $primaryKey) {
-				echo "\t\t\t\tif (false !== strpos(\$this->action, 'edit')) {\n";
-				echo "\t\t\t\t\techo \$this->Form->input('{$field}');\n";
-				echo "\t\t\t\t}\n";
-			}
-			elseif (in_array($field, $file_types)) {
-				echo "\t\t\t\techo \$this->Form->input('{$field}', array('type' => 'file'));\n";
-			}
-			elseif ('sort' == $field) {
-				echo "\t\t\t\techo \$this->Form->input('{$field}', array('value' => isset(\$this->request->data['{$modelClass}']['sort']) ? \$this->request->data['{$modelClass}']['sort'] : 99999));\n";
-			}
-			elseif ('active' == $field) {
-				echo "\t\t\t\techo \$this->Form->input('{$field}', array('type' => 'checkbox'));\n";
-			}
-			elseif ( ! in_array($field, array('created', 'modified', 'updated'))) {
-				echo "\t\t\t\techo \$this->Form->input('{$field}');\n";
-			}
-		}
 
-		if ( ! empty($associations['hasAndBelongsToMany'])) {
-			foreach ($associations['hasAndBelongsToMany'] as $assocName => $assocData) {
-				echo "\t\t\t\techo \$this->Form->input('{$assocName}');\n";
+			if ( ! empty($associations['hasAndBelongsToMany'])) {
+				foreach ($associations['hasAndBelongsToMany'] as $assocName => $assocData) {
+					echo "\t\t\t\techo \$this->Form->input('{$assocName}');\n";
+				}
 			}
-		}
 
-		echo "\t\t\t?>\n";
-?>
+			echo "\t\t\t?>\n";
 
-		</fieldset>
-<?php
-	echo "\n\t\t<?php echo \$this->Form->submit(__('Submit'), array('class' => 'btn btn-primary')); ?>\n";
-	echo "\t<?php echo \$this->Form->end( ); ?>\n";
+			echo "\n\t\t\t<?php echo \$this->Form->submit(__('Submit')); ?>\n";
+			echo "\n\t\t</fieldset>\n";
+			echo "\t<?php echo \$this->Form->end( ); ?>\n";
 ?>
 </div>
 <div class="actions">

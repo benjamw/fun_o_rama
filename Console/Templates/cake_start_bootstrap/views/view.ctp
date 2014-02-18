@@ -1,20 +1,4 @@
 <?php
-/**
- *
- * PHP 5
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       cake.console.libs.templates.views
- * @since         CakePHP(tm) v 1.2.0.5234
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
- */
 
 // run the names through our custom functions
 include 'functions.php';
@@ -26,8 +10,8 @@ $controller = Inflector::tableize($modelClass);
 
 <div class="<?php echo $pluralVar; ?> view">
 
-	<h2><?php echo "<?php echo __('{$singularHumanName}'); ?>"; ?></h2>
-	<dl>
+	<h3><?php echo "<?php echo __('{$singularHumanName}'); ?>"; ?></h3>
+	<dl class="dl-horizontal">
 
 <?php
 	foreach ($fields as $field) {
@@ -128,7 +112,7 @@ foreach ($relations as $alias => $details) {
 	<h3><?php echo "<?php echo __('Related " . $otherPluralHumanName . "'); ?>"; ?></h3>
 
 <?php echo "<?php if ( ! empty(\${$singularVar}['{$alias}'])) { ?>\n"; ?>
-	<table class="table table-striped table-bordered table-condensed">
+	<table class="table table-striped table-condensed">
 		<tr>
 <?php
 	foreach ($details['fields'] as $field) {
@@ -161,9 +145,9 @@ foreach ($relations as $alias => $details) {
 
 	echo "\t\t\t<td class=\"actions\">\n";
 	echo "\t\t\t\t<div class=\"btn-group\">\n";
-	echo "\t\t\t\t\t<?php echo \$this->Html->link(__('View'), array('controller' => '{$details['controller']}', 'action' => 'view', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-small')); ?>\n";
-	echo "\t\t\t\t\t<?php echo \$this->Html->link(__('Edit'), array('controller' => '{$details['controller']}', 'action' => 'edit', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-small')); ?>\n";
-	echo "\t\t\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('controller' => '{$details['controller']}', 'action' => 'delete', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete {$otherSingularHumanName} #%s?', \${$otherSingularVar}['{$details['primaryKey']}'])); ?>\n";
+	echo "\t\t\t\t\t<?php echo \$this->Html->link(__('View'), array('controller' => '{$details['controller']}', 'action' => 'view', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-xs btn-default')); ?>\n";
+	echo "\t\t\t\t\t<?php echo \$this->Html->link(__('Edit'), array('controller' => '{$details['controller']}', 'action' => 'edit', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-xs btn-default')); ?>\n";
+	echo "\t\t\t\t\t<?php echo \$this->Form->postLink(__('Delete'), array('controller' => '{$details['controller']}', 'action' => 'delete', \${$otherSingularVar}['{$details['primaryKey']}']), array('class' => 'btn btn-xs btn-warning'), __('Are you sure you want to delete {$otherSingularHumanName} #%s?', \${$otherSingularVar}['{$details['primaryKey']}'])); ?>\n";
 	echo "\t\t\t\t</div>\n";
 	echo "\t\t\t</td>\n";
 

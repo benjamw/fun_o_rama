@@ -18,11 +18,11 @@
 </div>
 <div class="actions">
 	<ul class="nav nav-pills">
-		<li><?php echo $this->Html->link(__('Edit Player'), array('action' => 'edit', $player['Player']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('Edit Player\'s Badges'), array('action' => 'badges', $player['Player']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Player'), array('action' => 'delete', $player['Player']['id']), array('class' => 'delete'), __('Are you sure you want to delete Player #%s?', $player['Player']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Players'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Player'), array('action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('Edit Player'), array('controller' => 'players', 'action' => 'edit', $player['Player']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Edit Player\'s Badges'), array('controller' => 'players', 'action' => 'badges', $player['Player']['id'])); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Delete Player'), array('controller' => 'players', 'action' => 'delete', $player['Player']['id']), array('class' => 'delete'), __('Are you sure you want to delete Player #%s?', $player['Player']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('List Players'), array('controller' => 'players', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Player'), array('controller' => 'players', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
 

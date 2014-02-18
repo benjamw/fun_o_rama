@@ -39,19 +39,19 @@ class SettingsController extends AppController {
 	}
 
 	public function admin_index( ) {
-		$this->redirect(array('action' => 'edit'));
+		return $this->redirect(array('action' => 'edit'));
 	}
 
 	public function admin_view($id = null) {
-		$this->redirect(array('action' => 'edit'));
+		return $this->redirect(array('action' => 'edit'));
 	}
 
 	public function admin_add( ) {
-		$this->redirect(array('action' => 'edit'));
+		return $this->redirect(array('action' => 'edit'));
 	}
 
 	public function admin_delete($id = null) {
-		$this->redirect(array('action' => 'edit'));
+		return $this->redirect(array('action' => 'edit'));
 	}
 
 	protected function _upload_file($file_data) {
@@ -77,7 +77,7 @@ class SettingsController extends AppController {
 		$enabled = false;
 
 		if ( ! $enabled || ! Configure::read('debug')) {
-			$this->redirect('/');
+			return $this->redirect('/');
 		}
 		Configure::write('debug', 2);
 

@@ -46,7 +46,7 @@
 <?php if ($allow_add_delete) { ?>
 <div class="actions">
 	<ul class="nav nav-pills">
-		<li><?php echo $this->Html->link(__('New Page'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('New Page'), array('controller' => 'pages', 'action' => 'add')); ?></li>
 	</ul>
 </div>
 <?php } ?>

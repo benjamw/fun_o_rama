@@ -349,7 +349,7 @@ class MeioUploadBehavior extends ModelBehavior {
  * @return boolean Always true
  * @access public
  */
-	function beforeValidate(Model $model) {
+	function beforeValidate(Model $model, $options = array( )) {
 		foreach ($this->__fields[$model->alias] as $fieldName => $options) {
 			$this->_setupValidation($model, $fieldName, $options);
 		}
@@ -363,7 +363,7 @@ class MeioUploadBehavior extends ModelBehavior {
  * @return boolean Whether the upload completed
  * @access public
  */
-	function beforeSave(Model $model) {
+	function beforeSave(Model $model, $options = array( )) {
 		return $this->upload($model, null);
 	}
 
@@ -393,7 +393,7 @@ class MeioUploadBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function afterSave(Model $model, $created) {
+	function afterSave(Model $model, $created, $options = array( )) {
 		$this->_deleteFilesList($model);
 	}
 

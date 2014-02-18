@@ -21,7 +21,7 @@ class ImgsController extends AppController {
 		Configure::write('debug', 0);
 
 		if (empty($this->params['url']['CKEditorFuncNum'])) {
-			$this->redirect('/');
+			return $this->redirect('/');
 		}
 
 		$path = IMAGES.'uploads'.DS;
@@ -62,12 +62,12 @@ class ImgsController extends AppController {
 			exit;
 		}
 
-		$this->redirect('/');
+		return $this->redirect('/');
 	}
 
 	public function browse( ) {
 		if (empty($this->params['url']['CKEditorFuncNum'])) {
-			$this->redirect('/');
+			return $this->redirect('/');
 		}
 		$this->set('callback', $this->params['url']['CKEditorFuncNum']);
 

@@ -118,6 +118,14 @@ class MenuHelper extends Helper {
 		if ($inactive) {
 			// remove any duplicate scores
 			$matchingLinks = array_diff($matchingLinks, array_unique(array_diff_assoc($matchingLinks, array_unique($matchingLinks))));
+
+			if ('exact' === $method) {
+				foreach ($matchingLinks as $key => $score) {
+					if ($score < 1000) {
+						unset($matchingLinks[$key]);
+					}
+				}
+			}
 		}
 
 		arsort($matchingLinks);

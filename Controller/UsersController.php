@@ -46,7 +46,7 @@ class UsersController extends AppController {
 		session_destroy( );
 
 		$this->Session->setFlash(__('You\'ve successfully logged out.'), 'flash_success');
-		$this->redirect($this->Auth->logout( ));
+		return $this->redirect($this->Auth->logout( ));
 	}
 
 	public function admin_logout( ) {
@@ -64,7 +64,7 @@ class UsersController extends AppController {
 			$this->request->data['User']['id'] = $this->user['User']['id'];
 			if ($this->User->save($this->request->data)) {
 				$this->Session->setFlash(__('Profile updated'), 'flash_success');
-				$this->redirect(array('controller' => 'users', 'action' => 'edit'));
+				return $this->redirect(array('controller' => 'users', 'action' => 'edit'));
 			}
 			else {
 				$user = $this->User->findById($this->user['User']['id']);

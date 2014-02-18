@@ -56,5 +56,6 @@ app/[Cc]onfig/database.php
 webroot/img/Badge/*
 webroot/img/Player/*
 webroot/img/identicons/*
+webroot/files/*
 
 

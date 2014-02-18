@@ -15,7 +15,7 @@ class ForgotsController extends AppController {
 			$forgot = $this->Forgot->findByToken($this->request->params['token']);
 
 			if ( ! $forgot) {
-				$this->redirect('/');
+				return $this->redirect('/');
 			}
 
 			// make sure our request is not past it's expiration date
@@ -26,7 +26,7 @@ class ForgotsController extends AppController {
 				$user = $this->Forgot->User->findById($forgot['Forgot']['user_id']);
 
 				if ( ! $user) {
-					$this->redirect('/');
+					return $this->redirect('/');
 				}
 
 				// reset the user's pass

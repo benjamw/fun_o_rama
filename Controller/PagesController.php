@@ -23,7 +23,7 @@ class PagesController extends AppController {
 
 		$count = count($path);
 		if ( ! $count) {
-			$this->redirect('/');
+			return $this->redirect('/');
 		}
 
 		$page = $subpage = $title_for_layout = null;
@@ -76,7 +76,7 @@ class PagesController extends AppController {
 	public function admin_add( ) {
 		$this->_enable_cg( );
 		if ( ! $this->allow_add_delete) {
-			$this->redirect(array('controller' => 'pages', 'action' => 'index'));
+			return $this->redirect(array('controller' => 'pages', 'action' => 'index'));
 		}
 		parent::admin_add( );
 	}
@@ -89,7 +89,7 @@ class PagesController extends AppController {
 	public function admin_delete($id = null) {
 		$this->_enable_cg( );
 		if ( ! $this->allow_add_delete) {
-			$this->redirect(array('controller' => 'pages', 'action' => 'index'));
+			return $this->redirect(array('controller' => 'pages', 'action' => 'index'));
 		}
 		parent::admin_delete($id);
 	}

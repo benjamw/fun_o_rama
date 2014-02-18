@@ -17,7 +17,7 @@ class AppController extends Controller {
 	public $components = array('Session', 'Auth', 'DebugKit.Toolbar');
 
 	public $user = array( );
-	public $use_settings = true;
+	public $use_settings = false;
 	public $use_acl = false;
 	public $use_remember_me = true;
 	public $use_forgot_pass = true;
@@ -61,7 +61,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 			exit;
 		}
 
-		parent::beforeFilter();
+		parent::beforeFilter( );
 
 		if (isset($this->Cookie)) {
 			$this->Cookie->path = preg_replace('%/+%', '/', '/'.APP_DIR.'/');
@@ -207,7 +207,6 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 					'forgots',
 					'imgs',
 					'pages',
-					'settings',
 					'stats',
 					'users',
 				);
@@ -295,7 +294,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 	* @return void
 	*/
 	public function index( ) {
-		$this->redirect($this->main_page);
+		return $this->redirect($this->main_page);
 	}
 
 
@@ -307,33 +306,50 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 	* @access public
 	* @return void
 	*/
-	public function ac($term = false, $state = false) {
-		$term = trim(ife($this->request->params['form']['term'], $term, false));
-		$state = (int) ife($this->request->params['form']['state'], $state, false);
+	public function ac($term = false) {
+		switch (true) {
+			case ( ! empty($this->request->params['form']['term'])) :
+				$term = $this->request->params['form']['term'];
+				break;
+
+			case ( ! empty($this->request->params['named']['term'])) :
+				$term = $this->request->params['named']['term'];
+				break;
+
+			case ( ! empty($_GET['term'])) :
+				$term = $_GET['term'];
+				break;
+		}
+
+		$term = trim((string) $term);
 
 		if ($term) {
-			$cond = array( );
-			if ($state) {
-				$cond = array(
-					$this->modelClass.'.state_id' => $this->request->params['form']['state'],
-				);
-			}
-
-			// grab a list of items that contain the search term
+			// grab a list of items that start with the search term
 			$list = $this->{$this->modelClass}->find('list', array(
-				'conditions' => array_merge($cond, array(
-					$this->modelClass.'.'.$this->{$this->modelClass}->displayField.' LIKE' => '%'.$term.'%',
-				)),
+				'conditions' => array(
+					$this->modelClass.'.'.$this->{$this->modelClass}->displayField.' LIKE' => $term.'%',
+				),
 				'order' => array(
-					$this->modelClass.'.'.$this->{$this->modelClass}->displayField.'' => 'asc',
+					$this->modelClass.'.'.$this->{$this->modelClass}->displayField => 'ASC',
 				),
 			));
+
+			// append a list of items that contain the search term
+			$list = array_merge($list, $this->{$this->modelClass}->find('list', array(
+				'conditions' => array(
+					$this->modelClass.'.'.$this->{$this->modelClass}->displayField.' NOT LIKE' => $term.'%',
+					$this->modelClass.'.'.$this->{$this->modelClass}->displayField.' LIKE' => '%'.$term.'%',
+				),
+				'order' => array(
+					$this->modelClass.'.'.$this->{$this->modelClass}->displayField => 'ASC',
+				),
+			)));
 
 			Configure::write('debug', 0);
 			echo json_encode(array_values($list));
 		}
 
-		die;
+		exit;
 	}
 
 
@@ -349,7 +365,9 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 	public function admin_index( ) {
 		$this->_use_filter_data( );
 
-		$this->{$this->modelClass}->recursive = 2;
+		if (empty($this->{$this->modelClass}->Behaviors->Containable->runtime[$this->{$this->modelClass}->alias]['contain'])) {
+			$this->{$this->modelClass}->recursive = 2;
+		}
 
 		$this->request->data = $this->paginate( );
 		$this->set(Inflector::variable($this->name), $this->request->data);
@@ -366,7 +384,10 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 	* @return void
 	*/
 	public function admin_view($id = null) {
-		$this->{$this->modelClass}->recursive = 3;
+		if (empty($this->{$this->modelClass}->Behaviors->Containable->runtime[$this->{$this->modelClass}->alias]['contain'])) {
+			$this->{$this->modelClass}->recursive = 3;
+		}
+
 		$this->{$this->modelClass}->id = $id;
 
 		if ( ! $this->{$this->modelClass}->exists( )) {
@@ -403,7 +424,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 			if ($this->{$this->modelClass}->save($this->request->data)) {
 				$this->Session->setFlash(__('The '.Inflector::humanize(Inflector::underscore($this->modelClass)).' has been saved'), 'flash_success');
 				if ( ! $this->prevent_redirect) {
-					$this->redirect(array('action' => 'index'));
+					return $this->redirect(array('action' => 'index'));
 				}
 				else {
 					return true;
@@ -448,7 +469,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 			if ($this->{$this->modelClass}->save($this->request->data)) {
 				$this->Session->setFlash(__('The '.Inflector::humanize(Inflector::underscore($this->modelClass)).' has been saved'), 'flash_success');
 				if ( ! $this->prevent_redirect) {
-					$this->redirect(array('action' => 'index'));
+					return $this->redirect(array('action' => 'index'));
 				}
 				else {
 					return true;
@@ -488,11 +509,11 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 
 		if ($this->{$this->modelClass}->delete( )) {
 			$this->Session->setFlash(__(Inflector::humanize(Inflector::underscore($this->modelClass)).' deleted'), 'flash_success');
-			$this->redirect(array('action'=>'index'));
+			return $this->redirect(array('action' => 'index'));
 		}
 
 		$this->Session->setFlash(__(Inflector::humanize(Inflector::underscore($this->modelClass)).' was not deleted'), 'flash_error');
-		$this->redirect(array('action' => 'index'));
+		return $this->redirect(array('action' => 'index'));
 	}
 
 
@@ -947,7 +968,8 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 				}
 
 				$used[] = $Model->name.'.'.$table;
-				$related[$table] = $this->_get_related_models($Model->{$table}, $used, $relationships);
+//				$related[$table] = $this->_get_related_models($Model->{$table}, $used, $relationships);
+				$related[$table] = array( );
 
 				// check and see if it's a tree
 				if (in_array('Tree', $Model->{$table}->actsAs) || array_key_exists('Tree', $Model->{$table}->actsAs)) {

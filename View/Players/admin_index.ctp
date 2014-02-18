@@ -1,6 +1,6 @@
 
 <div class="players index">
-	<h2><?php echo __('Players'); ?> <?php echo $this->Html->link(__('New Player'), array('action' => 'add'), array('class' => 'btn btn-mini btn-info')); ?></h2>
+	<h2><?php echo __('Players'); ?> <?php echo $this->Html->link(__('New Player'), array('controller' => 'players', 'action' => 'add'), array('class' => 'btn btn-mini btn-info')); ?></h2>
 
 	<div class="clearfix">
 		<?php echo $this->element('admin_filter'); ?>
@@ -30,10 +30,10 @@
 			?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
-					<?php echo $this->Html->link(__('View'), array('action' => 'view', $player['Player']['id']), array('class' => 'btn btn-small')); ?>
-					<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $player['Player']['id']), array('class' => 'btn btn-small')); ?>
-					<?php echo $this->Html->link(__('Badges'), array('action' => 'badges', $player['Player']['id']), array('class' => 'btn btn-small btn-info')); ?>
-					<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $player['Player']['id']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete Player #%s?', $player['Player']['id'])); ?>
+					<?php echo $this->Html->link(__('View'), array('controller' => 'players', 'action' => 'view', $player['Player']['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Html->link(__('Edit'), array('controller' => 'players', 'action' => 'edit', $player['Player']['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Html->link(__('Badges'), array('controller' => 'players', 'action' => 'badges', $player['Player']['id']), array('class' => 'btn btn-small btn-info')); ?>
+					<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'players', 'action' => 'delete', $player['Player']['id']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete Player #%s?', $player['Player']['id'])); ?>
 				</div>
 			</td>
 		</tr>
@@ -45,7 +45,7 @@
 </div>
 <div class="actions">
 	<ul class="nav nav-pills">
-		<li><?php echo $this->Html->link(__('New Player'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('New Player'), array('controller' => 'players', 'action' => 'add')); ?></li>
 	</ul>
 </div>
 
