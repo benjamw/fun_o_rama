@@ -65,7 +65,7 @@
 					<?php echo $this->Form->input('build_method', array('type' => 'radio', 'options' => array('best' => 'Best Match', 'random' => 'Random Teams'), 'value' => 'best', 'legend' => false)); ?>
 				</div>
 
-				<?php echo $this->Form->input('player_id', array('label' => 'Players', 'type' => 'select', 'multiple' => 'checkbox', 'div' => array('class' => 'checkboxes'))); ?>
+				<?php echo $this->Form->input('player_id', array('label' => 'Players', 'type' => 'select', 'multiple' => 'checkbox', 'div' => array('class' => 'checkboxes span9'))); ?>
 			</div>
 		</fieldset>
 		<?php echo $this->Html->image('hot.gif', array('class' => 'geobootstrap')); ?>

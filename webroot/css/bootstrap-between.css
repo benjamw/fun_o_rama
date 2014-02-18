@@ -71,15 +71,23 @@ table .actions {
 	width: auto;
 }
 
+#TournamentStartForm label {
+	font-weight: bold;
+}
+
+#TournamentStartForm .checkbox label,
+#TournamentStartForm .radio label {
+	font-weight: normal;
+}
+
 #TournamentStartForm div.checkboxes {
 	float: left;
 	min-height: 1px;
-	margin-left: 30px;
-	-webkit-column-count: 3;
-	-moz-column-count: 3;
-	-ms-column-count: 3;
-	-o-column-count: 3;
-	column-count: 3;
+	-webkit-column-count: 5;
+	-moz-column-count: 5;
+	-ms-column-count: 5;
+	-o-column-count: 5;
+	column-count: 5;
 	height: 160px;
 	width: 600px;
 	margin-top: 25px;
@@ -88,7 +96,7 @@ table .actions {
 }
 
 #TournamentStartForm div.checkboxes .checkbox {
-	width: 180px;
+	width: 95px;
 }
 
 #TournamentStartForm div.checkboxes > label {
@@ -142,6 +150,10 @@ ul.swappable {
 	background: #ccc;
 }
 
+#win_loss .name .badge {
+	float: right;
+}
+
 .chart {
 	width: 100%;
 	height: 300px;
@@ -154,4 +166,20 @@ ul.swappable {
 	background: #fff;
 	border: 1px solid #999;
 	opacity: 0.8;
+}
+
+.error input,
+.error select,
+.error textarea {
+	border-color: #b94a48;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+		 -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+					box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.error label,
+.error .help-block,
+.error .help-inline,
+.error .error-message {
+	color: #b94a48;
 }

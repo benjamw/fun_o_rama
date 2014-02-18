@@ -31,6 +31,7 @@
 	</thead>
 	<tbody>
 		<?php foreach ($players as $player) { ?>
+		<?php if ('Guest' === $player['Player']['name']) { continue; } ?>
 		<tr>
 			<td class="name"><span class="badge badge-warning"><?php echo $badges[$player['Player']['id']]; ?></span> <?php echo $this->Html->link($player['Player']['name'], array('controller' => 'players', 'action' => 'view', $player['Player']['id'])); ?></td>
 
