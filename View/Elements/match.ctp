@@ -14,6 +14,8 @@
 	<div class="match well well-bright">
 		<strong><?php echo $match['name']; ?></strong> started on <?php echo date('F j, Y @ h:ia', strtotime($match['created'])); ?>
 		<div class="outcomes pull-right">
+			<?php echo $this->Html->link('Tunes', array('controller' => 'songs', 'action' => 'play', $match['id']), array('class' => 'btn btn-mini btn-inverse')); ?>
+
 		<?php foreach ($match['Team'] as $team_num => $team) { ?>
 
 			<?php echo $this->element('team_button', compact('team', 'team_num', 'match_id')); ?>

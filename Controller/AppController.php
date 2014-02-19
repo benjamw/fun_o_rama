@@ -209,6 +209,7 @@ CakeLog::write('debug', env('HTTP_USER_AGENT'));
 					'pages',
 					'stats',
 					'users',
+					'votes',
 				);
 
 				if ( ! $this->use_settings) {

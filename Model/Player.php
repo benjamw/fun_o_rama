@@ -45,6 +45,12 @@ class Player extends AppModel {
 		'PlayerStat' => array(
 			'dependent' => true,
 		),
+		'Song' => array(
+			'dependent' => true,
+		),
+		'Vote' => array(
+			'dependent' => true,
+		),
 	);
 
 	public $hasAndBelongsToMany = array(

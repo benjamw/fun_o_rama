@@ -113,6 +113,46 @@
 </div>
 
 <div class="related well">
+	<h3><?php echo __('Related Songs'); ?></h3>
+
+<?php if ( ! empty($player['Song'])) { ?>
+	<table class="table table-striped table-bordered table-condensed">
+		<tr>
+			<th><?php echo __('ID'); ?></th>
+			<th><?php echo __('Title'); ?></th>
+			<th><?php echo __('File'); ?></th>
+			<th><?php echo __('Created'); ?></th>
+			<th class="actions"><?php echo __('Actions'); ?></th>
+		</tr>
+
+	<?php foreach ($player['Song'] as $song) { ?>
+		<tr class="table-hover">
+			<td><?php echo h($song['id']); ?>&nbsp;</td>
+			<td><?php echo h($song['title']); ?>&nbsp;</td>
+			<td><?php echo h($song['file']); ?>&nbsp;</td>
+			<td><?php echo h($song['created']); ?>&nbsp;</td>
+			<td class="actions">
+				<div class="btn-group">
+					<?php echo $this->Html->link(__('View'), array('controller' => 'songs', 'action' => 'view', $song['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Html->link(__('Edit'), array('controller' => 'songs', 'action' => 'edit', $song['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'songs', 'action' => 'delete', $song['id']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete Song #%s?', $song['id'])); ?>
+				</div>
+			</td>
+		</tr>
+	<?php } ?>
+
+	</table>
+<?php } ?>
+
+	<div class="actions">
+		<ul class="nav nav-pills">
+			<li><?php echo $this->Html->link(__('List Songs'), array('controller' => 'songs', 'action' => 'index')); ?> </li>
+			<li><?php echo $this->Html->link(__('New Song'), array('controller' => 'songs', 'action' => 'add')); ?> </li>
+		</ul>
+	</div>
+</div>
+
+<div class="related well">
 	<h3><?php echo __('Related Badges'); ?></h3>
 
 <?php if ( ! empty($player['Badge'])) { ?>

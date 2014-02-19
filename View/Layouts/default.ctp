@@ -35,6 +35,7 @@
 //					array('Players', array('controller' => 'players', 'action' => 'index')),
 //					array('Games', array('controller' => 'games', 'action' => 'index')),
 					array('Stats', array('controller' => 'stats', 'action' => 'index')),
+					array('Tunes', array('admin' => true, 'prefix' => 'admin', 'controller' => 'songs', 'action' => 'index')),
 				);
 			?>
 			<ul class="nav">

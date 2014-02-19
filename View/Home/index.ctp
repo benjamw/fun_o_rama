@@ -13,6 +13,7 @@
 	<div class="tourny match well">
 		<strong><?php echo $tourny['Game']['name']; ?></strong> started on <?php echo date('F j, Y @ h:ia', strtotime($match['created'])); ?>
 		<div class="outcomes pull-right">
+			<?php echo $this->Html->link('Tunes', array('controller' => 'songs', 'action' => 'play', 't'.$tourny['Tournament']['id']), array('class' => 'btn btn-mini btn-inverse')); ?>
 			<?php echo $this->Html->link('Adjust', array('controller' => 'tournaments', 'action' => 'adjust', $tourny['Tournament']['id']), array('class' => 'btn btn-mini btn-info')); ?>
 			<?php foreach ($match['Team'] as $team_num => $team) { ?>
 
