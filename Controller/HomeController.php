@@ -5,6 +5,7 @@ App::uses('AppController', 'Controller');
 class HomeController extends AppController {
 
 	public $uses = array('Tournament');
+	public $password = 'password'; // change this, obviously
 
 	public function index( ) {
 		// grab any in progress tournaments
@@ -60,6 +61,32 @@ class HomeController extends AppController {
 		$this->set('in_progress', $in_progress);
 
 		$this->_setSelects(true);
+	}
+
+	public function login( ) {
+		if ($this->request->is('post')) {
+			if ($this->password === $this->request->data['Home']['password']) {
+				$this->Session->write('ALLOWED', true);
+				$referer = $this->Session->read('LOGIN.referer');
+				$this->Session->delete('LOGIN');
+				$this->redirect($referer);
+			}
+			else {
+				sleep(5);
+				$failed = $this->Session->check('LOGIN.failed') ? $this->Session->read('LOGIN.failed') : 0;
+
+				++$failed;
+
+				if (3 <= $failed) {
+					$this->Session->write('LOGIN.blocked', true);
+					echo 'Access Denied';
+					exit;
+				}
+
+				$this->Session->write('LOGIN.failed', $failed);
+				$this->Session->setFlash('Login Failed', 'flash_error');
+			}
+		}
 	}
 
 	public function _setSelects($active_only = false) {

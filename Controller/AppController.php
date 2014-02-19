@@ -52,16 +52,19 @@ class AppController extends Controller {
 	}
 
 	public function beforeFilter( ) {
-// log the user agents accessing the site
-// so I can make the site more responsive in the future
-CakeLog::write('debug', env('HTTP_USER_AGENT'));
+		parent::beforeFilter( );
 
-		if (env('REMOTE_ADDR') && ! in_array(env('REMOTE_ADDR'), $this->allowed_ips)) {
-			echo 'Access denied.';
+		if ($this->Session->check('LOGIN.blocked')) {
+			echo 'Access Denied';
 			exit;
 		}
 
-		parent::beforeFilter( );
+		if (env('REMOTE_ADDR') && ! in_array(env('REMOTE_ADDR'), $this->allowed_ips) && ! $this->Session->check('ALLOWED')) {
+			if (('home' !== $this->request->params['controller']) || ('login' !== $this->request->params['action'])) {
+				$this->Session->write('LOGIN.referer', $this->request->params);
+				return $this->redirect(array('admin' => false, 'prefix' => false, 'controller' => 'home', 'action' => 'login'));
+			}
+		}
 
 		if (isset($this->Cookie)) {
 			$this->Cookie->path = preg_replace('%/+%', '/', '/'.APP_DIR.'/');
