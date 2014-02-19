@@ -121,7 +121,7 @@ class Tournament extends AppModel {
 
 		$data['num_sitting_out'] = count($data['player_id']) - ($data['num_teams'] * $data['team_size']);
 
-// do this until a sitting out handler is built
+// do this until a sitting out handler/model is built
 if ($data['num_sitting_out']) {
 	throw new CakeException('Teams are not even.  Teams must be even until I get a Sitting Out system built');
 }
