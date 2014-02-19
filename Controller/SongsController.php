@@ -50,7 +50,7 @@ class SongsController extends AppController {
 					'Song.id',
 				),
 				'conditions' => array(
-					'Song.id NOT IN' => $song_ids,
+					'Song.id <>' => $song_ids,
 					'Song.active' => 1,
 				),
 				'order' => 'rand()',
