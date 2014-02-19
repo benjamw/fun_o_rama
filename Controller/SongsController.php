@@ -60,7 +60,7 @@ class SongsController extends AppController {
 			$song_ids = array_merge($song_ids, $additional_songs);
 		}
 
-		// remove the songs that were played previously
+		// remove the songs that were played recently
 		$played_songs = $this->Song->find('list', array(
 			'fields' => array(
 				'Song.id',
@@ -69,11 +69,12 @@ class SongsController extends AppController {
 			'conditions' => array(
 				'Song.active' => 1,
 				'Song.played IS NOT NULL',
+				'Song.played > DATE_SUB(NOW( ), INTERVAL 3 HOUR)',
 			),
 			'order' => array(
 				'Song.played' => 'DESC',
 			),
-			'limit' => ceil(count($song_ids) / 2),
+			'limit' => ceil(count($song_ids) * 0.75), // 3/4 of total songs
 		));
 
 		$song_ids = array_diff($song_ids, $played_songs);
