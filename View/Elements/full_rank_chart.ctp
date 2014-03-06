@@ -2,27 +2,45 @@
 <?php $this->Html->script('flot/jquery.flot.js', array('block' => 'script')); ?>
 <?php $this->Html->script('flot/jquery.flot.time.js', array('block' => 'script')); ?>
 
-<div class="chart" id="rank_<?php echo $ranking['id']; ?>"></div>
+<div class="full_chart" id="game_rank_<?php echo $game_type['GameType']['id']; ?>"></div>
 
 <?php
 
 	$min = $max = 25;
 	$data = array( );
-	foreach ($ranking['RankHistory'] as $history) {
-		$mean = (float) $history['mean'];
 
-		$data[] = array(
-			strtotime($history['created']) * 1000,
-			$mean,
+	$players = Set::combine($players, '/Player/id', '/Player/name');
+
+	$rankings = Set::extract($rankings, '{n}.'.$game_type['GameType']['id']);
+
+	foreach ($rankings as $ranking) {
+		if (empty($ranking['RankHistory'])) {
+			continue;
+		}
+
+		$this_data = array(
+			'label' => $players[$ranking['PlayerRanking']['player_id']],
+			'data' => array( ),
 		);
 
-		if ($mean < $min) {
-			$min = $mean;
+		foreach ($ranking['RankHistory'] as $history) {
+			$mean = (float) $history['mean'];
+
+			$this_data['data'][] = array(
+				strtotime($history['created']) * 1000,
+				$mean,
+			);
+
+			if ($mean < $min) {
+				$min = $mean;
+			}
+
+			if ($mean > $max) {
+				$max = $mean;
+			}
 		}
 
-		if ($mean > $max) {
-			$max = $mean;
-		}
+		$data[] = $this_data;
 	}
 
 	// round to nearest 5
@@ -35,6 +53,8 @@
 	while ($disp_max <= $max) {
 		$disp_max += 5;
 	}
+
+	// make sure it didn't round the wrong way
 
 	$this->Html->scriptblock("
 		(function ($) {
@@ -83,7 +103,7 @@
 						url: ROOT_URL +'player_rankings/flot/',
 						data: {
 							name: label,
-							game: {$ranking['GameType']['id']},
+							game: {$game_type['GameType']['id']},
 							time: datapoint[0],
 							mean: datapoint[1]
 						},
@@ -120,17 +140,17 @@
 					return markings;
 				},
 				plot = $.plot(
-					$('#rank_{$ranking['id']}'),
-					[
-						{
-							data: data,
-							label: 'Rank'
-						}
-					],
+					$('#game_rank_{$game_type['GameType']['id']}'),
+					data,
 					{
 						series: {
 							lines: { show: true },
 							points: { show: true }
+						},
+						legend: {
+							noColumns: 3,
+							position: 'nw',
+							sorted: 'ascending'
 						},
 						grid: {
 							hoverable: true,
@@ -148,23 +168,23 @@
 					}
 				);
 
-			$('<div id=\"tooltip_{$ranking['id']}\" class=\"chart_tooltip\"></div>').appendTo('body');
+			$('<div id=\"game_tooltip_{$game_type['GameType']['id']}\" class=\"chart_tooltip\"></div>').appendTo('body');
 
-			$('#rank_{$ranking['id']}').bind('plothover', function (event, pos, item) {
+			$('#game_rank_{$game_type['GameType']['id']}').bind('plothover', function (event, pos, item) {
 				if (item) {
 					var x = item.datapoint[0].toFixed(2),
 						y = item.datapoint[1].toFixed(2);
 
-					$('#tooltip_{$ranking['id']}').html(item.series.label +' on '+ moment.unix(x / 1000).format('MMM D, YYYY h:mm a') +' = '+ y)
+					$('#game_tooltip_{$game_type['GameType']['id']}').html(item.series.label +' on '+ moment.unix(x / 1000).format('MMM D, YYYY h:mm a') +' = '+ y)
 						.css({top: item.pageY - 25, left: item.pageX + 10})
 						.fadeIn(200);
 				}
 				else {
-					$('#tooltip_{$ranking['id']}').hide( );
+					$('#game_tooltip_{$game_type['GameType']['id']}').hide( );
 				}
 			});
 
-			$('#rank_{$ranking['id']}').bind('plotclick', function (event, pos, item) {
+			$('#game_rank_{$game_type['GameType']['id']}').bind('plotclick', function (event, pos, item) {
 				plot.unhighlight( );
 
 				if (item) {
@@ -173,7 +193,7 @@
 					// pop a small dialog box that shows all the players in that game,
 					// their rankings after that game, and their ranking change (+- X.XX),
 					// and the rest of the tournament data
-					pull_dialog({$ranking['player_id']}, item.datapoint);
+					pull_dialog(item.series.label, item.datapoint);
 				}
 			});
 

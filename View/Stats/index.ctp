@@ -1,3 +1,4 @@
+<?php $this->Html->css('bracket.css', null, array('block' => 'css')); ?>
 <?php $this->Html->css('tablesorter.css', null, array('block' => 'css')); ?>
 <?php $this->Html->script('jquery.tablesorter.js', array('block' => 'script')); ?>
 <?php $this->Html->script('stats.js', array('block' => 'scriptBottom')); ?>
@@ -62,4 +63,25 @@
 		<?php } ?>
 	</tbody>
 </table>
+
+<div class="well">
+<?php foreach ($game_types as $game_type) { ?>
+	<?php
+		$has_data = false;
+
+		foreach ($player_rankings as $player_ranking) {
+			$has_data = $has_data || ! empty($player_ranking[$game_type['GameType']['id']]['RankHistory']);
+		}
+
+		if ( ! $has_data) {
+			continue;
+		}
+	?>
+	<h3><?php echo $game_type['GameType']['name']; ?></h3>
+
+	<div class="well">
+		<?php echo $this->element('full_rank_chart', array('rankings' => $player_rankings, 'players' => $players, 'game_type' => $game_type)); ?>
+	</div>
+<?php } ?>
+</div>
 

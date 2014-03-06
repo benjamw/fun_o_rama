@@ -1,4 +1,4 @@
-<?php $this->Html->css('bracket.css', null, array('inline' => false)); ?>
+<?php $this->Html->css('bracket.css', null, array('block' => 'css')); ?>
 
 <?php
 

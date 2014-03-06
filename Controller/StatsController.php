@@ -39,8 +39,19 @@ class StatsController extends AppController {
 		));
 		$this->set('games', $games);
 
+// ========================================================================
+
 		// player rankings
-		$rankings = $this->Player->PlayerRanking->find('all');
+		$rankings = $this->Player->PlayerRanking->find('all', array(
+			'contain' => array(
+				'RankHistory' => array(
+					'order' => array(
+						'RankHistory.created' => 'ASC',
+						'RankHistory.id' => 'ASC',
+					),
+				),
+			),
+		));
 
 		$player_rankings = array( );
 		foreach ($rankings as $ranking) {
@@ -52,6 +63,8 @@ class StatsController extends AppController {
 		}
 
 		$this->set('player_rankings', $player_rankings);
+
+// ========================================================================
 
 		// player stats
 		$stats = $this->Player->PlayerStat->find('all');

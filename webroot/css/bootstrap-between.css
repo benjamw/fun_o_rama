@@ -159,6 +159,11 @@ ul.swappable {
 	height: 300px;
 }
 
+.full_chart {
+	width: 100%;
+	height: 500px;
+}
+
 .chart_tooltip {
 	position: absolute;
 	display: none;

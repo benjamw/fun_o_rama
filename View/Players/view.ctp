@@ -1,3 +1,4 @@
+<?php $this->Html->css('bracket.css', null, array('block' => 'css')); ?>
 
 <div class="players view">
 
@@ -47,9 +48,10 @@
 		<h3>Ranking</h3>
 
 		<?php foreach ($player['PlayerRanking'] as $ranking) { ?>
+			<?php if (empty($ranking['RankHistory'])) { continue; } ?>
 		<div class="well">
 			<?php echo $ranking['GameType']['name'].' &mdash; Mean (Rank): <strong>'.number_format($ranking['mean'], 4).'</strong> &mdash; Std.Dev. (Accuracy): '.number_format($ranking['std_deviation'], 6); ?>
-			<?php echo $this->element('rank_chart', array('ranking' => $ranking)); ?>
+			<?php echo $this->element('rank_chart', compact('ranking')); ?>
 		</div>
 		<?php } ?>
 	</div>
