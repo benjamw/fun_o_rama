@@ -8,12 +8,14 @@
 	<thead>
 		<tr>
 			<th rowspan="3" class="name">Player</th>
-			<?php foreach ($game_types as $game_type) { ?>
+		<?php foreach ($game_types as $game_type) { ?>
+			<?php if ( ! $has_data[$game_type['GameType']['id']]) { continue; } ?>
 			<th colspan="<?php echo ((count($game_type['Game']) * 3) + 3); ?>" class="type"><?php echo $game_type['GameType']['name']; ?></th>
-			<?php } ?>
+		<?php } ?>
 		</tr>
 		<tr>
 		<?php foreach ($game_types as $game_type) { ?>
+			<?php if ( ! $has_data[$game_type['GameType']['id']]) { continue; } ?>
 			<th rowspan="2" class="rank">Rank</th>
 			<th rowspan="2">Std Dev</th>
 			<?php foreach ($game_type['Game'] as $game) { ?>
@@ -23,11 +25,14 @@
 		<?php } ?>
 		</tr>
 		<tr>
-			<?php foreach ($games as $game) { ?>
+		<?php foreach ($game_types as $game_type) { ?>
+			<?php if ( ! $has_data[$game_type['GameType']['id']]) { continue; } ?>
+			<?php foreach ($game_type['Game'] as $game) { ?>
 			<th title="Wins" class="win">W</th>
 			<th title="Losses" class="loss">L</th>
 			<th title="Streak" class="streak">S</th>
 			<?php } ?>
+		<?php } ?>
 		</tr>
 	</thead>
 	<tbody>
@@ -38,6 +43,8 @@
 
 			<?php
 				foreach ($game_types as $game_type) {
+					if ( ! $has_data[$game_type['GameType']['id']]) { continue; }
+
 					$rank = $player_rankings[$player['Player']['id']][$game_type['GameType']['id']]['PlayerRanking'];
 
 					if ( ! is_null($rank['mean'])) {
@@ -66,17 +73,7 @@
 
 <div class="well">
 <?php foreach ($game_types as $game_type) { ?>
-	<?php
-		$has_data = false;
-
-		foreach ($player_rankings as $player_ranking) {
-			$has_data = $has_data || ! empty($player_ranking[$game_type['GameType']['id']]['RankHistory']);
-		}
-
-		if ( ! $has_data) {
-			continue;
-		}
-	?>
+	<?php if ( ! $has_data[$game_type['GameType']['id']]) { continue; } ?>
 	<h3><?php echo $game_type['GameType']['name']; ?></h3>
 
 	<div class="well">

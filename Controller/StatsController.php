@@ -21,24 +21,6 @@ class StatsController extends AppController {
 		));
 		$this->set('game_types', $game_types);
 
-		$games = $this->Game->find('list', array(
-			'joins' => array(
-				array(
-					'table' => 'game_types',
-					'alias' => 'GameType',
-					'type' => 'INNER',
-					'conditions' => array(
-						'GameType.id = Game.game_type_id',
-					),
-				),
-			),
-			'order' => array(
-				'GameType.name' => 'ASC',
-				'Game.name' => 'ASC',
-			),
-		));
-		$this->set('games', $games);
-
 // ========================================================================
 
 		// player rankings
@@ -53,15 +35,19 @@ class StatsController extends AppController {
 			),
 		));
 
+		$has_data = array( );
 		$player_rankings = array( );
 		foreach ($rankings as $ranking) {
 			if ( ! isset($player_rankings[$ranking['PlayerRanking']['player_id']])) {
 				$player_rankings[$ranking['PlayerRanking']['player_id']] = array( );
 			}
 
+			$has_data[$ranking['PlayerRanking']['game_type_id']] = ! empty($has_data[$ranking['PlayerRanking']['game_type_id']]) || ! empty($ranking['PlayerRanking']['mean']);
+
 			$player_rankings[$ranking['PlayerRanking']['player_id']][$ranking['PlayerRanking']['game_type_id']] = $ranking;
 		}
 
+		$this->set('has_data', $has_data);
 		$this->set('player_rankings', $player_rankings);
 
 // ========================================================================
