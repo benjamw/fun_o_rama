@@ -38,12 +38,13 @@
 	?>
 </div>
 
-<?php if (false && ($adjusting || ! empty($sitting_out))) { ?>
+<?php if ($adjusting || ! empty($tournament['SittingOut'])) { ?>
 <div class="well" id="team_out">
 	<h5>Sitting Out:</h5>
 	<ul class="swappable">
 	<?php
-		foreach ($sitting_out as $player) {
+		foreach ($tournament['SittingOut'] as $sitting_out) {
+			$player = $sitting_out['Player'];
 			echo $this->element('player_li', compact('player', 'game_type_id', 'link'));
 		}
 	?>

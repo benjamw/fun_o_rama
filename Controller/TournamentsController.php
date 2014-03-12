@@ -141,6 +141,9 @@ class TournamentsController extends AppController {
 						'PlayerRanking',
 					),
 				),
+				'SittingOut' => array(
+					'Player',
+				),
 			),
 			'conditions' => array(
 				'Tournament.id' => $id,
@@ -156,16 +159,10 @@ class TournamentsController extends AppController {
 		}
 		unset($team); // kill the reference
 
-//		if ( ! empty($match['Match']['sat_out'])) {
-//			$player_ids[] = $match['Match']['sat_out'];
-//
-//			$sitting_out = $this->Match->Team->Player->find('first', array(
-//				'conditions' => array(
-//					'id' => $match['Match']['sat_out'],
-//				),
-//			));
-//			$this->set('sitting_out', $sitting_out);
-//		}
+		foreach ($tournament['SittingOut'] as & $sitting_out) {
+			$player_ids[] = $sitting_out['Player']['id'];
+		}
+		unset($sitting_out);
 
 		if ( ! empty($player_ids)) {
 			$the_rest = $this->Tournament->Team->Player->find('all', array(
@@ -315,10 +312,6 @@ class TournamentsController extends AppController {
 		parent::_setSelects($active_only);
 
 		$this->set($this->Tournament->enumValues( ));
-
-		if (empty($this->viewVars['sitting_out'])) {
-			$this->set('sitting_out', false);
-		}
 
 		if (empty($this->viewVars['the_rest'])) {
 			$this->set('the_rest', array( ));

@@ -45,6 +45,9 @@ class Player extends AppModel {
 		'PlayerStat' => array(
 			'dependent' => true,
 		),
+		'SittingOut' => array(
+			'dependent' => true,
+		),
 		'Song' => array(
 			'dependent' => true,
 		),

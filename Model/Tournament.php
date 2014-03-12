@@ -59,6 +59,9 @@ class Tournament extends AppModel {
 		'Match' => array(
 			'dependent' => true,
 		),
+		'SittingOut' => array(
+			'dependent' => true,
+		),
 		'Team' => array(
 			'dependent' => true,
 		),
@@ -66,6 +69,8 @@ class Tournament extends AppModel {
 
 
 	public function start($data) {
+		$data['player_id'] = array_trim($data['player_id'], 'int');
+
 		// sort the player ids to prevent issues later
 		sort($data['player_id']);
 
@@ -121,10 +126,8 @@ class Tournament extends AppModel {
 
 		$data['num_sitting_out'] = count($data['player_id']) - ($data['num_teams'] * $data['team_size']);
 
-// do this until a sitting out handler/model is built
-if ($data['num_sitting_out']) {
-	throw new CakeException('Teams are not even.  Teams must be even until I get a Sitting Out system built');
-}
+		$data['sitting_out'] = $this->SittingOut->find_sitting_outs($data);
+		$data['player_id'] = array_values(array_diff($data['player_id'], $data['sitting_out']));
 
 		$tourny = array(
 			'Tournament' => array(
@@ -137,7 +140,11 @@ if ($data['num_sitting_out']) {
 			'SittingOut' => array( ),
 		);
 
-		$data['sitting_out'] = $this->create_sitting_outs($data);
+		foreach ($data['sitting_out'] as $sitting_out) {
+			$tourny['SittingOut'][] = array(
+				'player_id' => $sitting_out,
+			);
+		}
 
 		list($data['teams'], $data['quality'], $data['seed']) = $this->create_teams($data);
 
@@ -180,6 +187,9 @@ if ($data['num_sitting_out']) {
 						),
 					),
 				),
+			),
+			'SittingOut' => array(
+				'Player',
 			),
 		));
 		$this->read(null, $this->id);
@@ -348,15 +358,6 @@ if ($data['num_sitting_out']) {
 		unset($team); // kill the reference
 
 		return array($teams, $quality, $seed);
-	}
-
-
-	protected function create_sitting_outs($data) {
-		if ( ! $data['num_sitting_out']) {
-			return array( );
-		}
-
-		// TODO: build this
 	}
 
 
