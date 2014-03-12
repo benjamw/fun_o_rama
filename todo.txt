@@ -1,3 +1,10 @@
+add button to reset all `played` values for the songs
+
+
+
+
+
+
 add player avatars to match edit page (Match/start.ctp), and to
 match create page in checkbox list (Home/index.ctp)
 
