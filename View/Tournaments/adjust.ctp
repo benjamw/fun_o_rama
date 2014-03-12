@@ -52,20 +52,6 @@
 </div>
 <?php } ?>
 
-<?php if ($adjusting) { ?>
-<div class="well" id="the_rest">
-	<h5>Other Players:</h5>
-	<ul class="swappable">
-	<?php
-		foreach ($the_rest as $player) {
-			echo $this->element('player_li', compact('player', 'game_type_id', 'link'));
-		}
-	?>
-	</ul>
-</div>
-<?php } ?>
-
-
 <h4>Current Matches</h4>
 <div class="matches well">
 
@@ -87,6 +73,20 @@
 	</div>
 	<?php } ?>
 </div>
+
+
+<?php if ($adjusting) { ?>
+<div class="well" id="the_rest">
+	<h5>Other Players:</h5>
+	<ul class="swappable">
+	<?php
+		foreach ($the_rest as $player) {
+			echo $this->element('player_li', compact('player', 'game_type_id', 'link'));
+		}
+	?>
+	</ul>
+</div>
+<?php } ?>
 
 
 <?php $this->Html->scriptblock('
