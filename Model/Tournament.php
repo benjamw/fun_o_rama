@@ -195,7 +195,7 @@ class Tournament extends AppModel {
 		$this->read(null, $this->id);
 
 		// now create the matches based on the tournament type
-		$this->{$data['tournament_type']}( );
+		$this->{$this->data['Tournament']['tournament_type']}( );
 
 		return $this->id;
 	}
@@ -609,8 +609,8 @@ class Tournament extends AppModel {
 					foreach ($team['Player'] as $player) {
 						$calc_team[] = array(
 							'id' => $player['id'],
-							'mean' => $player['PlayerRanking'][0]['mean'],
-							'std_dev' => $player['PlayerRanking'][0]['std_deviation'],
+							'mean' => ife($player['PlayerRanking'][0]['mean'], $this->getDefaultMean( ), false),
+							'std_dev' => ife($player['PlayerRanking'][0]['std_deviation'], $this->getDefaultStandardDeviation( ), false),
 						);
 					}
 				}
