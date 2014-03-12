@@ -16,7 +16,7 @@
 		echo $this->Html->css('geocities/bootstrap.min.css');
 		echo $this->Html->css('bootstrap-between.css');
 		echo $this->Html->css('bootstrap-responsive.min.css');
-		echo $this->Html->css('smoothness/jquery-ui-1.10.4.min.css');
+		echo $this->Html->css('//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css');
 		echo $this->fetch('css');
 
 	?>
@@ -75,7 +75,7 @@
 
 		echo $this->Html->scriptblock('var ROOT_URL = "'.$this->Html->url('/').'";');
 		echo $this->Html->script('//code.jquery.com/jquery-2.0.3.min.js');
-		echo $this->Html->script('jquery-ui-1.10.4.min.js');
+		echo $this->Html->script('//code.jquery.com/ui/1.10.4/jquery-ui.js');
 		echo $this->Html->script('bootstrap.min.js'); // bootstrap breaks ui.button( )
 		echo $this->fetch('script');
 
