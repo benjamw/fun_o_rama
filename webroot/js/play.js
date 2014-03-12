@@ -42,10 +42,8 @@
 		title_disp = document.getElementById('title'),
 		audio = document.getElementById('song'),
 		toggle_btn = document.getElementById('toggle'),
-		fading = false,
 		played = false,
 		pulled = false,
-		fade_timeout = false,
 
 
 		mark_played = function( ) {
@@ -88,13 +86,6 @@ console.log('pre-loading next song');
 				get_next_song( );
 			}
 
-			if ( ! audio.paused && ! fading && (audio.currentTime > (audio.duration - 2))) {
-console.log('start fading');
-console.log(ROOT_URL.slice(0, -1) + SONG.__file);
-				// fade out current, then play next song
-				fade_out( );
-			}
-
 			if ( ! played && (audio.currentTime > (audio.duration / 2))) {
 console.log('marking song as played');
 				// mark song as played
@@ -131,39 +122,13 @@ console.log(arguments);
 
 			audio.pause( );
 
-			if (fade_timeout) {
-				clearTimeout(fade_timeout);
-			}
-
-			fading = false;
 			played = false;
 			pulled = false;
-			fade_timeout = false;
 console.log(ROOT_URL.slice(0, -1) + SONG.__file);
 
 			audio.src = ROOT_URL.slice(0, -1) + SONG.__file;
 
 			init( );
-		},
-
-
-		fade_out = function( ) {
-console.log('---fade_out---');
-			var ramp = function( ) {
-					audio.volume = Math.max(0, audio.volume - 0.025); // 1 / 40
-					if (0 < audio.volume) {
-console.log('fading = '+ audio.volume);
-						fade_timeout = setTimeout(ramp, 50);
-					}
-					else {
-console.log('starting next');
-						play_next( );
-					}
-				};
-
-			fading = true;
-
-			ramp( );
 		},
 
 
