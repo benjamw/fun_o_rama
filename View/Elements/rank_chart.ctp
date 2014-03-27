@@ -93,8 +93,8 @@
 						}
 					});
 				},
+				yaxis_marking = { yaxis: { from: 25, to: 25 }, color: '#000' },
 				weekendAreas = function(axes) {
-
 					var i,
 						markings = [ ],
 						d = new Date(axes.xaxis.min);
@@ -116,6 +116,9 @@
 						i += 7 * 24 * 60 * 60 * 1000;
 					}
 					while (i < axes.xaxis.max);
+
+					// push this in last so it doesn't get covered
+					markings.push(yaxis_marking);
 
 					return markings;
 				},
