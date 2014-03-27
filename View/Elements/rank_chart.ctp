@@ -93,7 +93,7 @@
 						}
 					});
 				},
-				yaxis_marking = { yaxis: { from: 25, to: 25 }, color: '#000' },
+				yaxis_marking = { yaxis: { from: 25, to: 25 }, color: '#aaa' },
 				weekendAreas = function(axes) {
 					var i,
 						markings = [ ],
