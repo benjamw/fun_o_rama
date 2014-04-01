@@ -4,7 +4,7 @@
 <?php $this->Html->script('stats.js', array('block' => 'scriptBottom')); ?>
 
 <h2>Win-Loss Stats</h2>
-<table class="table table-striped table-bordered table-hover table-condensed tablesorter" id="win_loss">
+<table class="table table-striped table-bordered table-hover table-condensed tablesorter win_loss" id="win_loss">
 	<thead>
 		<tr>
 			<th rowspan="3" class="name">Player</th>

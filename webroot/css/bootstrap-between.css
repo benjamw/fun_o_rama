@@ -119,40 +119,57 @@ ul.swappable {
 	line-height: 20px;
 }
 
-#win_loss {
+.win_loss {
 	border-collapse: ;
 }
 
-#win_loss .name,
-#win_loss .type {
-	border-right: 2px solid #669;
+.win_loss thead th {
+	text-align: center;
 }
 
-#win_loss .total {
-	border-right: 2px solid #669;
+.win_loss .type,
+.win_loss .rank {
+	border-left: 2px solid #669;
+}
+
+.win_loss .total {
 	border-left: 2px solid #aaa;
 }
 
-#win_loss .win,
-#win_loss .game {
+.win_loss .win,
+.win_loss .game {
 	border-left: 2px solid #aaa;
 }
 
-#win_loss .rank {
+.win_loss .rank {
 	font-weight: bold;
 }
 
-#win_loss tr:hover td {
+.win_loss tr:hover td {
 	background: #d9edf7;
 }
 
-#win_loss tr td.empty {
+.win_loss tr td.empty {
 	background: #ccc;
 }
 
-#win_loss .name .badge {
+.win_loss .name .badge {
 	float: right;
 }
+
+.win_loss th {
+	width: 35px;
+}
+
+.win_loss th[colspan],
+.win_loss th[rowspan] {
+	width: auto;
+}
+
+.win_loss .num {
+	text-align: center;
+}
+
 
 .chart {
 	width: 100%;

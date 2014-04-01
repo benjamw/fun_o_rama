@@ -45,12 +45,55 @@
 	</div>
 
 	<div class="well">
+		<h3>Stats</h3>
+		<table class="table table-striped table-bordered table-hover table-condensed win_loss">
+			<thead>
+				<tr>
+					<th rowspan="2" class="name">Range</th>
+				<?php foreach ($player['PlayerStat'] as $stat) { ?>
+					<th colspan="4" class="game"><?php echo $stat['Game']['name']; ?></th>
+				<?php } ?>
+				</tr>
+				<tr>
+				<?php foreach ($player['PlayerStat'] as $stat) { ?>
+					<th title="Wins" class="win">W</th>
+					<th title="Losses" class="loss">L</th>
+					<th title="Win-Loss Ratio" class="ratio">R</th>
+					<th title="Streak" class="streak">S</th>
+				<?php } ?>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Current</td>
+				<?php foreach ($player['PlayerStat'] as $stat) { ?>
+					<td class="num win"><?php echo $stat['wins']; ?></td>
+					<td class="num loss"><?php echo $stat['losses']; ?></td>
+					<td class="num ratio"><?php echo number_format($stat['wins'] / max($stat['losses'], 1), 2); ?></td>
+					<td class="num streak"><?php echo $stat['streak']; ?></td>
+				<?php } ?>
+				</tr>
+				<tr>
+					<td>Global</td>
+				<?php foreach ($player['PlayerStat'] as $stat) { ?>
+					<td class="num win"><?php echo $stat['global_wins']; ?></td>
+					<td class="num loss"><?php echo $stat['global_losses']; ?></td>
+					<td class="num ratio"><?php echo number_format($stat['global_wins'] / max($stat['global_losses'], 1), 2); ?></td>
+					<td class="num streak"><?php echo $stat['min_streak'].'/'.$stat['max_streak']; ?></td>
+				<?php } ?>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="well">
 		<h3>Ranking</h3>
 
 		<?php foreach ($player['PlayerRanking'] as $ranking) { ?>
 			<?php if (empty($ranking['RankHistory'])) { continue; } ?>
 		<div class="well">
-			<?php echo $ranking['GameType']['name'].' &mdash; Mean (Rank): <strong>'.number_format($ranking['mean'], 4).'</strong> &mdash; Std.Dev. (Accuracy): '.number_format($ranking['std_deviation'], 6); ?>
+			<p class="pull-right">(Global Max: <?php echo number_format($ranking['max_mean'], 2); ?> &mdash; Min: <?php echo number_format($ranking['min_mean'], 2); ?>)</p>
+			<p><?php echo $ranking['GameType']['name'].' &mdash; Mean (Rank): <strong>'.number_format($ranking['mean'], 4).'</strong> &mdash; Std.Dev. (Accuracy): '.number_format($ranking['std_deviation'], 6); ?></p>
 			<?php echo $this->element('rank_chart', compact('ranking')); ?>
 		</div>
 		<?php } ?>

@@ -16,15 +16,3 @@ table.tablesorter thead tr .headerSortDown {
 	text-align: left;
 }
 
-
-#win_loss th {
-	width: 35px;
-}
-#win_loss th[colspan],
-#win_loss th[rowspan] {
-	width: auto;
-}
-#win_loss .num {
-	text-align: center;
-}
-
