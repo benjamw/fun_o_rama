@@ -132,18 +132,18 @@ class PlayerStat extends AppModel {
 					$cur_data = $this->findById($this->id);
 				}
 
-				if ($this->data['PlayerStat']['streak'] > $cur_data['PlayerStat']['max_streak']) {
+				if ( ! array_key_exists('max_streak', $this->data['PlayerStat']) && ($this->data['PlayerStat']['streak'] > $cur_data['PlayerStat']['max_streak'])) {
 					$this->data['PlayerStat']['max_streak'] = $this->data['PlayerStat']['streak'];
 				}
-				elseif ($this->data['PlayerStat']['streak'] < $cur_data['PlayerStat']['min_streak']) {
+				elseif ( ! array_key_exists('min_streak', $this->data['PlayerStat']) && ($this->data['PlayerStat']['streak'] < $cur_data['PlayerStat']['min_streak'])) {
 					$this->data['PlayerStat']['min_streak'] = $this->data['PlayerStat']['streak'];
 				}
 			}
 			else {
-				if ($this->data['PlayerStat']['streak'] > 0) {
+				if ( ! array_key_exists('max_streak', $this->data['PlayerStat']) && ($this->data['PlayerStat']['streak'] > 0)) {
 					$this->data['PlayerStat']['max_streak'] = $this->data['PlayerStat']['streak'];
 				}
-				else {
+				elseif ( ! array_key_exists('min_streak', $this->data['PlayerStat'])) {
 					$this->data['PlayerStat']['min_streak'] = $this->data['PlayerStat']['streak'];
 				}
 			}
@@ -157,9 +157,12 @@ class PlayerStat extends AppModel {
 					}
 
 					$difference = $this->data['PlayerStat'][$type] - $cur_data['PlayerStat'][$type];
-					$this->data['PlayerStat']['global_'.$type] = $cur_data['PlayerStat']['global_'.$type] + $difference;
+
+					if ( ! array_key_exists('global_'.$type, $this->data['PlayerStat'])) {
+						$this->data['PlayerStat']['global_'.$type] = $cur_data['PlayerStat']['global_'.$type] + $difference;
+					}
 				}
-				else {
+				elseif ( ! array_key_exists('global_'.$type, $this->data['PlayerStat'])) {
 					$this->data['PlayerStat']['global_'.$type] = $this->data['PlayerStat'][$type];
 				}
 			}
