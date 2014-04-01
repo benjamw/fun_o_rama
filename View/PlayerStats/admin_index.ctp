@@ -14,9 +14,14 @@
 			<th><?php echo $this->Paginator->sort('player_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('game_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('wins'); ?></th>
-			<th><?php echo $this->Paginator->sort('draws'); ?></th>
+			<!-- <th><?php echo $this->Paginator->sort('draws'); ?></th> -->
 			<th><?php echo $this->Paginator->sort('losses'); ?></th>
 			<th><?php echo $this->Paginator->sort('streak'); ?></th>
+			<th><?php echo $this->Paginator->sort('global_wins', 'Gl. Wins'); ?></th>
+			<!-- <th><?php echo $this->Paginator->sort('global_draws', 'Gl. Draws'); ?></th> -->
+			<th><?php echo $this->Paginator->sort('global_losses', 'Gl. Losses'); ?></th>
+			<th><?php echo $this->Paginator->sort('max_streak'); ?></th>
+			<th><?php echo $this->Paginator->sort('min_streak'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
@@ -26,9 +31,14 @@
 			<td><?php echo $this->Html->link($playerStat['Player']['name'], array('controller' => 'players', 'action' => 'view', $playerStat['Player']['id'])); ?>&nbsp;</td>
 			<td><?php echo $this->Html->link($playerStat['Game']['name'], array('controller' => 'games', 'action' => 'view', $playerStat['Game']['id'])); ?>&nbsp;</td>
 			<td><?php echo h($playerStat['PlayerStat']['wins']); ?>&nbsp;</td>
-			<td><?php echo h($playerStat['PlayerStat']['draws']); ?>&nbsp;</td>
+			<!-- <td><?php echo h($playerStat['PlayerStat']['draws']); ?>&nbsp;</td> -->
 			<td><?php echo h($playerStat['PlayerStat']['losses']); ?>&nbsp;</td>
 			<td><?php echo h($playerStat['PlayerStat']['streak']); ?>&nbsp;</td>
+			<td><?php echo h($playerStat['PlayerStat']['global_wins']); ?>&nbsp;</td>
+			<!-- <td><?php echo h($playerStat['PlayerStat']['global_draws']); ?>&nbsp;</td> -->
+			<td><?php echo h($playerStat['PlayerStat']['global_losses']); ?>&nbsp;</td>
+			<td><?php echo h($playerStat['PlayerStat']['max_streak']); ?>&nbsp;</td>
+			<td><?php echo h($playerStat['PlayerStat']['min_streak']); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('action' => 'view', $playerStat['PlayerStat']['id']), array('class' => 'btn btn-small')); ?>

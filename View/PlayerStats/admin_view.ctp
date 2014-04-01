@@ -25,6 +25,21 @@
 		<dt><?php echo __('Streak'); ?></dt>
 		<dd><?php echo h($playerStat['PlayerStat']['streak']); ?>&nbsp;</dd>
 
+		<dt><?php echo __('Global Wins'); ?></dt>
+		<dd><?php echo h($playerStat['PlayerStat']['global_wins']); ?>&nbsp;</dd>
+
+		<dt><?php echo __('Global Draws'); ?></dt>
+		<dd><?php echo h($playerStat['PlayerStat']['global_draws']); ?>&nbsp;</dd>
+
+		<dt><?php echo __('Global Losses'); ?></dt>
+		<dd><?php echo h($playerStat['PlayerStat']['global_losses']); ?>&nbsp;</dd>
+
+		<dt><?php echo __('Max Streak'); ?></dt>
+		<dd><?php echo h($playerStat['PlayerStat']['max_streak']); ?>&nbsp;</dd>
+
+		<dt><?php echo __('Min Streak'); ?></dt>
+		<dd><?php echo h($playerStat['PlayerStat']['min_streak']); ?>&nbsp;</dd>
+
 	</dl>
 
 </div>

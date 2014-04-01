@@ -14,6 +14,11 @@
 				echo $this->Form->input('draws');
 				echo $this->Form->input('losses');
 				echo $this->Form->input('streak');
+				echo $this->Form->input('global_wins');
+				echo $this->Form->input('global_draws');
+				echo $this->Form->input('global_losses');
+				echo $this->Form->input('max_streak');
+				echo $this->Form->input('min_streak');
 			?>
 
 		</fieldset>

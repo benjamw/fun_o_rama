@@ -241,14 +241,6 @@ g($match);
 			exit;
 		}
 
-g('EMPTYING TABLE `player_rankings`...');
-		$this->PlayerRanking->query(
-			'TRUNCATE TABLE `player_rankings`'
-		);
-
-		$rows = $this->PlayerRanking->find('count');
-g('ROW COUNT `player_rankings` = '.$rows);
-
 g('EMPTYING TABLE `rank_history`...');
 		$this->PlayerRanking->RankHistory->query(
 			'TRUNCATE TABLE `rank_history`'
@@ -257,8 +249,16 @@ g('EMPTYING TABLE `rank_history`...');
 		$rows = $this->PlayerRanking->RankHistory->find('count');
 g('ROW COUNT `rank_history` = '.$rows);
 
-g('STARTING');
-		$this->fill_values( );
+g('RESETTING TABLE `player_rankings`...');
+		$this->PlayerRanking->query(
+			'
+			UPDATE `player_rankings`
+				SET `mean` = NULL,
+					`std_deviation` = NULL,
+					`games_played` = 0
+			WHERE 1
+			'
+		);
 g('DONE');
 	}
 

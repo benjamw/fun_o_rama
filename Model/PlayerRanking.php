@@ -57,6 +57,26 @@ class PlayerRanking extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+		'max_mean' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'min_mean' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
 	);
 
 	public $belongsTo = array(
@@ -69,6 +89,30 @@ class PlayerRanking extends AppModel {
 			'dependent' => true,
 		),
 	);
+
+	public function beforeSave($options = array( )) {
+		// update the global values if needed
+		if (array_key_exists('mean', $this->data['PlayerRanking'])) {
+			if ($this->id) {
+				if (empty($cur_data)) {
+					$cur_data = $this->findById($this->id);
+				}
+
+				if ($this->data['PlayerRanking']['mean'] > $cur_data['PlayerRanking']['max_mean']) {
+					$this->data['PlayerRanking']['max_mean'] = $this->data['PlayerRanking']['mean'];
+				}
+				elseif ($this->data['PlayerRanking']['mean'] < $cur_data['PlayerRanking']['min_mean']) {
+					$this->data['PlayerRanking']['min_mean'] = $this->data['PlayerRanking']['mean'];
+				}
+			}
+			else {
+				$this->data['PlayerRanking']['max_mean'] = $this->data['PlayerRanking']['mean'];
+				$this->data['PlayerRanking']['min_mean'] = $this->data['PlayerRanking']['mean'];
+			}
+		}
+
+		return parent::beforeSave($options);
+	}
 
 }
 

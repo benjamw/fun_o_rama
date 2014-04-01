@@ -80,16 +80,17 @@ g($match);
 			exit;
 		}
 
-g('EMPTYING TABLE `player_stats`...');
+g('RESETTING TABLE `player_stats`...');
 		$this->PlayerStat->query(
-			'TRUNCATE TABLE `player_stats`'
+			'
+			UPDATE `player_stats`
+				SET `wins` = 0,
+					`draws` = 0,
+					`losses` = 0,
+					`streak` = 0
+			WHERE 1
+			'
 		);
-
-		$rows = $this->PlayerStat->find('count');
-g('ROW COUNT `player_stats` = '.$rows);
-
-g('STARTING');
-		$this->fill_values( );
 g('DONE');
 	}
 

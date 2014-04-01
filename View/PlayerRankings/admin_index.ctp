@@ -16,6 +16,8 @@
 			<th><?php echo $this->Paginator->sort('mean', 'Mean (&mu;)', array('escape' => false)); ?></th>
 			<th><?php echo $this->Paginator->sort('std_deviation', 'Std Dev. (&sigma;)', array('escape' => false)); ?></th>
 			<th><?php echo $this->Paginator->sort('games_played'); ?></th>
+			<th><?php echo $this->Paginator->sort('max_mean'); ?></th>
+			<th><?php echo $this->Paginator->sort('min_mean'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
@@ -27,6 +29,8 @@
 			<td><?php echo h($playerRanking['PlayerRanking']['mean']); ?>&nbsp;</td>
 			<td><?php echo h($playerRanking['PlayerRanking']['std_deviation']); ?>&nbsp;</td>
 			<td><?php echo h($playerRanking['PlayerRanking']['games_played']); ?>&nbsp;</td>
+			<td><?php echo h($playerRanking['PlayerRanking']['max_mean']); ?>&nbsp;</td>
+			<td><?php echo h($playerRanking['PlayerRanking']['min_mean']); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('action' => 'view', $playerRanking['PlayerRanking']['id']), array('class' => 'btn btn-small')); ?>

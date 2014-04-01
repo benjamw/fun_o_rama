@@ -13,6 +13,8 @@
 				echo $this->Form->input('mean');
 				echo $this->Form->input('std_deviation');
 				echo $this->Form->input('games_played');
+				echo $this->Form->input('max_mean');
+				echo $this->Form->input('min_mean');
 			?>
 
 		</fieldset>

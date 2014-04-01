@@ -22,6 +22,12 @@
 		<dt><?php echo __('Games Played'); ?></dt>
 		<dd><?php echo h($playerRanking['PlayerRanking']['games_played']); ?>&nbsp;</dd>
 
+		<dt><?php echo __('Max Mean'); ?></dt>
+		<dd><?php echo h($playerRanking['PlayerRanking']['max_mean']); ?>&nbsp;</dd>
+
+		<dt><?php echo __('Min Mean'); ?></dt>
+		<dd><?php echo h($playerRanking['PlayerRanking']['min_mean']); ?>&nbsp;</dd>
+
 	</dl>
 
 </div>
