@@ -132,19 +132,19 @@ class PlayerStat extends AppModel {
 					$cur_data = $this->findById($this->id);
 				}
 
-				if ($this->data['PlayerStat']['streak'] > $cur_data['PlayerStat']['max_streak']) {
-					$this->data['PlayerStat']['max_streak'] = $this->data['PlayerStat']['streak'];
+				if ((int) $this->data['PlayerStat']['streak'] > (int) $cur_data['PlayerStat']['max_streak']) {
+					$this->data['PlayerStat']['max_streak'] = (int) $this->data['PlayerStat']['streak'];
 				}
-				elseif ($this->data['PlayerStat']['streak'] < $cur_data['PlayerStat']['min_streak']) {
-					$this->data['PlayerStat']['min_streak'] = $this->data['PlayerStat']['streak'];
+				elseif ((int) $this->data['PlayerStat']['streak'] < (int) $cur_data['PlayerStat']['min_streak']) {
+					$this->data['PlayerStat']['min_streak'] = (int) $this->data['PlayerStat']['streak'];
 				}
 			}
 			else {
-				if ($this->data['PlayerStat']['streak'] > 0) {
-					$this->data['PlayerStat']['max_streak'] = $this->data['PlayerStat']['streak'];
+				if ((int) $this->data['PlayerStat']['streak'] > 0) {
+					$this->data['PlayerStat']['max_streak'] = (int) $this->data['PlayerStat']['streak'];
 				}
 				else {
-					$this->data['PlayerStat']['min_streak'] = $this->data['PlayerStat']['streak'];
+					$this->data['PlayerStat']['min_streak'] = (int) $this->data['PlayerStat']['streak'];
 				}
 			}
 		}
@@ -156,11 +156,11 @@ class PlayerStat extends AppModel {
 						$cur_data = $this->findById($this->id);
 					}
 
-					$difference = $this->data['PlayerStat'][$type] - $cur_data['PlayerStat'][$type];
-					$this->data['PlayerStat']['global_'.$type] = $cur_data['PlayerStat']['global_'.$type] + $difference;
+					$difference = ((int) $this->data['PlayerStat'][$type]) - ((int) $cur_data['PlayerStat'][$type]);
+					$this->data['PlayerStat']['global_'.$type] = ((int) $cur_data['PlayerStat']['global_'.$type]) + $difference;
 				}
 				else {
-					$this->data['PlayerStat']['global_'.$type] = $this->data['PlayerStat'][$type];
+					$this->data['PlayerStat']['global_'.$type] = (int) $this->data['PlayerStat'][$type];
 				}
 			}
 		}
