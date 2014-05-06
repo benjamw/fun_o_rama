@@ -183,6 +183,14 @@ class Match extends AppModel {
 					}
 				}
 
+				// remove the global stats
+				// so they'll get updated properly
+				unset($stat['global_wins']);
+				unset($stat['global_draws']);
+				unset($stat['global_losses']);
+				unset($stat['max_streak']);
+				unset($stat['min_streak']);
+
 				if ($draw) {
 					$stat['draws'] += 1;
 					$stat['streak'] = 0;
