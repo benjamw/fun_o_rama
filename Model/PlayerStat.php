@@ -132,19 +132,19 @@ class PlayerStat extends AppModel {
 					$cur_data = $this->findById($this->id);
 				}
 
-				if ((int) $this->data['PlayerStat']['streak'] > (int) $cur_data['PlayerStat']['max_streak']) {
-					$this->data['PlayerStat']['max_streak'] = (int) $this->data['PlayerStat']['streak'];
+				if ( ! array_key_exists('max_streak', $this->data['PlayerStat']) && ($this->data['PlayerStat']['streak'] > $cur_data['PlayerStat']['max_streak'])) {
+					$this->data['PlayerStat']['max_streak'] = $this->data['PlayerStat']['streak'];
 				}
-				elseif ((int) $this->data['PlayerStat']['streak'] < (int) $cur_data['PlayerStat']['min_streak']) {
-					$this->data['PlayerStat']['min_streak'] = (int) $this->data['PlayerStat']['streak'];
+				elseif ( ! array_key_exists('min_streak', $this->data['PlayerStat']) && ($this->data['PlayerStat']['streak'] < $cur_data['PlayerStat']['min_streak'])) {
+					$this->data['PlayerStat']['min_streak'] = $this->data['PlayerStat']['streak'];
 				}
 			}
 			else {
-				if ((int) $this->data['PlayerStat']['streak'] > 0) {
-					$this->data['PlayerStat']['max_streak'] = (int) $this->data['PlayerStat']['streak'];
+				if ( ! array_key_exists('max_streak', $this->data['PlayerStat']) && ($this->data['PlayerStat']['streak'] > 0)) {
+					$this->data['PlayerStat']['max_streak'] = $this->data['PlayerStat']['streak'];
 				}
-				else {
-					$this->data['PlayerStat']['min_streak'] = (int) $this->data['PlayerStat']['streak'];
+				elseif ( ! array_key_exists('min_streak', $this->data['PlayerStat'])) {
+					$this->data['PlayerStat']['min_streak'] = $this->data['PlayerStat']['streak'];
 				}
 			}
 		}
@@ -156,11 +156,14 @@ class PlayerStat extends AppModel {
 						$cur_data = $this->findById($this->id);
 					}
 
-					$difference = ((int) $this->data['PlayerStat'][$type]) - ((int) $cur_data['PlayerStat'][$type]);
-					$this->data['PlayerStat']['global_'.$type] = ((int) $cur_data['PlayerStat']['global_'.$type]) + $difference;
+					$difference = $this->data['PlayerStat'][$type] - $cur_data['PlayerStat'][$type];
+
+					if ( ! array_key_exists('global_'.$type, $this->data['PlayerStat'])) {
+						$this->data['PlayerStat']['global_'.$type] = $cur_data['PlayerStat']['global_'.$type] + $difference;
+					}
 				}
-				else {
-					$this->data['PlayerStat']['global_'.$type] = (int) $this->data['PlayerStat'][$type];
+				elseif ( ! array_key_exists('global_'.$type, $this->data['PlayerStat'])) {
+					$this->data['PlayerStat']['global_'.$type] = $this->data['PlayerStat'][$type];
 				}
 			}
 		}

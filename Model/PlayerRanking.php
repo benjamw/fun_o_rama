@@ -98,16 +98,21 @@ class PlayerRanking extends AppModel {
 					$cur_data = $this->findById($this->id);
 				}
 
-				if ($this->data['PlayerRanking']['mean'] > $cur_data['PlayerRanking']['max_mean']) {
+				if ( ! array_key_exists('max_mean', $this->data['PlayerRanking']) && ($this->data['PlayerRanking']['mean'] > $cur_data['PlayerRanking']['max_mean'])) {
 					$this->data['PlayerRanking']['max_mean'] = $this->data['PlayerRanking']['mean'];
 				}
-				elseif ($this->data['PlayerRanking']['mean'] < $cur_data['PlayerRanking']['min_mean']) {
+				elseif ( ! array_key_exists('min_mean', $this->data['PlayerRanking']) && ($this->data['PlayerRanking']['mean'] < $cur_data['PlayerRanking']['min_mean'])) {
 					$this->data['PlayerRanking']['min_mean'] = $this->data['PlayerRanking']['mean'];
 				}
 			}
 			else {
-				$this->data['PlayerRanking']['max_mean'] = $this->data['PlayerRanking']['mean'];
-				$this->data['PlayerRanking']['min_mean'] = $this->data['PlayerRanking']['mean'];
+				if ( ! array_key_exists('max_mean', $this->data['PlayerRanking'])) {
+					$this->data['PlayerRanking']['max_mean'] = $this->data['PlayerRanking']['mean'];
+				}
+
+				if ( ! array_key_exists('min_mean', $this->data['PlayerRanking'])) {
+					$this->data['PlayerRanking']['min_mean'] = $this->data['PlayerRanking']['mean'];
+				}
 			}
 		}
 
