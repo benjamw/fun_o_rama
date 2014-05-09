@@ -222,5 +222,116 @@ class Match extends AppModel {
 		}
 	}
 
+	public function undo($id = null) {
+		if ( ! empty($id)) {
+			$this->id = $id;
+		}
+
+		$id = $this->id;
+
+		$this->contain(array(
+			'Tournament' => array(
+				'Game',
+				'Team' => array(
+					'Player',
+				),
+			),
+			'WinningTeam' => array(
+				'Player',
+			),
+		));
+		$match = $this->read( );
+
+		$players = Set::extract($match, '/Tournament/Team/Player/id');
+		$winning_players = Set::extract($match, '/WinningTeam/Player/id');
+
+		// revert the stats
+		$stats = $this->Team->Player->PlayerStat->find('all', array(
+			'conditions' => array(
+				'PlayerStat.player_id' => $players,
+				'PlayerStat.game_id' => $match['Tournament']['Game']['id'],
+			),
+		));
+
+		foreach ($stats as $stat) {
+			$stat = $stat['PlayerStat'];
+
+			if (in_array($stat['player_id'], $winning_players)) {
+				--$stat['wins'];
+				--$stat['global_wins'];
+
+				if ((0 !== (int) $stat['streak']) && ($stat['streak'] === $stat['max_streak'])) {
+					--$stat['streak'];
+					--$stat['max_streak'];
+				}
+			}
+			else {
+				--$stat['losses'];
+				--$stat['global_losses'];
+
+				if ((0 !== (int) $stat['streak']) && ($stat['streak'] === $stat['min_streak'])) {
+					++$stat['streak'];
+					++$stat['min_streak'];
+				}
+			}
+
+			$this->Team->Player->PlayerStat->save(array('PlayerStat' => $stat), false);
+		}
+
+		// revert the rankings
+		$ranks = $this->Team->Player->PlayerRanking->find('all', array(
+			'conditions' => array(
+				'PlayerRanking.player_id' => $players,
+				'PlayerRanking.game_type_id' => $match['Tournament']['Game']['game_type_id'],
+			),
+		));
+
+		foreach ($ranks as $rank) {
+			$rank = $rank['PlayerRanking'];
+
+			$rank_history = $this->Team->Player->PlayerRanking->RankHistory->find('all', array(
+				'conditions' => array(
+					'RankHistory.player_ranking_id' => $rank['id'],
+				),
+				'order' => array(
+					'RankHistory.created' => 'DESC',
+					'RankHistory.id' => 'DESC',
+				),
+				'limit' => 2,
+			));
+
+			if ($rank['max_mean'] === $rank['mean']) {
+				$rank['max_mean'] = $rank_history[1]['RankHistory']['mean'];
+			}
+			elseif ($rank['min_mean'] === $rank['mean']) {
+				$rank['min_mean'] = $rank_history[1]['RankHistory']['mean'];
+			}
+
+			$rank['mean'] = $rank_history[1]['RankHistory']['mean'];
+			$rank['std_deviation'] = $rank_history[1]['RankHistory']['std_deviation'];
+			--$rank['games_played'];
+
+			$this->Team->Player->PlayerRanking->save(array('PlayerRanking' => $rank));
+
+			// delete the latest history entry
+			$this->Team->Player->PlayerRanking->RankHistory->delete($rank_history[0]['RankHistory']['id']);
+		}
+
+		// delete the match
+		$return = $this->delete( );
+
+		// if the tournament is empty, delete it as well
+		$tourny_matches = $this->find('count', array(
+			'conditions' => array(
+				'Match.tournament_id' => $match['Tournament']['id'],
+			),
+		));
+		if ( ! $tourny_matches) {
+			$this->Tournament->delete($match['Tournament']['id']);
+		}
+
+		return $return;
+	}
+
 }
 

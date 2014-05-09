@@ -72,6 +72,7 @@
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('action' => 'view', $match['Match']['id']), array('class' => 'btn btn-small')); ?>
 					<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $match['Match']['id']), array('class' => 'btn btn-small')); ?>
+					<?php echo $this->Form->postLink(__('Undo'), array('action' => 'undo', $match['Match']['id']), array('class' => 'btn btn-small btn-info'), __('Are you sure you want to undo Match #%s?', $match['Match']['id'])); ?>
 					<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $match['Match']['id']), array('class' => 'btn btn-small btn-warning'), __('Are you sure you want to delete Match #%s?', $match['Match']['id'])); ?>
 				</div>
 			</td>
