@@ -13,6 +13,7 @@
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo __('Avatar'); ?></th>
+			<th><?php echo $this->Paginator->sort('active'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 		</tr>
 
@@ -28,6 +29,7 @@
 					echo $this->Identicon->create($player['Player']['id']);
 				}
 			?>&nbsp;</td>
+			<td><?php echo ucfirst(Set::enum((int) $player['Player']['active'])); ?>&nbsp;</td>
 			<td class="actions">
 				<div class="btn-group">
 					<?php echo $this->Html->link(__('View'), array('controller' => 'players', 'action' => 'view', $player['Player']['id']), array('class' => 'btn btn-small')); ?>

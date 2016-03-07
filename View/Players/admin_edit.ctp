@@ -10,6 +10,7 @@
 				}
 				echo $this->Form->input('name');
 				echo $this->Form->input('avatar', array('type' => 'file'));
+				echo $this->Form->input('active');
 			?>
 
 		</fieldset>

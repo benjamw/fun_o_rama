@@ -91,7 +91,12 @@ class HomeController extends AppController {
 
 	public function _setSelects($active_only = false) {
 		$this->set($this->Tournament->enumValues( ));
-		$this->set('players', $this->Tournament->Team->Player->find('list', array('order' => 'name')));
+		$this->set('players', $this->Tournament->Team->Player->find('list', array(
+		    'conditions' => array(
+		        'active' => true,
+		    ),
+		    'order' => 'name',
+		)));
 
 		parent::_setSelects($active_only);
 	}
