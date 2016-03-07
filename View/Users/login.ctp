@@ -1,5 +1,5 @@
 <div class="users login">
-<?php echo $this->Form->create('User', array('action' => 'login'));?>
+<?php echo $this->Form->create('User', array('url' => array('controller' => 'users', 'action' => 'login'))); ?>
 	<fieldset>
 		<legend><?php echo __('Login');?></legend>
 	<?php

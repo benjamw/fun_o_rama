@@ -52,7 +52,7 @@
 <div class="info not_geobootstrap">Please select the game and players below, then click on "Create Teams" to get your auto-generated teams!</div>
 
 <div class="home form">
-	<?php echo $this->Form->create('Tournament', array('action' => 'start')); ?>
+	<?php echo $this->Form->create('Tournament', array('url' => array('controller' => 'home', 'action' => 'start'))); ?>
 		<fieldset>
 			<legend>Start a match / tournament</legend>
 
