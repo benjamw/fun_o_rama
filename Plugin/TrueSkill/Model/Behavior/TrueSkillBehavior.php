@@ -78,7 +78,9 @@ class TrueSkillBehavior extends ModelBehavior {
 		for ($i = 0; $i <= 1; ++$i) {
 			$team[$i] = new Team( );
 			foreach ($in_teams[$i] as $player) {
-				$team[$i]->addPlayer(new Player($player['id']), new Rating($player['mean'], $player['std_dev']));
+				$pl = new Player($player['id']);
+				$team[$i]->addPlayer($pl, new Rating($player['mean'], $player['std_dev']));
+				unset($pl); // kill the reference
 			}
 		}
 
@@ -160,7 +162,9 @@ class TrueSkillBehavior extends ModelBehavior {
 				$team = new Team( );
 
 				foreach ($player_spots as $idx) {
-					$team->addPlayer(new Player($players[$idx]['id']), new Rating($players[$idx]['mean'], $players[$idx]['std_dev']));
+					$pl = new Player($players[$idx]['id']);
+					$team->addPlayer($pl, new Rating($players[$idx]['mean'], $players[$idx]['std_dev']));
+					unset($pl); // kill the reference
 				}
 
 				$calc_teams[] = $team;
@@ -236,7 +240,9 @@ class TrueSkillBehavior extends ModelBehavior {
 			$team = new Team( );
 
 			foreach ($players as $player) {
-				$team->addPlayer(new Player($player['id']), new Rating($player['mean'], $player['std_dev']));
+				$pl = new Player($player['id']);
+				$team->addPlayer($pl, new Rating($player['mean'], $player['std_dev']));
+				unset($pl); // kill the reference
 			}
 
 			$calc_teams[] = $team;

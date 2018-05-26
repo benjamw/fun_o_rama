@@ -69,6 +69,7 @@ class Match extends AppModel {
 		$players = array( );
 
 		// convert to a format that is usable by the plugin
+		$teams = array( );
 		foreach ($match['Team'] as $match_team) {
 			if (empty($match_team['Player'])) {
 				return false;
