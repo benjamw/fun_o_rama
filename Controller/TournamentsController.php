@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class TournamentsController extends AppController {
 
 	public function index( ) {
-		// grab any curently running tournaments
+		// grab any currently running tournaments
 		$active = $this->Tournament->find('all', array(
 			'contain' => array(
 				'Game' => array(
