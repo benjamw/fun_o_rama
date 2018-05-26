@@ -7,7 +7,7 @@ class Page extends AppModel {
 	public $validate = array(
 		'title' => array(
 			'notempty' => array(
-				'rule' => array('notempty'),
+				'rule' => array('notblank'),
 				'message' => 'Please enter a page title',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -27,7 +27,7 @@ class Page extends AppModel {
 		),
 		'copy' => array(
 			'notempty' => array(
-				'rule' => array('notempty'),
+				'rule' => array('notblank'),
 				'message' => 'Please enter the page copy',
 				//'allowEmpty' => false,
 				//'required' => false,

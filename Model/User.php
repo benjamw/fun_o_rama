@@ -13,7 +13,7 @@ class User extends AppModel {
 	public $validate = array(
 		'first_name' => array(
 			'notempty' => array(
-				'rule' => array('notempty'),
+				'rule' => array('notblank'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -23,7 +23,7 @@ class User extends AppModel {
 		),
 		'last_name' => array(
 			'notempty' => array(
-				'rule' => array('notempty'),
+				'rule' => array('notblank'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -33,7 +33,7 @@ class User extends AppModel {
 		),
 		'username' => array(
 			'notempty' => array(
-				'rule' => array('notempty'),
+				'rule' => array('notblank'),
 				'message' => 'Please enter a username',
 				//'allowEmpty' => false,
 				'required' => true,
@@ -79,7 +79,7 @@ class User extends AppModel {
 		),
 		'password' => array(
 			'notempty' => array(
-				'rule' => array('notempty'),
+				'rule' => array('notblank'),
 				'message' => 'Please enter a password',
 				//'allowEmpty' => false,
 				'required' => true,
@@ -89,7 +89,7 @@ class User extends AppModel {
 		),
 		'confirm' => array(
 			'required' => array(
-				'rule' => array('notempty'),
+				'rule' => array('notblank'),
 				'message' => 'Please verify your password',
 				//'allowEmpty' => false,
 				'required' => true,
