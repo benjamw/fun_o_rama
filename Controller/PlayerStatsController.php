@@ -24,7 +24,7 @@ g('ROW COUNT `player_stats` = '.$rows);
 g('STARTING');
 		$this->fill_values( );
 		$this->play_games( );
-g('DONE');
+g('DONE REFRESHING');
 	}
 
 	public function fill_values( ) {
@@ -48,6 +48,7 @@ g('FILLING VALUES');
 g($result);
 			}
 		}
+g('DONE FILLING');
 	}
 
 	public function play_games( ) {
@@ -71,6 +72,7 @@ g('PLAYING GAMES');
 g($match);
 			$this->PlayerStat->Player->Team->Match->update_stats($match['Match']['id']);
 		}
+g('DONE PLAYING');
 	}
 
 	public function reset_values( ) {
@@ -91,7 +93,7 @@ g('RESETTING TABLE `player_stats`...');
 			WHERE 1
 			'
 		);
-g('DONE');
+g('DONE RESETTING');
 	}
 
 }

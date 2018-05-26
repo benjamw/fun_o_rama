@@ -185,7 +185,7 @@ g('ROW COUNT `rank_history` = '.$rows);
 g('STARTING');
 		$this->fill_values( );
 		$this->play_games( );
-g('DONE');
+g('DONE REFRESHING');
 	}
 
 	public function fill_values( ) {
@@ -209,6 +209,7 @@ g('FILLING VALUES');
 g($result);
 			}
 		}
+g('DONE FILLING');
 	}
 
 	public function play_games( ) {
@@ -232,6 +233,7 @@ g('PLAYING GAMES');
 g($match);
 			$this->PlayerRanking->Player->Team->Match->update_rank($match['Match']['id']);
 		}
+g('DONE PLAYING');
 	}
 
 	public function reset_values( ) {
@@ -259,7 +261,7 @@ g('RESETTING TABLE `player_rankings`...');
 			WHERE 1
 			'
 		);
-g('DONE');
+g('DONE RESETTING');
 	}
 
 }
