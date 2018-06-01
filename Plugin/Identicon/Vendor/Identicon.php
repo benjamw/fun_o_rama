@@ -29,7 +29,7 @@ class Identicon {
 	var $webroot;
 
 	//constructor
-	function identicon($root, $webroot, $cache_dir, $blocks = '') {
+	function __construct($root, $webroot, $cache_dir, $blocks = '') {
 		$this->root = $root;
 		$this->webroot = $webroot;
 		$this->cache_dir = $cache_dir.'/';
