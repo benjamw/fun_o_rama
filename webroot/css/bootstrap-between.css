@@ -112,7 +112,7 @@ ul.swappable {
 }
 
 .win_loss {
-	border-collapse: ;
+	border-collapse: collapse;
 }
 
 .win_loss thead th {
