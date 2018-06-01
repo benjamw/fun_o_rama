@@ -14,7 +14,7 @@ class FideKFactor extends KFactor
         }
 
         return 10;
-    }    
+    }
 }
 
 /**

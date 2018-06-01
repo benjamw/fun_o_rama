@@ -1,9 +1,9 @@
 <?php
 /**
  * Basic math functions.
- * 
+ *
  * @author     Jeff Moser <jeff@moserware.com>
- * @copyright  2010 Jeff Moser 
+ * @copyright  2010 Jeff Moser
  */
 
 /**

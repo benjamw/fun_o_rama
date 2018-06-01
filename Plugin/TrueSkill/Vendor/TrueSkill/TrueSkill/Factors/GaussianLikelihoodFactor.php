@@ -12,7 +12,7 @@ use Moserware\Skills\FactorGraphs\Variable;
 
 /**
  * Connects two variables and adds uncertainty.
- * 
+ *
  * See the accompanying math paper for more details.
  */
 class GaussianLikelihoodFactor extends GaussianFactor
@@ -39,10 +39,10 @@ class GaussianLikelihoodFactor extends GaussianFactor
 
     private function updateHelper(Message &$message1, Message &$message2,
                                   Variable &$variable1, Variable &$variable2)
-    {        
+    {
         $message1Value = clone $message1->getValue();
-        $message2Value = clone $message2->getValue();        
-        
+        $message2Value = clone $message2->getValue();
+
         $marginal1 = clone $variable1->getValue();
         $marginal2 = clone $variable2->getValue();
 
@@ -68,7 +68,7 @@ class GaussianLikelihoodFactor extends GaussianFactor
     public function updateMessageIndex($messageIndex)
     {
         $messages = &$this->getMessages();
-        $vars = &$this->getVariables();       
+        $vars = &$this->getVariables();
 
         switch ($messageIndex)
         {

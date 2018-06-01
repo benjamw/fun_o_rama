@@ -35,7 +35,7 @@ class TrueSkillFactorGraph extends FactorGraph
 {
     private $_gameInfo;
     private $_layers;
-    private $_priorLayer;    
+    private $_priorLayer;
 
     public function __construct(GameInfo &$gameInfo, array &$teams, array $teamRanks)
     {
@@ -46,7 +46,7 @@ class TrueSkillFactorGraph extends FactorGraph
                                         {
                                             return GaussianDistribution::fromPrecisionMean(0, 0);
                                         });
-                                        
+
         $this->setVariableFactory($newFactory);
         $this->_layers = array(
                               $this->_priorLayer,
@@ -78,7 +78,7 @@ class TrueSkillFactorGraph extends FactorGraph
 
             $currentLayer->buildLayer();
 
-            $lastOutput = &$currentLayer->getOutputVariablesGroups();       
+            $lastOutput = &$currentLayer->getOutputVariablesGroups();
         }
     }
 
@@ -120,7 +120,7 @@ class TrueSkillFactorGraph extends FactorGraph
                 $fullSchedule[] = $currentPriorSchedule;
             }
         }
-        
+
         $allLayersReverse = \array_reverse($this->_layers);
 
         foreach ($allLayersReverse as &$currentLayer)
@@ -144,7 +144,7 @@ class TrueSkillFactorGraph extends FactorGraph
         {
             foreach ($currentTeam as &$currentPlayer)
             {
-                $localCurrentPlayer = &$currentPlayer->getKey();                
+                $localCurrentPlayer = &$currentPlayer->getKey();
                 $newRating = new Rating($currentPlayer->getValue()->getMean(),
                                         $currentPlayer->getValue()->getStandardDeviation());
 

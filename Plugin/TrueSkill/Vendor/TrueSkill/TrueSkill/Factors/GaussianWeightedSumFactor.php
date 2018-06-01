@@ -15,7 +15,7 @@ use Moserware\Skills\FactorGraphs\Variable;
 
 /**
  * Factor that sums together multiple Gaussians.
- *  
+ *
  * See the accompanying math paper for more details.s
  */
 class GaussianWeightedSumFactor extends GaussianFactor
@@ -37,7 +37,7 @@ class GaussianWeightedSumFactor extends GaussianFactor
         // v_0 = a_1*v_1 + a_2*v_2 + ... + a_n * v_n
         $variableWeightsLength = count($variableWeights);
         $this->_weights[0] = \array_fill(0, count($variableWeights), 0);
-        
+
         for($i = 0; $i < $variableWeightsLength; $i++)
         {
             $weight = &$variableWeights[$i];
@@ -65,7 +65,7 @@ class GaussianWeightedSumFactor extends GaussianFactor
         for ($weightsIndex = 1; $weightsIndex < $weightsLength; $weightsIndex++)
         {
             $currentWeights = \array_fill(0, $variableWeightsLength, 0);
-            
+
             $variableIndices = \array_fill(0, $variableWeightsLength + 1, 0);
             $variableIndices[0] = $weightsIndex;
 
@@ -73,7 +73,7 @@ class GaussianWeightedSumFactor extends GaussianFactor
 
             // keep a single variable to keep track of where we are in the array.
             // This is helpful since we skip over one of the spots
-            $currentDestinationWeightIndex = 0;            
+            $currentDestinationWeightIndex = 0;
 
             for ($currentWeightSourceIndex = 0;
                  $currentWeightSourceIndex < $variableWeightsLength;
@@ -122,7 +122,7 @@ class GaussianWeightedSumFactor extends GaussianFactor
         {
             $localCurrentVariable = &$currentVariable;
             $this->createVariableToMessageBinding($localCurrentVariable);
-        }        
+        }
     }
 
     public function getLogNormalization()
@@ -201,7 +201,7 @@ class GaussianWeightedSumFactor extends GaussianFactor
     }
 
     public function updateMessageIndex($messageIndex)
-    {        
+    {
         $allMessages = &$this->getMessages();
         $allVariables = &$this->getVariables();
 
@@ -221,7 +221,7 @@ class GaussianWeightedSumFactor extends GaussianFactor
             $updatedMessages[] = &$allMessages[$indicesToUse[$i]];
             $updatedVariables[] = &$allVariables[$indicesToUse[$i]];
         }
-        
+
         return $this->updateHelper($this->_weights[$messageIndex],
                                    $this->_weightsSquared[$messageIndex],
                                    $updatedMessages,
@@ -233,12 +233,12 @@ class GaussianWeightedSumFactor extends GaussianFactor
         // TODO: Perf? Use PHP equivalent of StringBuilder? implode on arrays?
         $result = (string)$sumVariable;
         $result .= ' = ';
-        
+
         $totalVars = count($variablesToSum);
         for($i = 0; $i < $totalVars; $i++)
         {
             $isFirst = ($i == 0);
-            
+
             if($isFirst && ($weights[$i] < 0))
             {
                 $result .= '-';
@@ -249,9 +249,9 @@ class GaussianWeightedSumFactor extends GaussianFactor
             $result .= "*[";
             $result .= (string)$variablesToSum[$i];
             $result .= ']';
-            
+
             $isLast = ($i == ($totalVars - 1));
-            
+
             if(!$isLast)
             {
                 if($weights[$i + 1] >= 0)
@@ -262,9 +262,9 @@ class GaussianWeightedSumFactor extends GaussianFactor
                 {
                     $result .= ' - ';
                 }
-            }                
+            }
         }
-        
+
         return $result;
     }
 }

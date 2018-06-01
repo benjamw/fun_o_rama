@@ -3,12 +3,12 @@ namespace Moserware\Skills\FactorGraphs;
 
 class Message
 {
-    private $_name;    
+    private $_name;
     private $_value;
 
     public function __construct(&$value = null, $name = null)
     {
-        $this->_name = $name;        
+        $this->_name = $name;
         $this->_value = $value;
     }
 
@@ -19,13 +19,13 @@ class Message
     }
 
     public function setValue(&$value)
-    {        
+    {
         $this->_value = &$value;
     }
 
     public function __toString()
     {
-        return $this->_name; 
+        return $this->_name;
     }
 }
 

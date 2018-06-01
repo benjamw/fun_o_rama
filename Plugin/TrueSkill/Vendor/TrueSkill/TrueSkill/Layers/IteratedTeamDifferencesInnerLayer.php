@@ -47,7 +47,7 @@ class IteratedTeamDifferencesInnerLayer extends TrueSkillFactorGraphLayer
     }
 
     public function createPriorSchedule()
-    {        
+    {
         switch (count($this->getInputVariablesGroups()))
         {
             case 0:

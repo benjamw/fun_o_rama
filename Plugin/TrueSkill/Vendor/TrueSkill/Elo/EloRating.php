@@ -10,7 +10,7 @@ use Moserware\Skills\Rating;
  */
 class EloRating extends Rating
 {
-    public function __construct($rating)        
+    public function __construct($rating)
     {
         parent::__construct($rating, 0);
     }

@@ -266,7 +266,7 @@ class Matrix
         $resultMatrix = array();
 
         for ($currentRow = 0; $currentRow < $resultRows; $currentRow++)
-        {            
+        {
             for ($currentColumn = 0; $currentColumn < $resultColumns; $currentColumn++)
             {
                 $productValue = 0;
@@ -284,7 +284,7 @@ class Matrix
         }
 
         return new Matrix($resultRows, $resultColumns, $resultMatrix);
-    }   
+    }
 
     private function getMinorMatrix($rowToRemove, $columnToRemove)
     {
@@ -391,18 +391,18 @@ class SquareMatrix extends Matrix
         $allValues = \func_get_args();
         $rows = (int) sqrt(count($allValues));
         $cols = $rows;
-        
+
         $matrixData = array();
         $allValuesIndex = 0;
 
         for ($currentRow = 0; $currentRow < $rows; $currentRow++)
-        {        
+        {
             for ($currentColumn = 0; $currentColumn < $cols; $currentColumn++)
             {
                 $matrixData[$currentRow][$currentColumn] = $allValues[$allValuesIndex++];
             }
         }
-                
+
         parent::__construct($rows, $cols, $matrixData);
     }
 }
@@ -414,9 +414,9 @@ class DiagonalMatrix extends Matrix
         $diagonalCount = count($diagonalValues);
         $rowCount = $diagonalCount;
         $colCount = $rowCount;
-        
+
         parent::__construct($rowCount, $colCount);
-        
+
         for($currentRow = 0; $currentRow < $rowCount; $currentRow++)
         {
             for($currentCol = 0; $currentCol < $colCount; $currentCol++)
@@ -428,9 +428,9 @@ class DiagonalMatrix extends Matrix
                 else
                 {
                     $this->setValue($currentRow, $currentCol, 0);
-                }                
+                }
             }
-        }             
+        }
     }
 }
 

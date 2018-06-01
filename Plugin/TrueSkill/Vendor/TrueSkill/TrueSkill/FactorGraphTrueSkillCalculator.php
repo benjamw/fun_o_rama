@@ -52,7 +52,7 @@ class FactorGraphTrueSkillCalculator extends SkillCalculator
         $factorGraph = new TrueSkillFactorGraph($gameInfo, $teams, $teamRanks);
         $factorGraph->buildGraph();
         $factorGraph->runSchedule();
-        
+
         $probabilityOfOutcome = $factorGraph->getProbabilityOfRanking();
 
         return $factorGraph->getUpdatedRatings();
@@ -104,8 +104,8 @@ class FactorGraphTrueSkillCalculator extends SkillCalculator
     {
         // A simple vector of all the player means.
         return new Vector(self::getPlayerRatingValues($teamAssignmentsList,
-                                                      function($rating) 
-                                                      { 
+                                                      function($rating)
+                                                      {
                                                            return $rating->getMean();
                                                       }));
     }

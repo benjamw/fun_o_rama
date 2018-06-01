@@ -3,10 +3,10 @@
 namespace Moserware\Skills;
 
 // Container for a player's rating.
-class Rating 
+class Rating
 {
     const CONSERVATIVE_STANDARD_DEVIATION_MULTIPLIER = 3;
-    
+
     private $_conservativeStandardDeviationMultiplier;
     private $_mean;
     private $_standardDeviation;
@@ -29,7 +29,7 @@ class Rating
      */
     public function getMean()
     {
-        return $this->_mean;        
+        return $this->_mean;
     }
 
     /**
@@ -54,7 +54,7 @@ class Rating
         $posteriorGaussian = new GaussianDistribution($fullPosterior->getMean(), $fullPosterior.getStandardDeviation());
 
         // From a clarification email from Ralf Herbrich:
-        // "the idea is to compute a linear interpolation between the prior and posterior skills of each player 
+        // "the idea is to compute a linear interpolation between the prior and posterior skills of each player
         //  ... in the canonical space of parameters"
 
         $precisionDifference = $posteriorGaussian->getPrecision() - $priorGaussian->getPrecision();
@@ -73,7 +73,7 @@ class Rating
     public function __toString()
     {
         return sprintf("mean=%.4f, standardDeviation=%.4f", $this->_mean, $this->_standardDeviation);
-    }  
+    }
 }
 
 ?>

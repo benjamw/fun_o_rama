@@ -11,7 +11,7 @@ class TeamsRange extends Range
     {
         parent::__construct($min, $max);
     }
-    
+
     protected static function create($min, $max)
     {
         return new TeamsRange($min, $max);

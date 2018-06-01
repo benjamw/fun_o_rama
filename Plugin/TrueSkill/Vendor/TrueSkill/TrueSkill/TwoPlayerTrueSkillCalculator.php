@@ -32,7 +32,7 @@ use Moserware\Skills\TeamsRange;
 
 /**
  * Calculates the new ratings for only two players.
- * 
+ *
  * When you only have two players, a lot of the math simplifies. The main purpose of this class
  * is to show the bare minimum of what a TrueSkill implementation should have.
  */
@@ -54,12 +54,12 @@ class TwoPlayerTrueSkillCalculator extends SkillCalculator
 
         // Make sure things are in order
         RankSorter::sort($teams, $teamRanks);
-        
+
         // Since we verified that each team has one player, we know the player is the first one
         $winningTeamPlayers = $teams[0]->getAllPlayers();
         $winner = $winningTeamPlayers[0];
         $winnerPreviousRating = $teams[0]->getRating($winner);
-        
+
         $losingTeamPlayers = $teams[1]->getAllPlayers();
         $loser = $losingTeamPlayers[0];
         $loserPreviousRating = $teams[1]->getRating($loser);

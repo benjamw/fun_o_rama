@@ -21,7 +21,7 @@ abstract class TwoPlayerEloCalculator extends SkillCalculator
 {
     protected $_kFactor;
 
-    protected function __construct(KFactor $kFactor)        
+    protected function __construct(KFactor $kFactor)
     {
         parent::__construct(SkillCalculatorSupportedOptions::NONE, TeamsRange::exactly(2), PlayersRange::exactly(1));
         $this->_kFactor = $kFactor;
@@ -30,19 +30,19 @@ abstract class TwoPlayerEloCalculator extends SkillCalculator
     public function calculateNewRatings($gameInfo,
                                         array $teamsOfPlayerToRatings,
                                         array $teamRanks)
-    {   
+    {
         $this->validateTeamCountAndPlayersCountPerTeam($teamsOfPlayerToRatings);
         RankSorter::sort($teamsOfPlayerToRatings, $teamRanks);
-        
+
         $result = array();
         $isDraw = ($teamRanks[0] === $teamRanks[1]);
 
         $team1 = $teamsOfPlayerToRatings[0];
         $team2 = $teamsOfPlayerToRatings[1];
-        
+
         $player1 = each($team1);
         $player2 = each($team2);
-        
+
         $player1Rating = $player1["value"]->getMean();
         $player2Rating = $player2["value"]->getMean();
 
@@ -85,13 +85,13 @@ abstract class TwoPlayerEloCalculator extends SkillCalculator
         validateTeamCountAndPlayersCountPerTeam($teamsOfPlayerToRatings);
         $team1 = $teamsOfPlayerToRatings[0];
         $team2 = $teamsOfPlayerToRatings[1];
-        
+
         $player1 = $team1[0];
         $player2 = $team2[0];
-        
+
         $player1Rating = $player1[1]->getMean();
         $player2Rating = $player2[1]->getMean();
-        
+
         $ratingDifference = $player1Rating - $player2Rating;
 
         // The TrueSkill paper mentions that they used s1 - s2 (rating difference) to

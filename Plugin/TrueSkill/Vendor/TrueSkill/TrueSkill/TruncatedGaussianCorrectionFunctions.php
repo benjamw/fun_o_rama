@@ -11,10 +11,10 @@ class TruncatedGaussianCorrectionFunctions
 
     /**
      * The "V" function where the team performance difference is greater than the draw margin.
-     * 
+     *
      * In the reference F# implementation, this is referred to as "the additive
      * correction of a single-sided truncated Gaussian with unit variance."
-     * 
+     *
      * @param number $drawMargin In the paper, it's referred to as just "ε".
      */
     public static function vExceedsMarginScaled($teamPerformanceDifference, $drawMargin, $c)
@@ -36,11 +36,11 @@ class TruncatedGaussianCorrectionFunctions
 
     /**
      * The "W" function where the team performance difference is greater than the draw margin.
-     * 
+     *
      * In the reference F# implementation, this is referred to as "the multiplicative
      * correction of a single-sided truncated Gaussian with unit variance."
      */
-    
+
     public static function wExceedsMarginScaled($teamPerformanceDifference, $drawMargin, $c)
     {
         return self::wExceedsMargin($teamPerformanceDifference/$c, $drawMargin/$c);
@@ -68,7 +68,7 @@ class TruncatedGaussianCorrectionFunctions
     {
         return self::vWithinMargin($teamPerformanceDifference/$c, $drawMargin/$c);
     }
-    
+
     // from F#:
     public static function vWithinMargin($teamPerformanceDifference, $drawMargin)
     {

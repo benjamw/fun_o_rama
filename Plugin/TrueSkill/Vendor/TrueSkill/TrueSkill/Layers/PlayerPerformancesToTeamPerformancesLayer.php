@@ -31,13 +31,13 @@ class PlayerPerformancesToTeamPerformancesLayer extends TrueSkillFactorGraphLaye
             $localCurrentTeam = &$currentTeam;
             $teamPerformance = &$this->createOutputVariable($localCurrentTeam);
             $newSumFactor = $this->createPlayerToTeamSumFactor($localCurrentTeam, $teamPerformance);
-            
+
             $this->addLayerFactor($newSumFactor);
 
             // REVIEW: Does it make sense to have groups of one?
             $outputVariablesGroups = &$this->getOutputVariablesGroups();
             $outputVariablesGroups[] = array($teamPerformance);
-        }        
+        }
     }
 
     public function createPriorSchedule()
@@ -69,11 +69,11 @@ class PlayerPerformancesToTeamPerformancesLayer extends TrueSkillFactorGraphLaye
                 $sumVariable,
                 $teamMembers,
                 $weights);
-                                                 
+
     }
 
     public function createPosteriorSchedule()
-    {        
+    {
         $allFactors = array();
         $localFactors = &$this->getLocalFactors();
         foreach($localFactors as &$currentFactor)

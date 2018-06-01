@@ -16,12 +16,12 @@ class Variable
 
     public function &getValue()
     {
-        $value = &$this->_value;        
+        $value = &$this->_value;
         return $value;
     }
 
     public function setValue(&$value)
-    {        
+    {
         $this->_value = &$value;
     }
 

@@ -9,7 +9,7 @@ class Range
 {
     private $_min;
     private $_max;
-    
+
     public function __construct($min, $max)
     {
         if ($min > $max)
@@ -24,13 +24,13 @@ class Range
     public function getMin()
     {
         return $this->_min;
-    }    
-    
+    }
+
     public function getMax()
     {
         return $this->_max;
     }
-    
+
     protected static function create($min, $max)
     {
         return new Range($min, $max);

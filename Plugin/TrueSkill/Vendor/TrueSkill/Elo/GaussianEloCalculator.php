@@ -14,11 +14,11 @@ class GaussianEloCalculator extends TwoPlayerEloCalculator
     // From the paper
     const STABLE_KFACTOR = 24;
 
-    public function __construct()        
+    public function __construct()
     {
         parent::__construct(new KFactor(self::STABLE_KFACTOR));
     }
-    
+
     public function getPlayerWinProbability(GameInfo $gameInfo, $playerRating, $opponentRating)
     {
         $ratingDifference = $playerRating - $opponentRating;

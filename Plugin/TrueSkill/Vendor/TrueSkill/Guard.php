@@ -3,7 +3,7 @@ namespace Moserware\Skills;
 
 /**
  * Verifies argument contracts.
- * 
+ *
  * @see http://www.moserware.com/2008/01/borrowing-ideas-from-3-interesting.html
  */
 class Guard

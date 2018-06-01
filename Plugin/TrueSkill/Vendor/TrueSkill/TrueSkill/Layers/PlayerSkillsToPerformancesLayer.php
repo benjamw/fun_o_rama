@@ -37,8 +37,8 @@ class PlayerSkillsToPerformancesLayer extends TrueSkillFactorGraphLayer
                 $newLikelihoodFactor = $this->createLikelihood($localPlayerSkillVariable, $playerPerformance);
                 $this->addLayerFactor($newLikelihoodFactor);
                 $currentTeamPlayerPerformances[] = $playerPerformance;
-            }            
-            
+            }
+
             $outputVariablesGroups[] = $currentTeamPlayerPerformances;
         }
     }
@@ -74,7 +74,7 @@ class PlayerSkillsToPerformancesLayer extends TrueSkillFactorGraphLayer
                 array_map(
                         function($likelihood)
                         {
-                            return new ScheduleStep("name", $likelihood, 1);                    
+                            return new ScheduleStep("name", $likelihood, 1);
                         },
                         $localFactors),
                 "All skill to performance sending");

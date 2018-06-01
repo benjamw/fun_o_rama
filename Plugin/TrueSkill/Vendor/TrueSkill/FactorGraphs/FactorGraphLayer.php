@@ -8,7 +8,7 @@ require_once(dirname(__FILE__) . "/Schedule.php");
 abstract class FactorGraphLayer
 {
     private $_localFactors = array();
-    private $_outputVariablesGroups = array();    
+    private $_outputVariablesGroups = array();
     private $_inputVariablesGroups = array();
     private $_parentFactorGraph;
 

@@ -5,7 +5,7 @@ require_once(dirname(__FILE__) . "/GameInfo.php");
 require_once(dirname(__FILE__) . "/PlayersRange.php");
 require_once(dirname(__FILE__) . "/TeamsRange.php");
 
-/** 
+/**
  * Base class for all skill calculator implementations.
  */
 abstract class SkillCalculator
@@ -13,7 +13,7 @@ abstract class SkillCalculator
     private $_supportedOptions;
     private $_playersPerTeamAllowed;
     private $_totalTeamsAllowed;
-    
+
     protected function __construct($supportedOptions, TeamsRange $totalTeamsAllowed, PlayersRange $playerPerTeamAllowed)
     {
         $this->_supportedOptions = $supportedOptions;
@@ -34,7 +34,7 @@ abstract class SkillCalculator
 
     /**
      * Calculates the match quality as the likelihood of all teams drawing.
-     * 
+     *
      * @param $gameInfo Parameters for the game.
      * @param $teams A mapping of team players and their ratings.
      * @return The quality of the match between the teams as a percentage (0% = bad, 100% = well matched).
@@ -43,9 +43,9 @@ abstract class SkillCalculator
                                                    array &$teamsOfPlayerToRatings);
 
     public function isSupported($option)
-    {           
-        return ($this->_supportedOptions & $option) == $option;             
-    }    
+    {
+        return ($this->_supportedOptions & $option) == $option;
+    }
 
     protected function validateTeamCountAndPlayersCountPerTeam(array &$teamsOfPlayerToRatings)
     {
@@ -56,9 +56,9 @@ abstract class SkillCalculator
         array &$teams,
         TeamsRange &$totalTeams,
         PlayersRange &$playersPerTeam)
-    {        
+    {
         $countOfTeams = 0;
-        
+
         foreach ($teams as $currentTeam)
         {
             if (!$playersPerTeam->isInRange($currentTeam->count()))

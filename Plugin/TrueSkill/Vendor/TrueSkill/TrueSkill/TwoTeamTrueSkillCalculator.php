@@ -36,7 +36,7 @@ use Moserware\Skills\Team;
 
 /**
  * Calculates new ratings for only two teams where each team has 1 or more players.
- * 
+ *
  * When you only have two teams, the math is still simple: no factor graphs are used yet.
  */
 class TwoTeamTrueSkillCalculator extends SkillCalculator

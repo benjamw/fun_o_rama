@@ -74,7 +74,7 @@ The toolbar has a few configuration settings. Settings are passed in the compone
 	public $components = array(
 		'DebugKit.Toolbar' => array(/* array of settings */)
 	);
-	
+
 
 ### Configuring Panels
 
@@ -94,7 +94,7 @@ Using the panels key you can specify which panels you want to load, as well as t
 	public $components = array(
 		'DebugKit.Toolbar' => array('panels' => array('myCustomPanel', 'timer' => false))
 	);
-	
+
 Would add your custom panel `myCustomPanel` to the toolbar and exclude the default `Timer` panel. In addition to choosing which panels you want, you can pass options into the `__construct` of the panels. For example the built-in `History` panel uses the `history` key to set the number of historical requests to track.
 
 	public $components = array(
@@ -165,7 +165,7 @@ Much like `startup()` `beforeRender()` is called during the Component beforeRend
 
 This would return cake's internal params array. The return of a panel's `beforeRender()` is available in you Panel element as `$content`
 
-### Panel Elements 
+### Panel Elements
 
 Each Panel is expected to have a view element that renders the content from the panel. The element name must be the underscored inflection of the class name. For example `SessionPanel` has an element named `session_panel.ctp`, and sqllogPanel has an element named `sqllog_panel.ctp`. These elements should be located in the root of your `View/Elements` directory.
 
@@ -185,14 +185,14 @@ Panels provided by [Cake Plugins](http://book.cakephp.org/2.0/en/plugins.html) w
 		...
 	}
 
-To use a plugin panel, use the common CakePHP dot notation for plugins. 
+To use a plugin panel, use the common CakePHP dot notation for plugins.
 
 	public $components = array('DebugKit.Toolbar' => array(
 	    'panels' => array('MyPlugin.MyCustom')
 	));
 
 
-The above would load all the default panels as well as the custom panel from `MyPlugin`. 
+The above would load all the default panels as well as the custom panel from `MyPlugin`.
 
 ## Cache Engine
 

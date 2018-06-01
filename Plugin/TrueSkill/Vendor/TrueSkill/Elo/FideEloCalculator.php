@@ -11,7 +11,7 @@ require_once(dirname(__FILE__) . "/TwoPlayerEloCalculator.php");
  */
 class FideEloCalculator extends TwoPlayerEloCalculator
 {
-    public function __construct(FideKFactor $kFactor)        
+    public function __construct(FideKFactor $kFactor)
     {
         parent::__construct($kFactor);
     }
@@ -35,7 +35,7 @@ class FideEloCalculator extends TwoPlayerEloCalculator
                (
                    1.0 + pow(10.0, $ratingDifference / (2 * $gameInfo->getBeta()))
                );
-    }        
+    }
 }
 
 ?>
