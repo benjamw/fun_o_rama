@@ -2,7 +2,7 @@
 <html>
 <head>
 
-	<title>DAZ Fun-☺-rama ME&reg; :: <?php echo $title_for_layout; ?></title>
+	<title>Fun-o-rama :: <?php echo $title_for_layout; ?></title>
 
 	<?php
 
@@ -26,7 +26,7 @@
 
 	<header class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<span class="brand"><?php echo $this->Html->image('Daz3D_23016.gif', array('class' => 'geobootstrap')); ?><span class="not_geobootstrap">DAZ</span> Fun-☺-rama <?php echo $this->Html->image('me.jpg', array('class' => 'geobootstrap')); ?><span class="not_geobootstrap">ME</span>&reg;</span>
+			<span class="brand">Fun-o-rama</span>
 			<?php
 				$menu = array(
 					array('Home', array('controller' => 'home', 'action' => 'index')),
@@ -34,7 +34,7 @@
 //					array('Players', array('controller' => 'players', 'action' => 'index')),
 //					array('Games', array('controller' => 'games', 'action' => 'index')),
 					array('Stats', array('controller' => 'stats', 'action' => 'index')),
-					array('Tunes', array('admin' => true, 'prefix' => 'admin', 'controller' => 'songs', 'action' => 'index')),
+//					array('Tunes', array('admin' => true, 'prefix' => 'admin', 'controller' => 'songs', 'action' => 'index')),
 				);
 			?>
 			<ul class="nav">

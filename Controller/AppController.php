@@ -31,10 +31,6 @@ class AppController extends Controller {
 		'users' => array('login', 'logout', 'admin_login', 'admin_logout'),
 	);
 
-	public $allowed_ips = array(
-		'127.0.0.1', // local
-	);
-
 	public function __construct($request = null, $response = null) {
 		if ($this->use_acl) {
 			$this->components[] = 'Acl';
@@ -57,13 +53,6 @@ class AppController extends Controller {
 		if ($this->Session->check('LOGIN.blocked')) {
 			echo 'Access Denied';
 			exit;
-		}
-
-		if (env('REMOTE_ADDR') && ! in_array(env('REMOTE_ADDR'), $this->allowed_ips) && ! $this->Session->check('ALLOWED')) {
-			if (('home' !== $this->request->params['controller']) || ('login' !== $this->request->params['action'])) {
-				$this->Session->write('LOGIN.referer', $this->request->params);
-				return $this->redirect(array('admin' => false, 'prefix' => false, 'controller' => 'home', 'action' => 'login'));
-			}
 		}
 
 		if (isset($this->Cookie)) {

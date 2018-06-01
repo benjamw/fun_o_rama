@@ -5,8 +5,8 @@ App::uses('CakeEmail', 'Network/Email');
 
 class ForgotsController extends AppController {
 
-	protected $site_name = 'DAZ Fun';
-	protected $email_from = array('daz_fun@daz3d.com' => 'Forgot Password');
+	protected $site_name = 'Fun-O-Rama';
+	protected $email_from = array('you@yoursite.com' => 'Forgot Password');
 
 	public function index( ) {
 		$step = 'form';

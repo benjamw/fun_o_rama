@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=2.0" />
-	<title>Tunes-o-Rama ME</title>
+	<title>Tunes-o-Rama</title>
 </head>
 <body>
 

@@ -23,8 +23,6 @@ re-bake other admin areas (groups, users, pages, etc)
 Add levels for players based on number of games played (ranking, or
 experience?)
 
-https://docs.google.com/a/daz3d.com/document/d/1vzd3e8AFPnikg5EJYJz26-fFyojLKpAwbOOIgO5PU74/edit
-
 more stats on stats page, maybe split out each game type into it's own
 table
 
