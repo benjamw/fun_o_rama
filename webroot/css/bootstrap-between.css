@@ -81,22 +81,14 @@ table .actions {
 }
 
 #TournamentStartForm div.checkboxes {
-	float: left;
-	min-height: 1px;
-	-webkit-column-count: 5;
-	-moz-column-count: 5;
-	-ms-column-count: 5;
-	-o-column-count: 5;
-	column-count: 5;
-	height: 160px;
-	width: 600px;
 	margin-top: 25px;
-	overflow: visible;
 	position: relative;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 #TournamentStartForm div.checkboxes .checkbox {
-	width: 95px;
+	width: 150px;
 }
 
 #TournamentStartForm div.checkboxes > label {
