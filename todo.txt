@@ -1,3 +1,24 @@
+if the team is only one player, the team name is the player's name
+
+add a redemption bracket for losers to play in more than one game
+
+
+
+Put the match creation stuff behind the admin
+
+make the admin require users
+
+have a page where the tournaments can be seen, but not interacted with
+
+
+
+
+
+
+
+
+
+
 add button to reset all `played` values for the songs
 
 
