@@ -263,7 +263,7 @@ class Tournament extends AppModel {
 				}
 			}
 
-			$quality = $this->getQuality($calc_teams);
+			$quality = 0;
 		}
 		elseif (150000 >= $num_combos) {
 			// if this function is going to be running for a while
